@@ -17,8 +17,13 @@ _PORT = 54321
 
 
 class _ScriptedSocket:
-    def __init__(self, scripts: list[bytes | BaseException]) -> None:
+    def __init__(
+        self,
+        scripts: list[bytes | BaseException],
+        sources: list[tuple[str, int]] | None = None,
+    ) -> None:
         self.scripts = scripts
+        self.sources = sources
         self.sent: list[tuple[bytes, tuple[str, int]]] = []
 
     def settimeout(self, timeout: float | None) -> None:
@@ -32,17 +37,22 @@ class _ScriptedSocket:
         item = self.scripts.pop(0)
         if isinstance(item, BaseException):
             raise item
+        if self.sources:
+            return item, self.sources.pop(0)
         return item, (_HOST, _PORT)
 
     def close(self) -> None:
         return None
 
 
-def _factory(scripts: list[bytes | BaseException]):
+def _factory(
+    scripts: list[bytes | BaseException],
+    sources: list[tuple[str, int]] | None = None,
+):
     sockets: list[_ScriptedSocket] = []
 
     def build() -> _ScriptedSocket:
-        datagram = _ScriptedSocket(scripts)
+        datagram = _ScriptedSocket(scripts, sources)
         sockets.append(datagram)
         return datagram
 
@@ -58,8 +68,11 @@ def _keys() -> tuple[bytes, bytes, bytes]:
 
 def _handshake(device_id: int = 7, stamp: int = 100) -> bytes:
     packet = bytearray(32)
+    struct.pack_into(">HH", packet, 0, 0x2131, 32)
     struct.pack_into(">I", packet, 8, device_id)
     struct.pack_into(">I", packet, 12, stamp)
+    token = bytes.fromhex(_TOKEN)
+    packet[16:32] = hashlib.md5(bytes(packet[:16]) + token).digest()
     return bytes(packet)
 
 
@@ -87,9 +100,14 @@ def _cipher(plaintext: bytes, stamp: int = 120) -> bytes:
 
 def _transport(
     scripts: list[bytes | BaseException],
+    sources: list[tuple[str, int]] | None = None,
+    clock=None,
 ) -> tuple[MiioPropertyTransport, list]:
-    build, sockets = _factory(scripts)
-    return MiioPropertyTransport(_HOST, _TOKEN, socket_factory=build), sockets
+    build, sockets = _factory(scripts, sources)
+    return (
+        MiioPropertyTransport(_HOST, _TOKEN, socket_factory=build, clock=clock),
+        sockets,
+    )
 
 
 def _session(*after_probe: bytes | BaseException) -> list[bytes | BaseException]:
@@ -242,6 +260,45 @@ def test_wrong_token_fails_the_probe_without_another_timeout():
     foreign = header + checksum + encrypted
     transport, sockets = _transport([_handshake(), foreign])
     assert transport.probe() is False
-    assert transport.local_auth_failed is True
+    assert transport.local_auth_failed is False
     assert transport.send("get_properties", retry_count=2) is None
     assert len(sockets) == 2
+
+
+def test_spoofed_packets_do_not_latch_and_auth_failures_recover_after_backoff():
+    spoofed, _sockets = _transport(
+        [_handshake()],
+        sources=[("192.0.2.8", _PORT)],
+    )
+    assert spoofed.probe() is False
+    assert spoofed.local_auth_failed is False
+
+    bad_checksum = bytearray(_response({"id": 1, "result": {"model": "x"}}))
+    bad_checksum[16] ^= 0xFF
+    mismatched, _more = _transport([_handshake(), bytes(bad_checksum)])
+    assert mismatched.probe() is False
+    assert mismatched.local_auth_failed is False
+
+    now = {"at": 0.0}
+
+    def clock() -> float:
+        return now["at"]
+
+    scripts: list[bytes | BaseException] = []
+    for _attempt in range(3):
+        scripts.extend([_handshake(), _cipher(b"not-json" + bytes([8] * 8))])
+    scripts.extend(
+        [
+            _handshake(),
+            _response({"id": 4, "result": {"model": "xiaomi.vacuum.d109gl"}}),
+        ]
+    )
+    transport, sockets = _transport(scripts, clock=clock)
+    for _attempt in range(3):
+        assert transport.probe() is False
+    assert transport.local_auth_failed is True
+    assert transport.probe() is False
+    assert len(sockets) == 6
+    now["at"] = 31.0
+    assert transport.probe() is True
+    assert transport.local_auth_failed is False

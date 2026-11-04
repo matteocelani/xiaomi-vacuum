@@ -261,9 +261,8 @@ def test_paused_start_uses_continue_sweep_and_skips_unmapped_actions():
             assert manager._mapped_action(DreameVacuumAction.REQUEST_MAP) is None
             assert manager._mapped_action(DreameVacuumAction.UPDATE_MAP_DATA) is None
             manager.action_mapping = None
-            dreame_map = manager._mapped_action(DreameVacuumAction.REQUEST_MAP)
-            assert dreame_map is not None
-            assert dreame_map["siid"] == 6
+            with pytest.raises(InvalidActionException):
+                manager._mapped_action(DreameVacuumAction.REQUEST_MAP)
         finally:
             release_device(device)
 

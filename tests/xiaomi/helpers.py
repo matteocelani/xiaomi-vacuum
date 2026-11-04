@@ -200,6 +200,8 @@ class FakeMiio:
             struct.pack_into(">HH", reply, 0, 0x2131, 32)
             struct.pack_into(">I", reply, 8, self._device_id)
             struct.pack_into(">I", reply, 12, self._stamp)
+            checksum = hashlib.md5(bytes(reply[:16]) + self.token).digest()
+            reply[16:32] = checksum
             return bytes(reply)
         if len(packet) <= _HEADER:
             return None

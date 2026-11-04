@@ -157,7 +157,7 @@ def test_call_clean_is_a_sweep_type_and_the_global_record_stays() -> None:
     assert chinese.state_by_wire == base.state_by_wire
     assert 12 not in base.task_by_wire
     assert chinese.convert_incoming("TASK_STATUS", 12) == int(StoredTask.AUTO_CLEANING)
-    assert base.convert_incoming("TASK_STATUS", 12) == 12
+    assert base.convert_incoming("TASK_STATUS", 12) == -1
     added = {control.key for control in chinese.controls} - {
         control.key for control in base.controls
     }

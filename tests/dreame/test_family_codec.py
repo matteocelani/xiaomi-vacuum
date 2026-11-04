@@ -81,7 +81,7 @@ def test_apply_family_installs_only_explicit_x20_max_addresses():
     assert device._request_properties is original
     assert not hasattr(device, "_xiaomi_values")
     assert device._property_codec is family
-    assert device._map_manager.action_mapping is device.action_mapping
+    assert device._map_manager is None
     assert device.property_mapping[DreameVacuumProperty.STATE] == {"siid": 2, "piid": 2}
     assert device.property_mapping[DreameVacuumProperty.ERROR] == {"siid": 2, "piid": 3}
     assert DreameVacuumAction.REQUEST_MAP not in device.action_mapping
