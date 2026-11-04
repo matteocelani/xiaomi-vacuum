@@ -224,6 +224,7 @@ def test_catalog_row_stays_until_the_xiaomi_codec_is_installed():
         "xiaomi.vacuum.c107",
         "xiaomi.vacuum.ov81cn",
         "xiaomi.vacuum.d101",
+        "xiaomi.vacuum.c104",
     ):
         copied = _load(model, None)
         assert tuple(copied.list) == _COPIED_XIAOMI_ROW
@@ -247,6 +248,7 @@ def test_chinese_variants_keep_the_global_capability_list():
         ("xiaomi.vacuum.ov42gl", "xiaomi.vacuum.pv31cn"),
         ("xiaomi.vacuum.d102ev", "xiaomi.vacuum.c107"),
         ("xiaomi.vacuum.pv81gl", "xiaomi.vacuum.ov81cn"),
+        ("xiaomi.vacuum.b106eu", "xiaomi.vacuum.c104"),
     )
     for global_model, chinese_model in pairs:
         global_capability = _load(global_model, resolve_family(global_model))
@@ -315,6 +317,12 @@ def test_s20_plus_and_x20_max_use_the_xiaomi_base():
     assert vacuum_t12.auto_empty_base is False
     assert vacuum_t12.self_wash_base is False
     assert vacuum_t12.lidar_navigation is False
+    vacuum_c104 = _load("xiaomi.vacuum.c104", resolve_family("xiaomi.vacuum.c104"))
+    assert tuple(vacuum_c104.list) == tuple(e10.list)
+    assert vacuum_c104.dnd is False
+    assert vacuum_c104.auto_empty_base is False
+    assert vacuum_c104.self_wash_base is False
+    assert vacuum_c104.lidar_navigation is False
     assert tuple(x20.list) == _X20_MAX
     assert tuple(x20_pro.list) == _X20_MAX
     assert tuple(vacuum_5.list) == _X20_MAX

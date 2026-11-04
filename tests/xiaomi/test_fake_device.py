@@ -31,6 +31,7 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_MIJIA_ROBOT_VACUUM_5,
     MODEL_MIJIA_ROBOT_VACUUM_6,
     MODEL_MIJIA_SWEEP_MOP_2,
+    MODEL_MIJIA_SWEEP_MOP_3,
     MODEL_ROBOT_VACUUM_5_PRO,
     MODEL_ROBOT_VACUUM_6,
     MODEL_ROBOT_VACUUM_6_MAX,
@@ -156,6 +157,7 @@ def test_sweep_family_starts_and_returns_without_pause(socket_enabled: None) -> 
         MODEL_S12,
         MODEL_T12,
         MODEL_MIJIA_SWEEP_MOP_2,
+        MODEL_MIJIA_SWEEP_MOP_3,
         MODEL_MIJIA_3C,
     ):
         family = resolve_family(model)
