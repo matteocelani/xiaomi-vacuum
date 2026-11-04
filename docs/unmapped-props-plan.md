@@ -1,5 +1,7 @@
 # Plan for the 180 unmapped writable properties
 
+Approved as written on 2026-11-04. The owner accepted 85 entities, one `xiaomi_add_schedule` service for the 90 order fields, and the 5 uncertain properties left unmapped with documented omission reasons. `xiaomi.vacuum.pv32gl` stays on spec version 2. `ota-info` (siid 20, aiid 16) is not exposed. Phase 2 does not start until PR #37 is merged.
+
 Research only. No product code in this change. Implementation waits until PR #37 (`cursor/review-fail-closed-3510`) is on `master`, because that branch is rewriting `value_limits.py`, `model.py`, the family modules, and `device.py`.
 
 Fetched 2026-11-04 from `https://miot-spec.org/miot-spec-v2/instance?type=<urn>`. These are the properties the deep suite xfailed as "published writable, no map, no omission rule": 180 property instances, 59 distinct spec shapes, 24 models. The other 24 models have none.
