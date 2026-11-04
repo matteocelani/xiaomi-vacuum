@@ -41,6 +41,7 @@ from custom_components.dreame_vacuum.xiaomi.exceptions import (
     XiaomiValueException,
 )
 from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_S20_PLUS, MODEL_X20_MAX
+from custom_components.dreame_vacuum.xiaomi.model import coerce_outgoing
 from custom_components.dreame_vacuum.xiaomi.value_limits import (
     is_uint8_address,
     wire_allowed,
@@ -384,6 +385,15 @@ def test_outgoing_suction_uses_the_family_offset_and_rejects_unknown_wires() -> 
         family.convert_outgoing("STATE", 1)
     with pytest.raises(XiaomiValueException):
         family.convert_outgoing("TASK_STATUS", 0)
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("STATE", "x")
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("STATE", True)
+    assert coerce_outgoing("float", "VOLUME", 1.5) == 1.5
+    with pytest.raises(XiaomiValueException):
+        coerce_outgoing("float", "VOLUME", True)
+    with pytest.raises(XiaomiValueException):
+        coerce_outgoing("float", "VOLUME", "1.5")
 
 
 _DREAME_PROTOCOL_XIAOMI: tuple[str, ...] = (
@@ -509,22 +519,115 @@ def test_send_command_rejects_parameters_that_skip_the_allowlist() -> None:
         device.send_command(
             "action", {"siid": 2, "aiid": 1, "in": [{"piid": 99, "value": 1}]}
         )
-    with pytest.raises(InvalidValueException):
+    with pytest.raises(InvalidActionException):
         device.send_command(
             "action", {"siid": 2, "aiid": 1, "in": [{"piid": 20, "value": 9}]}
         )
+    with pytest.raises(InvalidValueException):
+        device.send_command("set_properties", [{"siid": 4, "piid": 2, "value": 101.0}])
+    with pytest.raises(InvalidValueException):
+        device.send_command("set_properties", [{"siid": 4, "piid": 2, "value": "101"}])
+    with pytest.raises(InvalidValueException):
+        device.send_command("set_properties", [{"siid": 4, "piid": 2, "value": True}])
+    with pytest.raises(InvalidValueException):
+        device.send_command("set_properties", [{"siid": 2, "piid": 1, "value": "x"}])
     assert sent == []
     device.send_command("set_properties", [{"siid": 4, "piid": 2, "value": 4}])
     assert sent[-1][0] == "set_properties"
     parameters = sent[-1][1]
     assert isinstance(parameters, list)
     assert parameters[0]["value"] == family.convert_outgoing("VOLUME", 4)
-    device.send_command(
-        "action", {"siid": 2, "aiid": 1, "in": [{"piid": 20, "value": 2}]}
+    with pytest.raises(InvalidActionException):
+        device.send_command(
+            "action", {"siid": 2, "aiid": 1, "in": [{"piid": 20, "value": 2}]}
+        )
+
+
+def test_action_input_uses_the_action_service_not_another_piid() -> None:
+    family = resolve_family(MODEL_S20_PLUS)
+    assert family is not None
+    device = object.__new__(DreameVacuumDevice)
+    device._commands_fail_closed = False
+    device.property_mapping = {
+        DreameVacuumProperty.BATTERY_LEVEL: {"siid": 3, "piid": 1},
+        DreameVacuumProperty.STATE: {"siid": 2, "piid": 1},
+    }
+    device.action_mapping = {DreameVacuumAction.START: {"siid": 2, "aiid": 1}}
+    device._property_codec = SimpleNamespace(
+        declared_inputs=lambda siid, aiid: (
+            frozenset({1}) if siid == 2 and aiid == 1 else frozenset()
+        ),
+        convert_outgoing=family.convert_outgoing,
     )
-    action_parameters = sent[-1][1]
-    assert isinstance(action_parameters, dict)
-    assert action_parameters["in"] == [{"piid": 20, "value": 2}]
+    device.schedule_update = lambda *_args, **_kwargs: None
+    sent: list[object] = []
+    device._protocol = SimpleNamespace(
+        send=lambda *_args, **_kwargs: sent.append(True) or {"ok": True}
+    )
+    with pytest.raises(InvalidValueException):
+        device.send_command(
+            "action", {"siid": 2, "aiid": 1, "in": [{"piid": 1, "value": 50}]}
+        )
+    with pytest.raises(InvalidActionException):
+        device.send_command(
+            "action", {"siid": 2, "aiid": 1, "in": [{"piid": 2, "value": 1}]}
+        )
+    assert sent == []
+
+
+def test_catalog_model_outside_the_dreame_protocol_allowlist_fails_closed() -> None:
+    with pytest.raises(DeviceException, match="unsupported model"):
+        DreameVacuumDevice(
+            "Sim",
+            "",
+            "",
+            configured_model=MODEL_S20_PLUS,
+            family_resolver=lambda _model: None,
+        )
+
+
+def test_locked_local_reads_use_cloud_when_credentials_exist() -> None:
+    protocol = DreameVacuumProtocol()
+    calls: list[str] = []
+
+    def cloud_send(
+        method: str,
+        parameters: object = None,
+        retry_count: int = 2,
+        timeout: object = None,
+    ) -> list[dict[str, int]]:
+        del parameters, retry_count, timeout
+        calls.append(method)
+        return [{"code": 0, "value": 3}]
+
+    def cloud_send_async(
+        callback: object, method: str, parameters: object = None, retry_count: int = 2
+    ) -> None:
+        del parameters, retry_count
+        calls.append(f"async:{method}")
+        if callable(callback):
+            callback([{"code": 0, "value": 3}])
+
+    cloud = SimpleNamespace(
+        logged_in=True,
+        device_id="device",
+        send=cloud_send,
+        send_async=cloud_send_async,
+    )
+    protocol.property_transport = SimpleNamespace(
+        local_auth_failed=True, send=lambda *_args, **_kwargs: None
+    )
+    protocol.cloud = cloud
+    protocol.device_cloud = None
+    assert protocol.send("get_properties", []) == [{"code": 0, "value": 3}]
+    protocol.send_async(None, "get_properties", [])
+    assert calls == ["get_properties", "async:get_properties"]
+    with pytest.raises(DeviceException):
+        protocol.send("set_properties", [])
+    assert calls == ["get_properties", "async:get_properties"]
+    protocol.cloud = None
+    with pytest.raises(DeviceException):
+        protocol.send("get_properties", [])
 
 
 def test_capability_load_rejects_a_brand_that_does_not_own_the_suffix() -> None:

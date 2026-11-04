@@ -312,7 +312,6 @@ from .exceptions import (
     NotSupportedException,
     UnavailableException,
 )
-from .catalog import catalog_supports_model
 from .family_codec import apply_family, family_fault_name
 from .protocol import DreameVacuumProtocol
 from .map import DreameMapVacuumMapManager, DreameVacuumMapDecoder
@@ -2542,7 +2541,14 @@ class DreameVacuumDevice:
     def _is_unlisted_xiaomi(self, model: str) -> bool:
         if not model.startswith(("xiaomi.", "mijia.")):
             return False
-        return not catalog_supports_model(DEVICE_INFO, model)
+        # Upstream Dreame-protocol Xiaomi models. Catalog presence is not enough:
+        # a later catalog row without a family must still fail closed.
+        return model not in {
+            "xiaomi.vacuum.c102cn",
+            "xiaomi.vacuum.c102gl",
+            "xiaomi.vacuum.d103cn",
+            "xiaomi.vacuum.d110ch",
+        }
 
     def _close_unknown_xiaomi(self, model: str) -> None:
         self.property_mapping = {}
@@ -2673,7 +2679,10 @@ class DreameVacuumDevice:
             if not isinstance(item, dict) or not set(item) <= {"piid", "value"} or "piid" not in item or "value" not in item:
                 raise InvalidActionException(key="invalid_action", action="action")
             piid = item.get("piid")
-            prop = self._property_for_piid(piid)
+            allowed = self._declared_action_inputs(parameters.get("siid"), parameters.get("aiid"))
+            if isinstance(piid, bool) or not isinstance(piid, int) or piid not in allowed:
+                raise InvalidActionException(key="invalid_action", action="action")
+            prop = self._property_for_address(parameters.get("siid"), piid)
             if prop is None:
                 raise InvalidActionException(key="invalid_action", action="action")
             inputs.append({"piid": piid, "value": self._wire_value_for_property(prop, item.get("value"))})
@@ -2692,11 +2701,17 @@ class DreameVacuumDevice:
         except Exception as err:
             raise InvalidValueException(f"out of range: {prop.name}") from err
 
-    def _property_for_piid(self, piid: object) -> DreameVacuumProperty | None:
-        for prop, mapping in self.property_mapping.items():
-            if mapping.get("piid") == piid:
-                return prop
-        return None
+    def _declared_action_inputs(self, siid: object, aiid: object) -> frozenset[int]:
+        codec = self._property_codec
+        if codec is None or not isinstance(siid, int) or not isinstance(aiid, int):
+            return frozenset()
+        declared = getattr(codec, "declared_inputs", None)
+        if not callable(declared):
+            return frozenset()
+        found = declared(siid, aiid)
+        if isinstance(found, frozenset):
+            return found
+        return frozenset()
 
     def _property_for_address(self, siid: object, piid: object) -> DreameVacuumProperty | None:
         for prop, mapping in self.property_mapping.items():

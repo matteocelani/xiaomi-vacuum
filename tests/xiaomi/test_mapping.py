@@ -52,6 +52,7 @@ from custom_components.dreame_vacuum.xiaomi.c101eu import X20 as X20_RECORD
 from custom_components.dreame_vacuum.xiaomi.d102ev import MIJIA_M30 as M30_RECORD
 from custom_components.dreame_vacuum.xiaomi.d102gl import X20_PRO as X20_PRO_RECORD
 from custom_components.dreame_vacuum.xiaomi.d106gl import S20 as S20_RECORD
+from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiValueException
 from custom_components.dreame_vacuum.xiaomi.mapping import (
     MODEL_H40,
     MODEL_ROBOT_VACUUM_5,
@@ -197,9 +198,11 @@ def test_cleaning_mode_and_suction_shift_only_on_the_wire_edges():
     assert family.convert_incoming("SUCTION_LEVEL", 2.0) == 1
     assert family.convert_outgoing("CLEANING_MODE", 0) == 1
     assert family.convert_outgoing("SUCTION_LEVEL", 2) == 3
-    assert family.convert_outgoing("CLEANING_MODE", False) is False
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("CLEANING_MODE", False)
     assert family.convert_outgoing("VOLUME", 4) == 4
-    assert family.convert_outgoing("CLEANING_MODE", "1") == "1"
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("CLEANING_MODE", "1")
     assert family.convert_incoming("SCHEDULE", "1-2-3") == "1-2-3"
     assert family.convert_incoming("VOLUME", True) is True
     assert family.convert_incoming("VOLUME", {"raw": 1}) == {"raw": 1}

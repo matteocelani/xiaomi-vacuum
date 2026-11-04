@@ -11,7 +11,7 @@ from typing import Final, Protocol, runtime_checkable
 from .controls import XiaomiControl, refresh_controls
 from .exceptions import XiaomiTransportException, XiaomiValueException
 from .transport import MiioPropertyTransport
-from .value_limits import index_offset, wire_allowed
+from .value_limits import index_offset, wire_allowed, wire_kind
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -102,6 +102,8 @@ class StoredTask(IntEnum):
 
 
 _UNKNOWN_STORED: Final = -1
+# Populated when a mapped action's spec publishes input piids. Empty means none.
+_ACTION_INPUTS: Final[dict[tuple[str, int, int], frozenset[int]]] = {}
 _UNKNOWN_FAULT_NAME: Final = "unknown"
 _UNKNOWN_LOGGED: set[tuple[str, str, int]] = set()
 _STORED_STATE_VALUES: Final[frozenset[int]] = frozenset(
@@ -133,6 +135,39 @@ _ACTIVE_TASK_STATES: Final[frozenset[int]] = frozenset(
         int(StoredState.SWEEPING_AND_MOPPING),
     }
 )
+
+
+def _is_numeric_text(value: str) -> bool:
+    """Return whether the text is a number, including a signed or decimal one."""
+    text = value.strip()
+    if not text:
+        return False
+    try:
+        float(text)
+    except ValueError:
+        return False
+    return True
+
+
+def coerce_outgoing(kind: str, property_name: str, value: object) -> object:
+    """Return a value whose Python type matches the spec format."""
+    if kind == "string":
+        if isinstance(value, str) and not _is_numeric_text(value):
+            return value
+        raise XiaomiValueException(property_name)
+    if kind == "bool":
+        if isinstance(value, bool) or (isinstance(value, int) and value in (0, 1)):
+            return value
+        raise XiaomiValueException(property_name)
+    if kind == "float":
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise XiaomiValueException(property_name)
+        return value
+    if kind == "int":
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise XiaomiValueException(property_name)
+        return value
+    raise XiaomiValueException(property_name)
 
 
 @runtime_checkable
@@ -187,14 +222,25 @@ class XiaomiModel:
             return _UNKNOWN_FAULT_NAME
         return self.fault_names.get(number, _UNKNOWN_FAULT_NAME)
 
+    def declared_inputs(self, siid: int, aiid: int) -> frozenset[int]:
+        """Return the spec input piids for one mapped action."""
+        return _ACTION_INPUTS.get((self.model, siid, aiid), frozenset())
+
     def convert_outgoing(self, property_name: str, value: object) -> object:
-        """Map a Dreame value to the integer the robot expects on the wire."""
-        if isinstance(value, bool) or not isinstance(value, int):
-            return value
-        # Stored state and task codes are Dreame values, not Xiaomi wire codes.
-        if property_name in {"STATE", "TASK_STATUS"}:
+        """Map a Dreame value to the value the robot expects on the wire."""
+        kind = wire_kind(self.model, property_name)
+        if kind is None:
             raise XiaomiValueException(property_name)
-        wire = value + index_offset(self.model, property_name)
+        if kind == "int" and property_name in {"STATE", "TASK_STATUS"}:
+            # Reject a non-integer before the state rule, which also rejects ints.
+            coerce_outgoing(kind, property_name, value)
+            raise XiaomiValueException(property_name)
+        if kind != "int":
+            return coerce_outgoing(kind, property_name, value)
+        number = coerce_outgoing(kind, property_name, value)
+        if not isinstance(number, int):
+            raise XiaomiValueException(property_name)
+        wire = number + index_offset(self.model, property_name)
         if not wire_allowed(self.model, property_name, wire):
             raise XiaomiValueException(property_name)
         return wire

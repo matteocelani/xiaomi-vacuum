@@ -228,6 +228,23 @@ def test_catalog_rejects_records_capability_load_would_reject():
         load_model_catalog(_encoded([[], [], [], []]))
 
 
+def test_decoded_catalog_is_reused(monkeypatch: pytest.MonkeyPatch) -> None:
+    import custom_components.dreame_vacuum.dreame.catalog as catalog
+
+    calls = {"n": 0}
+    original = catalog.zlib.decompress
+
+    def counting(data: bytes, wbits: int = 15) -> bytes:
+        calls["n"] += 1
+        return original(data, wbits)
+
+    catalog._decode_catalog.cache_clear()
+    monkeypatch.setattr(catalog.zlib, "decompress", counting)
+    assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.c102cn") is True
+    assert load_model_catalog(DEVICE_INFO)["xiaomi.vacuum.d110ch"] == 1
+    assert calls["n"] == 1
+
+
 def test_catalog_rejects_a_blob_that_is_not_a_list():
     payload = base64.b64encode(gzip.compress(b"{}", mtime=0)).decode("ascii")
     with pytest.raises(DeviceException):

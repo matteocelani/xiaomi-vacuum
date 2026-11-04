@@ -41,7 +41,7 @@ C-01, H-01, and H-02 stayed closed. The fail-closed follow-up had rejected suppo
 
 | ID | Result | Test |
 | --- | --- | --- |
-| N-01 | Fixed. `xiaomi.*` and `mijia.*` are closed only when `resolve_family` and `catalog_supports_model` both miss. `c102cn`, `c102gl`, `d103cn`, and `d110ch` keep `DreameVacuumPropertyMapping`. | `test_dreame_protocol_xiaomi_models_keep_the_dreame_catalog` |
+| N-01 | Fixed, then narrowed by R3-L01. The four Dreame-protocol models stay on the Dreame maps. Any other `xiaomi.*` or `mijia.*` without a family is closed, even when the catalog contains it. | `test_dreame_protocol_xiaomi_models_keep_the_dreame_catalog`, `test_catalog_model_outside_the_dreame_protocol_allowlist_fails_closed` |
 | N-02 | Fixed. The handshake checks the source host, magic `0x2131`, and length 32. Fixtures send the unsigned `0xff` hello that robots send. | `test_unsigned_handshake_is_accepted` |
 | N-03 | Fixed. `get_properties` and `set_properties` accept only a non-empty list. `set_properties` runs `convert_outgoing`. Action `in` piids must be mapped and their values must convert. Extra keys are rejected. | `test_send_command_rejects_parameters_that_skip_the_allowlist` |
 | N-04 | Fixed. `_remember_reported_model` writes `CONF_MODEL` only when `resolve_family` returns a family, so Dreame and the four Dreame-protocol Xiaomi models are not pinned or reloaded. | `tests/xiaomi/test_reported_model.py` |
@@ -53,3 +53,15 @@ C-01, H-01, and H-02 stayed closed. The fail-closed follow-up had rejected suppo
 | STATE / TASK_STATUS | Fixed. `convert_outgoing` raises `XiaomiValueException` for both names. Incoming conversion is unchanged. | `test_outgoing_suction_uses_the_family_offset_and_rejects_unknown_wires` |
 | L-07 | Still deferred. Retries and random request ids stay as recorded above. | — |
 | L-12 | Still deferred. Action and pip SHA pins stay as recorded above. | — |
+
+## Re-review at b42f68f
+
+R3 approved with reservations: no Critical or High findings. These rows close the two Medium findings and the Lows that were safe to change.
+
+| ID | Result | Test |
+| --- | --- | --- |
+| R3-M01 | Fixed. `convert_outgoing` accepts only the spec format: bool (and 0 or 1), integer types, float, or a non-numeric string. `None`, lists, bools where an int is expected, and numeric strings raise on every outgoing path, including `send_command`. | `tests/xiaomi/test_outgoing_types.py` |
+| R3-M02 | Fixed. An action input piid must be in that action's spec `in` list and must resolve with `_property_for_address(siid, piid)`. A piid from another service is not accepted. | `test_action_inputs_follow_the_spec_for_every_family`, `test_action_input_uses_the_action_service_not_another_piid` |
+| R3-L01 | Fixed. The Dreame-protocol fallback is the allowlist `c102cn`, `c102gl`, `d103cn`, `d110ch`, not catalog presence. | `test_catalog_model_outside_the_dreame_protocol_allowlist_fails_closed` |
+| R3-L02 | Fixed. During local auth lockout, `get_properties` uses the cloud when cloud credentials exist. `set_properties` still stops locally. | `test_locked_local_reads_use_cloud_when_credentials_exist` |
+| R3-L03 | Fixed. The decoded catalog is cached, so repeated model checks do not decompress the blob again. | `test_decoded_catalog_is_reused` |
