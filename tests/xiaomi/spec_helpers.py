@@ -1191,6 +1191,95 @@ VACUUM_6_PRO_STATE_AFTER_READ: Final[dict[int, DreameVacuumState]] = {
 }
 
 
+MIJIA_B108_SERVICE_REASONS: Final[dict[int, str]] = {
+    1: "identity: manufacturer, model, and firmware come from miIO.info.",
+    7: "map: map, room, and zone support stays off until its own change.",
+}
+MIJIA_B108_PROPERTY_REASONS: Final[dict[tuple[int, int], str]] = {
+    (2, 7): "needs council: clean times is not a Dreame property on the S20+ base.",
+    (2, 10): "map: zone ids.",
+    (2, 11): "map: restricted areas.",
+    (2, 12): "map: virtual walls.",
+    (2, 13): "map: room ids are not readable.",
+    (2, 14): "map: room name is not readable.",
+    (2, 15): "map: points are not readable.",
+    (2, 16): "needs council: mode repeats suction-level with a different value list.",
+    (3, 3): "no ha meaning: battery voltage is not a Home Assistant battery sensor.",
+    (4, 1): "needs council: the alarm boolean is not the Dreame volume property.",
+    (5, 2): "no ha meaning: current lock echoes the mapped child lock.",
+    (6, 2): "no ha meaning: firmware is already exposed from miIO.info.",
+    (6, 4): "needs council: DND time is one packed integer, not a start and end.",
+    (6, 7): "needs council: carpet avoidance is a boolean this base does not select.",
+    (6, 8): "map: carpet display is map rendering.",
+    (6, 10): "map: room information.",
+    (6, 12): "no ha meaning: common params are neither readable nor writable.",
+}
+MIJIA_B108_ACTION_REASONS: Final[dict[tuple[int, int], str]] = {
+    (2, 3): "needs council: sweep-only start duplicates cleaning mode plus start.",
+    (2, 4): "needs council: mop start duplicates cleaning mode plus start.",
+    (2, 5): "needs council: sweep-mop start duplicates cleaning mode plus start.",
+    (2, 7): "map: zone config takes a room-id parameter.",
+    (2, 8): "map: room config takes a room-id parameter.",
+    (2, 9): "map: set-zone takes a zone parameter.",
+    (2, 10): "map: room clean config takes a room parameter.",
+    (2, 11): "map: split room is a map edit.",
+    (2, 12): "map: merge rooms is a map edit.",
+    (2, 13): "map: room sweep takes a room-id parameter.",
+    (2, 14): "map: build-map stays unmapped until map support.",
+    (6, 2): "needs council: entering remote control needs a remote-control design.",
+    (6, 3): "needs council: adding a schedule takes an order blob.",
+    (6, 4): "needs council: modifying a schedule takes an order blob.",
+    (6, 5): "needs council: deleting a schedule takes an order blob.",
+    (6, 8): "needs council: listening voice has no published effect.",
+    (6, 9): "needs council: remote direction buttons need a remote-control design.",
+    (6, 10): "needs council: remote direction buttons need a remote-control design.",
+    (6, 11): "needs council: remote direction buttons need a remote-control design.",
+    (6, 12): "needs council: remote direction buttons need a remote-control design.",
+    (6, 13): "needs council: remote direction buttons need a remote-control design.",
+    (6, 14): "needs council: remote direction buttons need a remote-control design.",
+    (6, 15): "needs council: stop-and-gocharge duplicates return-to-base.",
+    (6, 16): "no ha meaning: system info is a diagnostic fetch, not a user control.",
+}
+MIJIA_B108_STATE_AFTER_READ: Final[dict[int, DreameVacuumState]] = {
+    1: DreameVacuumState.IDLE,
+    2: DreameVacuumState.CHARGING,
+    3: DreameVacuumState.CHARGING,
+    4: DreameVacuumState.SWEEPING,
+    5: DreameVacuumState.PAUSED,
+    6: DreameVacuumState.RETURNING,
+    7: DreameVacuumState.REMOTE_CONTROL,
+    8: DreameVacuumState.CHARGING_COMPLETED,
+    9: DreameVacuumState.BUILDING,
+    10: DreameVacuumState.UPGRADING,
+}
+
+
+def mijia_b108_case(
+    model: str, device_name: str, spec_filename: str, spec_type: str
+) -> SpecCase:
+    """Build the shared 2S spec case for one released mijia.vacuum.b108 model."""
+    return SpecCase(
+        model=model,
+        device_name=device_name,
+        spec_filename=spec_filename,
+        property_reasons=MIJIA_B108_PROPERTY_REASONS,
+        action_reasons=MIJIA_B108_ACTION_REASONS,
+        state_after_read=MIJIA_B108_STATE_AFTER_READ,
+        classification_counts={spec_filename: (38, 64)},
+        spec_type=spec_type,
+        reason_prefix_counts={
+            "identity": 5,
+            "map": 31,
+            "needs council": 23,
+            "no ha meaning": 5,
+        },
+        service_reasons=MIJIA_B108_SERVICE_REASONS,
+        checked_events=((3, 1), (7, 1), (7, 2)),
+        state_wire_eight=int(DreameVacuumState.CHARGING_COMPLETED),
+        action_spec_filenames=(spec_filename,),
+    )
+
+
 def sweep_case(
     model: str, device_name: str, spec_filename: str, spec_type: str
 ) -> SpecCase:

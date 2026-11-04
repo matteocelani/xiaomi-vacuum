@@ -35,7 +35,10 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_MIJIA_ROBOT_VACUUM_5,
     MODEL_MIJIA_ROBOT_VACUUM_6,
     MODEL_MIJIA_SWEEP_MOP_2,
+    MODEL_MIJIA_SWEEP_MOP_2S,
     MODEL_MIJIA_SWEEP_MOP_3,
+    MODEL_MIJIA_SWEEP_MOP_3S,
+    MODEL_MIJIA_SWEEP_MOP_3S_ZH,
     MODEL_ROBOT_VACUUM_5_PRO,
     MODEL_ROBOT_VACUUM_6,
     MODEL_ROBOT_VACUUM_6_MAX,
@@ -426,6 +429,17 @@ _ACTION_TEXT[MODEL_E5] = {
     "RESET_FILTER": "Reset Filter Life",
     "RESET_SIDE_BRUSH": "Reset Brush Life",
 }
+_MIJIA_B108_PROPERTIES = {
+    key: ("" if key == "FAULTS" else value)
+    for key, value in _PROPERTY_TEXT[MODEL_S20_PLUS].items()
+    if key != "CARPET_CLEANING"
+}
+_PROPERTY_TEXT[MODEL_MIJIA_SWEEP_MOP_2S] = _MIJIA_B108_PROPERTIES
+_PROPERTY_TEXT[MODEL_MIJIA_SWEEP_MOP_3S] = _MIJIA_B108_PROPERTIES
+_PROPERTY_TEXT[MODEL_MIJIA_SWEEP_MOP_3S_ZH] = _MIJIA_B108_PROPERTIES
+_ACTION_TEXT[MODEL_MIJIA_SWEEP_MOP_2S] = _ACTION_TEXT[MODEL_S20_PLUS]
+_ACTION_TEXT[MODEL_MIJIA_SWEEP_MOP_3S] = _ACTION_TEXT[MODEL_S20_PLUS]
+_ACTION_TEXT[MODEL_MIJIA_SWEEP_MOP_3S_ZH] = _ACTION_TEXT[MODEL_S20_PLUS]
 _SPEC_FILES = {
     MODEL_S20_PLUS: ("b108gl.json",),
     MODEL_X20_MAX: ("d109gl.json", "d109gl_v1.json"),
@@ -459,6 +473,9 @@ _SPEC_FILES = {
     MODEL_S12: ("b106eu.json",),
     MODEL_T12: ("b106bk.json",),
     MODEL_MIJIA_SWEEP_MOP_3: ("c104.json",),
+    MODEL_MIJIA_SWEEP_MOP_2S: ("b108za.json",),
+    MODEL_MIJIA_SWEEP_MOP_3S: ("b108zb.json",),
+    MODEL_MIJIA_SWEEP_MOP_3S_ZH: ("b108zh.json",),
     MODEL_MIJIA_SWEEP_MOP_2: ("c101.json", "c101_v1.json"),
     MODEL_MIJIA_3C: ("c103.json", "c103_v1.json"),
     MODEL_MIJIA_M30: ("d102ev.json",),
@@ -541,6 +558,9 @@ def _charging_value(name: str, number: int) -> str:
 def test_charging_value_three_is_not_chargeable():
     for name in (
         "b108gl.json",
+        "b108za.json",
+        "b108zb.json",
+        "b108zh.json",
         "d109gl.json",
         "d109gl_v1.json",
         "d102gl.json",

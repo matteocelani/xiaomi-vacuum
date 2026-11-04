@@ -249,6 +249,9 @@ def test_chinese_variants_keep_the_global_capability_list():
         ("xiaomi.vacuum.d102ev", "xiaomi.vacuum.c107"),
         ("xiaomi.vacuum.pv81gl", "xiaomi.vacuum.ov81cn"),
         ("xiaomi.vacuum.b106eu", "xiaomi.vacuum.c104"),
+        ("xiaomi.vacuum.b108gl", "mijia.vacuum.b108za"),
+        ("xiaomi.vacuum.b108gl", "mijia.vacuum.b108zb"),
+        ("xiaomi.vacuum.b108gl", "mijia.vacuum.b108zh"),
     )
     for global_model, chinese_model in pairs:
         global_capability = _load(global_model, resolve_family(global_model))
