@@ -70,6 +70,9 @@ def test_s20_plus_and_x20_max_load_from_the_current_catalog():
     assert models["mijia.vacuum.b108za"] == 1
     assert models["mijia.vacuum.b108zb"] == 1
     assert models["mijia.vacuum.b108zh"] == 1
+    assert models["mijia.vacuum.v1"] == 1
+    assert models["mijia.vacuum.v2"] == 1
+    assert models["mijia.vacuum.v3"] == 1
     assert "xiaomi.vacuum.b108za" not in models
     assert models["xiaomi.vacuum.c102gl"] == 1
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.b108gl") is True
@@ -117,6 +120,9 @@ def test_s20_plus_and_x20_max_load_from_the_current_catalog():
     assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.b108za") is True
     assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.b108zb") is True
     assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.b108zh") is True
+    assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.v1") is True
+    assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.v2") is True
+    assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.v3") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.c102gl") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.notreal") is False
 
@@ -160,7 +166,7 @@ def test_mijia_prefix_keeps_existing_brand_resolution():
     current = load_model_catalog(DEVICE_INFO)
     prefixes = Counter(model.split(".", 1)[0] for model in current)
     assert prefixes == Counter(
-        {"dreame": 620, "mova": 121, "xiaomi": 46, "trouver": 18, "mijia": 3}
+        {"dreame": 620, "mova": 121, "xiaomi": 46, "trouver": 18, "mijia": 6}
     )
 
 

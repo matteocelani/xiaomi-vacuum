@@ -28,6 +28,9 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_MIJIA_6_PRO,
     MODEL_MIJIA_7_MAX,
     MODEL_MIJIA_7C,
+    MODEL_MIJIA_ESSENTIAL,
+    MODEL_MIJIA_ESSENTIAL_V3,
+    MODEL_MIJIA_G1,
     MODEL_MIJIA_H40,
     MODEL_MIJIA_M30,
     MODEL_MIJIA_M30_PRO,
@@ -410,6 +413,43 @@ _PROPERTY_TEXT[MODEL_MIJIA_SWEEP_MOP_2] = _PROPERTY_TEXT[MODEL_X20]
 _ACTION_TEXT[MODEL_MIJIA_SWEEP_MOP_2] = _ACTION_TEXT[MODEL_X20]
 _PROPERTY_TEXT[MODEL_MIJIA_3C] = _PROPERTY_TEXT[MODEL_S20]
 _ACTION_TEXT[MODEL_MIJIA_3C] = _ACTION_TEXT[MODEL_S20]
+_ESSENTIAL_ACTIONS = {
+    "START": "Start Sweep",
+    "STOP": "Stop Sweeping",
+    "CHARGE": "Start Charge",
+    "LOCATE": "Identify",
+    "RESET_FILTER": "Reset Filter Life",
+    "RESET_MAIN_BRUSH": "Reset Brush Life",
+    "RESET_SIDE_BRUSH": "Reset Brush Life",
+}
+_ESSENTIAL_PROPERTIES = {
+    "STATE": "Status",
+    "ERROR": "Device Fault",
+    "BATTERY_LEVEL": "Battery Level",
+    "VOLUME": "Volume",
+    "FILTER_LEFT": "Filter Life Level",
+    "MAIN_BRUSH_LEFT": "Brush Life Level",
+    "SIDE_BRUSH_LEFT": "Brush Life Level",
+    "DND": "勿扰模式开关",
+}
+_PROPERTY_TEXT[MODEL_MIJIA_G1] = {
+    **_ESSENTIAL_PROPERTIES,
+    "CLEANING_TIME": "",
+    "CLEANING_COUNT": "",
+}
+_PROPERTY_TEXT[MODEL_MIJIA_ESSENTIAL] = {
+    **_ESSENTIAL_PROPERTIES,
+    "CLEANING_TIME": "清扫时间",
+    "CLEANING_COUNT": "总清扫次数",
+}
+_PROPERTY_TEXT[MODEL_MIJIA_ESSENTIAL_V3] = {
+    **_ESSENTIAL_PROPERTIES,
+    "CLEANING_TIME": "clean-time",
+    "CLEANING_COUNT": "total-clean-count",
+}
+_ACTION_TEXT[MODEL_MIJIA_G1] = _ESSENTIAL_ACTIONS
+_ACTION_TEXT[MODEL_MIJIA_ESSENTIAL] = _ESSENTIAL_ACTIONS
+_ACTION_TEXT[MODEL_MIJIA_ESSENTIAL_V3] = _ESSENTIAL_ACTIONS
 _PROPERTY_TEXT[MODEL_E5] = {
     "STATE": "Status",
     "ERROR": "Device Fault",
@@ -486,6 +526,9 @@ _SPEC_FILES = {
     MODEL_MIJIA_M30_PRO: ("c107.json", "c107_v1.json"),
     MODEL_MIJIA_ROBOT_VACUUM_4: ("ov81cn.json", "ov81cn_v1.json"),
     MODEL_MIJIA_H40: ("d101.json", "d101_v1.json", "d101_v2.json"),
+    MODEL_MIJIA_G1: ("v1.json",),
+    MODEL_MIJIA_ESSENTIAL: ("v2.json",),
+    MODEL_MIJIA_ESSENTIAL_V3: ("v3.json",),
 }
 _ABSENT_PROPERTIES = (
     "STATUS",

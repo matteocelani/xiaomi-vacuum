@@ -28,6 +28,25 @@ class _PollsProperties(Protocol):
         """Read properties. A missing argument reads the full set."""
 
 
+@runtime_checkable
+class _NamesFaults(Protocol):
+    """A codec that names fault codes instead of using the Dreame vocabulary."""
+
+    def fault_name(self, code: object) -> str | None:
+        """Return a translation key, or None when Dreame names still apply."""
+
+
+def family_fault_name(device: object, code: object) -> str | None:
+    """Return a family fault translation key, or None when the codec has no table."""
+    codec = device._property_codec
+    if not isinstance(codec, _NamesFaults):
+        return None
+    named = codec.fault_name(code)
+    if not isinstance(named, str) or not named:
+        return None
+    return named
+
+
 def apply_family(device: object, family: object) -> None:
     """Install explicit maps, then keep a local transport so a later poll can retry."""
     property_overrides = family.property_overrides

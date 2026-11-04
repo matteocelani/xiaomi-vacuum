@@ -311,7 +311,7 @@ from .exceptions import (
     NotSupportedException,
     UnavailableException,
 )
-from .family_codec import apply_family
+from .family_codec import apply_family, family_fault_name
 from .protocol import DreameVacuumProtocol
 from .map import DreameMapVacuumMapManager, DreameVacuumMapDecoder
 
@@ -8955,6 +8955,10 @@ class DreameVacuumDeviceStatus:
     @property
     def error_name(self) -> str:
         """Return error as string for translation."""
+        raw = self.faults[0] if self.faults else self._get_property(DreameVacuumProperty.ERROR)
+        named = family_fault_name(self._device, raw)
+        if named is not None:
+            return named
         return ERROR_CODE_TO_ERROR_NAME.get(self.error, STATE_UNKNOWN)
 
     @property
