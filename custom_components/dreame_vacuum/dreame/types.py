@@ -3444,7 +3444,7 @@ class DreameVacuumDeviceCapability:
                 else RobotType.LIDAR if self.lidar_navigation else RobotType.VSLAM
             )
         )
-        if "xiaomi.vacuum." in self._device.info.model:
+        if self._device.info.model.startswith(("xiaomi.", "mijia.")):
             self.mijia = True
             self.wifi_map = False
             self.mop_clean_frequency = True

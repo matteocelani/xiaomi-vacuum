@@ -60,7 +60,6 @@ _WASH_TWENTY_FIVE_SQUARE_METERS: Final = 5
 
 # The Dreame cleaning-mode select would write mop-only, which this spec omits.
 _OMITTED_PROPERTIES: Final = frozenset({"CLEANING_MODE"})
-_OMITTED_ACTIONS: Final = frozenset({"START_CUSTOM"})
 # Station self-clean and IMU calibration are published. Hair cutting is not.
 _KEPT_STATION_CONTROLS: Final = frozenset(
     {
@@ -182,7 +181,7 @@ MIJIA_7_MAX: Final = XiaomiModel(
         STATION_STATISTICS_PROPERTIES,
         omitted=_OMITTED_PROPERTIES,
     ),
-    action_overrides=compose_addresses(STATION_ACTIONS, omitted=_OMITTED_ACTIONS),
+    action_overrides=compose_addresses(STATION_ACTIONS),
     state_by_wire=compose_codes(
         EXTENDED_STATION_STATES,
         {**SUMMON_STATES, **SWEEP_SUMMON_STATES},

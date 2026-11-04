@@ -38,8 +38,10 @@ _HANDSHAKE: Final = bytes.fromhex("21310020") + (b"\xff" * _HANDSHAKE_PADDING_LE
 _FAILURE_NONE: Final = "none"
 _FAILURE_TIMEOUT: Final = "timeout"
 _FAILURE_AUTH: Final = "auth"
+_FAILURE_PROTOCOL: Final = "protocol"
 _FAILURE_ID: Final = "id"
 _FAILURE_REJECT: Final = "reject"
+_AUTH_FAILURE_LIMIT: Final = 3
 
 
 def _token_bytes(token: str) -> bytes:
@@ -87,11 +89,13 @@ class MiioPropertyTransport:
         token: str,
         socket_factory: Callable[[], socket.socket] | None = None,
         timeout: float = _TIMEOUT_SECONDS,
+        clock: Callable[[], float] | None = None,
     ) -> None:
         self._host = host
         self._token = _token_bytes(token)
         self._socket_factory = socket_factory
         self._timeout = timeout
+        self._clock = time.monotonic if clock is None else clock
         self._discovered = False
         self._device_id = 0
         self._stamp = 0
@@ -101,6 +105,7 @@ class MiioPropertyTransport:
         self._iv = hashlib.md5(self._key + self._token).digest()
         self._auth_failed = False
         self._auth_logged = False
+        self._failure_streak = 0
         self._retry_after = 0.0
         self._failure = _FAILURE_NONE
 
@@ -114,18 +119,21 @@ class MiioPropertyTransport:
 
     def probe(self) -> bool:
         """Return whether the robot accepts the token, not only a handshake."""
+        if self._auth_is_blocked():
+            return False
         if not self._handshake():
             self._discovered = False
+            self._schedule_retry()
             return False
         self._discovered = True
         info = self._exchange(_INFO_METHOD, [])
-        if info is None and self._failure == _FAILURE_AUTH:
-            self._mark_auth_failed()
-            return False
         if info is None:
             self._discovered = False
+            self._record_exchange_failure()
+            self._schedule_retry()
             return False
         self._auth_failed = False
+        self._failure_streak = 0
         self._discovered = True
         return True
 
@@ -139,33 +147,69 @@ class MiioPropertyTransport:
         # retry_count stays in the signature for callers. A missed robot must not
         # multiply the timeout, so a failure waits out a backoff instead.
         del retry_count
-        if self._auth_failed:
+        if self._auth_is_blocked():
             return None
-        now = time.monotonic()
+        now = self._clock()
         if not self._discovered:
             if now < self._retry_after:
                 return None
             if not self.probe():
-                if not self._auth_failed:
-                    self._retry_after = time.monotonic() + _PROBE_BACKOFF_SECONDS
                 return None
         response = self._exchange(method, parameters)
         if response is not None:
+            self._failure_streak = 0
             return response
-        if self._failure == _FAILURE_AUTH:
-            self._mark_auth_failed()
-            return None
+        self._record_exchange_failure()
         self._discovered = False
-        self._retry_after = time.monotonic() + _PROBE_BACKOFF_SECONDS
+        self._schedule_retry()
         return None
+
+    def _schedule_retry(self) -> None:
+        self._retry_after = self._clock() + _PROBE_BACKOFF_SECONDS
+
+    def _auth_is_blocked(self) -> bool:
+        if not self._auth_failed:
+            return False
+        if self._clock() >= self._retry_after:
+            self._auth_failed = False
+            self._failure_streak = 0
+            self._discovered = False
+            return False
+        return True
+
+    def _record_exchange_failure(self) -> None:
+        if self._failure != _FAILURE_AUTH:
+            self._failure_streak = 0
+            return
+        self._failure_streak += 1
+        if self._failure_streak < _AUTH_FAILURE_LIMIT:
+            return
+        self._mark_auth_failed()
 
     def _mark_auth_failed(self) -> None:
         self._auth_failed = True
         self._discovered = False
+        self._schedule_retry()
         if self._auth_logged:
             return
         self._auth_logged = True
         _LOGGER.warning("Local miIO token was rejected")
+
+    def _from_host(self, address: object) -> bool:
+        return (
+            isinstance(address, tuple)
+            and len(address) >= 1
+            and address[0] == self._host
+        )
+
+    def _checksum_matches(self, packet: bytes) -> bool:
+        if len(packet) < _HEADER_SIZE:
+            return False
+        header = packet[:_HEADER_FIELDS]
+        checksum = packet[_HEADER_FIELDS:_HEADER_SIZE]
+        payload = packet[_HEADER_SIZE:]
+        expected = hashlib.md5(header + self._token + payload).digest()
+        return checksum == expected
 
     def _open(self) -> socket.socket:
         if self._socket_factory is None:
@@ -179,15 +223,15 @@ class MiioPropertyTransport:
         datagram = self._open()
         try:
             datagram.sendto(_HANDSHAKE, (self._host, _MIIO_PORT))
-            data, _address = datagram.recvfrom(_HANDSHAKE_BUFFER)
+            data, address = datagram.recvfrom(_HANDSHAKE_BUFFER)
         except OSError:
             _LOGGER.debug("miIO handshake failed")
             self._failure = _FAILURE_TIMEOUT
             return False
         finally:
             datagram.close()
-        if len(data) < _HANDSHAKE_MIN_LENGTH:
-            self._failure = _FAILURE_TIMEOUT
+        if not self._from_host(address) or not self._checksum_matches(data):
+            self._failure = _FAILURE_PROTOCOL
             return False
         self._device_id = struct.unpack(">I", data[8:12])[0]
         self._stamp = struct.unpack(">I", data[12:16])[0]
@@ -217,7 +261,7 @@ class MiioPropertyTransport:
         datagram = self._open()
         try:
             datagram.sendto(packet, (self._host, _MIIO_PORT))
-            response, _address = datagram.recvfrom(_RESPONSE_BUFFER)
+            response, address = datagram.recvfrom(_RESPONSE_BUFFER)
         except OSError:
             _LOGGER.debug("miIO property request failed")
             self._failure = _FAILURE_TIMEOUT
@@ -225,8 +269,12 @@ class MiioPropertyTransport:
             return None
         finally:
             datagram.close()
-        if len(response) <= _HEADER_SIZE:
-            self._failure = _FAILURE_AUTH
+        if (
+            not self._from_host(address)
+            or len(response) <= _HEADER_SIZE
+            or not self._checksum_matches(response)
+        ):
+            self._failure = _FAILURE_PROTOCOL
             return None
         decrypted = _aes_decrypt(response[_HEADER_SIZE:], self._key, self._iv)
         if decrypted is None:

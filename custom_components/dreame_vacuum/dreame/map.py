@@ -35,13 +35,12 @@ from typing import Optional, Tuple
 from threading import Timer
 from .resources import *
 from .protocol import DreameVacuumProtocol
-from .exceptions import DeviceException
+from .exceptions import DeviceException, InvalidActionException
 from .types import (
     PIID,
     DIID,
     DreameVacuumProperty,
     DreameVacuumAction,
-    DreameVacuumActionMapping,
     DreameVacuumDeviceCapability,
     RobotType,
     CleansetType,
@@ -169,6 +168,7 @@ class DreameMapVacuumMapManager:
         self._aes_iv: str = None
         self._capability: DreameVacuumDeviceCapability = None
         self.action_mapping = None
+        self.property_mapping = None
 
         self._init_data()
 
@@ -228,7 +228,7 @@ class DreameMapVacuumMapManager:
             self._latest_object_name_time = request_start_time
 
         map_data_result = self._protocol.cloud.get_device_property(
-            DIID(DreameVacuumProperty.MAP_DATA), 20, self._latest_map_data_time
+            self._mapped_diid(DreameVacuumProperty.MAP_DATA), 20, self._latest_map_data_time
         )
 
         if not self._protocol.cloud.connected:
@@ -245,7 +245,7 @@ class DreameMapVacuumMapManager:
             map_data_result = []
 
         object_name_result = self._protocol.cloud.get_device_property(
-            DIID(DreameVacuumProperty.OBJECT_NAME), 1, self._latest_object_name_time
+            self._mapped_diid(DreameVacuumProperty.OBJECT_NAME), 1, self._latest_object_name_time
         )
         if object_name_result is None:
             _LOGGER.warning("Getting object_name from cloud failed")
@@ -282,14 +282,29 @@ class DreameMapVacuumMapManager:
     def _mapped_action(self, action: DreameVacuumAction) -> dict[str, int] | None:
         action_mapping = self.action_mapping
         if action_mapping is None:
-            mapping = DreameVacuumActionMapping[action]
-        else:
-            mapping = action_mapping.get(action)
-            if mapping is None:
-                return None
-        if "siid" not in mapping or "aiid" not in mapping:
+            raise InvalidActionException("map action mapping is not set")
+        mapping = action_mapping.get(action)
+        if mapping is None or "siid" not in mapping or "aiid" not in mapping:
             return None
         return mapping
+
+    def _mapped_diid(self, prop: DreameVacuumProperty) -> str:
+        mapping = self.property_mapping
+        if not mapping:
+            raise InvalidActionException("map property mapping is not set")
+        diid = DIID(prop, mapping)
+        if diid is None:
+            raise InvalidActionException(f"{prop.name} is not mapped")
+        return diid
+
+    def _mapped_piid(self, prop: DreameVacuumProperty) -> int:
+        mapping = self.property_mapping
+        if not mapping:
+            raise InvalidActionException("map property mapping is not set")
+        piid = PIID(prop, mapping)
+        if piid is None:
+            raise InvalidActionException(f"{prop.name} is not mapped")
+        return piid
 
     def _request_map(self, parameters: dict[str, Any] = None) -> dict[str, Any] | None:
         if parameters is None:
@@ -299,7 +314,7 @@ class DreameMapVacuumMapManager:
 
         payload = [
             {
-                "piid": PIID(DreameVacuumProperty.FRAME_INFO),
+                "piid": self._mapped_piid(DreameVacuumProperty.FRAME_INFO),
                 MAP_PARAMETER_VALUE: str(json.dumps(parameters, separators=(",", ":"))).replace(" ", ""),
             }
         ]
@@ -579,13 +594,15 @@ class DreameMapVacuumMapManager:
             if object_name is None or object_name == "":
                 _LOGGER.info("Get object name from cloud")
                 if self._protocol.cloud.dreame_cloud:
-                    object_name_result = self._protocol.cloud.get_properties(DIID(DreameVacuumProperty.OBJECT_NAME))
+                    object_name_result = self._protocol.cloud.get_properties(
+                        self._mapped_diid(DreameVacuumProperty.OBJECT_NAME)
+                    )
                     if object_name_result:
                         object_name_result = object_name_result[0][MAP_PARAMETER_VALUE]
                         object_name = object_name_result[0]
                 else:
                     object_name_result = self._protocol.cloud.get_device_property(
-                        DIID(DreameVacuumProperty.OBJECT_NAME)
+                        self._mapped_diid(DreameVacuumProperty.OBJECT_NAME)
                     )
                     if object_name_result:
                         object_name_result = json.loads(object_name_result[0][MAP_PARAMETER_VALUE])
@@ -1193,13 +1210,18 @@ class DreameMapVacuumMapManager:
 
     def get_aes_key(self):
         if self._aes_key is None:
+            address = None
+            if self.property_mapping:
+                address = self.property_mapping.get(DreameVacuumProperty.GET_PUBLIC_KEY)
+            if not address or "siid" not in address or "piid" not in address:
+                return None
             private_key = rsa.generate_private_key(public_exponent=65537, key_size=1024)
             response = self._protocol.action(
-                14,
+                address["siid"],
                 1,
                 [
                     {
-                        "piid": 5,
+                        "piid": address["piid"],
                         "value": base64.b64encode(
                             private_key.public_key().public_bytes(
                                 encoding=serialization.Encoding.DER,
@@ -1483,7 +1505,9 @@ class DreameMapVacuumMapManager:
                     and self._map_request_count == 2
                     and self._map_data is None
                 ):
-                    object_name_result = self._protocol.cloud.get_properties(DIID(DreameVacuumProperty.OBJECT_NAME))
+                    object_name_result = self._protocol.cloud.get_properties(
+                        self._mapped_diid(DreameVacuumProperty.OBJECT_NAME)
+                    )
                     if object_name_result and MAP_PARAMETER_VALUE in object_name_result[0]:
                         self._add_cloud_map_data(
                             None, object_name_result[0][MAP_PARAMETER_VALUE], object_name_result[0].get("updateDate")

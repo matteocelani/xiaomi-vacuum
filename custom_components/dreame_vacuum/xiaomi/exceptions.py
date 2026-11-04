@@ -13,3 +13,7 @@ class XiaomiControlException(Exception):  # noqa: N818 - core uses Exception
     def __init__(self, key: str) -> None:
         self.key = key
         super().__init__(key)
+
+
+class XiaomiValueException(XiaomiControlException):
+    """An outgoing value is outside the published spec for this model."""

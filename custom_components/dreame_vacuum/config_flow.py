@@ -8,6 +8,7 @@ from collections.abc import Mapping
 from homeassistant.const import (
     CONF_NAME,
     CONF_HOST,
+    CONF_MODEL,
     CONF_TOKEN,
     CONF_PASSWORD,
     CONF_USERNAME,
@@ -724,6 +725,7 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
                     CONF_DID: self.device_id,
                     CONF_AUTH_KEY: self.protocol.cloud.auth_key if self.protocol and self.protocol.cloud else None,
                     CONF_ACCOUNT_TYPE: self.account_type,
+                    **({CONF_MODEL: self.model} if self.model else {}),
                 },
                 options=self.options,
             )

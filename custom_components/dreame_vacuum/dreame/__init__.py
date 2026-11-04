@@ -169,6 +169,7 @@ from .protocol import DreameVacuumProtocol
 from .exceptions import (
     DeviceException,
     InvalidActionException,
+    NotSupportedException,
     DeviceUnavailableException,
     EntityUnavailableException,
     UnavailableException,

@@ -35,7 +35,9 @@ from .dreame import (
     DreameVacuumState,
     DreameVacuumSuctionLevel,
     DreameVacuumAction,
+    DreameVacuumProperty,
     InvalidActionException,
+    NotSupportedException,
     UnavailableException,
 )
 from .const import (
@@ -951,7 +953,7 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
         )
         if coordinator.device._map_manager:
             self._attr_supported_features |= VacuumEntityFeature.MAP
-            if CLEAN_AREA_ENTITY_FEATURE:
+            if CLEAN_AREA_ENTITY_FEATURE and coordinator.device.supports_targeted_clean():
                 self._attr_supported_features |= CLEAN_AREA_ENTITY_FEATURE
         self._activity_class = activity_class
 
@@ -1106,7 +1108,13 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
         """Set the vacuum cleaner to return to the dock."""
         await self._try_command("Unable to call return_to_base: %s", self.device.return_to_base)
 
+    def _require_targeted_clean(self) -> None:
+        if self.device.supports_targeted_clean():
+            return
+        self._raise_error(NotSupportedException(feature="targeted_clean"))
+
     async def async_clean_zone(self, zone, repeats=1, suction_level="", water_volume="") -> None:
+        self._require_targeted_clean()
         await self._try_command(
             "Unable to call clean_zone: %s",
             self.device.clean_zone,
@@ -1118,6 +1126,7 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
     async def async_clean_segment(self, segments, repeats=1, suction_level="", water_volume="") -> None:
         """Clean selected segments."""
+        self._require_targeted_clean()
         await self._try_command(
             "Unable to call clean_segment: %s",
             self.device.clean_segment,
@@ -1129,6 +1138,7 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
     async def async_clean_spot(self, points, repeats=1, suction_level="", water_volume="") -> None:
         """Clean 1.5 square meters area of selected points."""
+        self._require_targeted_clean()
         await self._try_command(
             "Unable to call clean_spot: %s",
             self.device.clean_spot,
@@ -1172,6 +1182,7 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
         Only cleans segments from the currently selected map.
         """
+        self._require_targeted_clean()
         selected_map = self.device.status.selected_map
         if selected_map is None or selected_map.map_index is None:
             return

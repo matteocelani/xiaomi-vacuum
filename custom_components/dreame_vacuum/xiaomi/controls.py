@@ -7,6 +7,7 @@ from enum import StrEnum
 from typing import Final, Protocol, runtime_checkable
 
 from .exceptions import XiaomiControlException
+from .value_limits import is_uint8_address
 
 _MIOT_BATCH: Final = 10
 
@@ -222,6 +223,7 @@ def write_control(device: object, control: XiaomiControl, value: object) -> None
     """Send one control value. Property-map controls are written by the shell."""
     if control.siid is None or control.piid is None:
         raise XiaomiControlException(control.key)
+    value = _validated_value(device, control, value)
     result = device._protocol.set_property(control.siid, control.piid, value)
     if not _accepted(result):
         raise XiaomiControlException(control.key)
@@ -261,10 +263,14 @@ def refresh_controls(device: object, controls: tuple[XiaomiControl, ...]) -> boo
             {"did": control.key, "siid": control.siid, "piid": control.piid}
             for control in batch
         ]
-        result = device._protocol.get_properties(items)
+        try:
+            result = device._protocol.get_properties(items)
+        except Exception:  # noqa: BLE001 - one control must not fail the property poll
+            continue
         if not isinstance(result, list):
-            raise XiaomiControlException("refresh")
+            continue
         changed = _store_batch(store, batch, result) or changed
+        _drop_failed(store, batch, result)
     return changed
 
 
@@ -275,6 +281,51 @@ def _stored_values(device: object) -> dict[str, object] | None:
     if not isinstance(values, dict):
         return None
     return values
+
+
+def _validated_value(device: object, control: XiaomiControl, value: object) -> object:
+    wire = value
+    if isinstance(value, bool) and _control_is_uint8(device, control):
+        wire = 1 if value else 0
+    if control.options and wire not in {item for item, _slug in control.options}:
+        raise XiaomiControlException(control.key)
+    missing_range = control.minimum is None or control.maximum is None
+    outside_range = (
+        isinstance(wire, int)
+        and not isinstance(wire, bool)
+        and control.minimum is not None
+        and control.maximum is not None
+        and (wire < control.minimum or wire > control.maximum)
+    )
+    if (
+        control.value_kind == ValueKind.INT
+        and not control.options
+        and (missing_range or outside_range)
+    ):
+        raise XiaomiControlException(control.key)
+    return wire
+
+
+def _control_is_uint8(device: object, control: XiaomiControl) -> bool:
+    codec = getattr(device, "_property_codec", None)
+    model = getattr(codec, "model", None)
+    if not isinstance(model, str) or control.siid is None or control.piid is None:
+        return False
+    return is_uint8_address(model, control.siid, control.piid)
+
+
+def _drop_failed(
+    store: dict[str, object],
+    batch: list[XiaomiControl],
+    result: list[object],
+) -> None:
+    accepted: set[tuple[object, object]] = set()
+    for item in result:
+        if isinstance(item, dict) and item.get("code") == 0 and "value" in item:
+            accepted.add((item.get("siid"), item.get("piid")))
+    for control in batch:
+        if (control.siid, control.piid) not in accepted:
+            store.pop(control.key, None)
 
 
 def _accepted(result: object) -> bool:
