@@ -241,7 +241,10 @@ _STRINGS = Path("custom_components/dreame_vacuum/strings.json")
 def test_every_fault_code_uses_the_spec_name_not_a_dreame_name(
     socket_enabled: None,
 ) -> None:
-    """Each published fault code shows that spec's description, never a Dreame name."""
+    """Each published fault code shows that spec's description, never a Dreame name.
+
+    A code the value list does not describe stays unknown.
+    """
     del socket_enabled
     document = json.loads(_STRINGS.read_text(encoding="utf-8"))
     sensor = document["entity"]["sensor"]["error"]
