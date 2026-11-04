@@ -119,6 +119,11 @@ def _decode_catalog(blob: str) -> list[object]:
     raise DeviceException("device catalog is not a list")
 
 
+def catalog_brand_matches(brand: object, code: str, model: str) -> bool:
+    """Return whether this catalog brand owns the full model id."""
+    return _model_id(brand, code) == model
+
+
 def _model_id(brand: object, code: object) -> str:
     prefix = _PREFIX_DREAME
     for brand_code, brand_prefix in _BRAND_PREFIXES:

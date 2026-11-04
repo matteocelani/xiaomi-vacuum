@@ -202,6 +202,12 @@ class MiioPropertyTransport:
             and address[0] == self._host
         )
 
+    def _is_hello(self, packet: bytes) -> bool:
+        if len(packet) != _HEADER_SIZE:
+            return False
+        magic, length = struct.unpack(">HH", packet[:4])
+        return magic == _MIIO_MAGIC and length == _HEADER_SIZE
+
     def _checksum_matches(self, packet: bytes) -> bool:
         if len(packet) < _HEADER_SIZE:
             return False
@@ -230,7 +236,7 @@ class MiioPropertyTransport:
             return False
         finally:
             datagram.close()
-        if not self._from_host(address) or not self._checksum_matches(data):
+        if not self._from_host(address) or not self._is_hello(data):
             self._failure = _FAILURE_PROTOCOL
             return False
         self._device_id = struct.unpack(">I", data[8:12])[0]
@@ -269,15 +275,13 @@ class MiioPropertyTransport:
             return None
         finally:
             datagram.close()
-        if (
-            not self._from_host(address)
-            or len(response) <= _HEADER_SIZE
-            or not self._checksum_matches(response)
-        ):
+        if not self._from_host(address) or len(response) <= _HEADER_SIZE:
             self._failure = _FAILURE_PROTOCOL
             return None
+        # Robots sign the encrypted body. A bad checksum or decrypt from the
+        # right host is a rejected token, so the auth lockout can count it.
         decrypted = _aes_decrypt(response[_HEADER_SIZE:], self._key, self._iv)
-        if decrypted is None:
+        if decrypted is None or not self._checksum_matches(response):
             self._failure = _FAILURE_AUTH
             return None
         # python-miio appends a trailing NUL before padding. Leave it off the JSON.

@@ -649,6 +649,8 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
         model = info.model if info is not None else None
         if not isinstance(model, str) or not model:
             return
+        if resolve_family(model) is None:
+            return
         current = self._entry.data.get(CONF_MODEL)
         if isinstance(current, str) and current:
             return

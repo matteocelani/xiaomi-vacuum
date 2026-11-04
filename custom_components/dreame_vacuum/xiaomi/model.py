@@ -193,7 +193,7 @@ class XiaomiModel:
             return value
         # Stored state and task codes are Dreame values, not Xiaomi wire codes.
         if property_name in {"STATE", "TASK_STATUS"}:
-            return value
+            raise XiaomiValueException(property_name)
         wire = value + index_offset(self.model, property_name)
         if not wire_allowed(self.model, property_name, wire):
             raise XiaomiValueException(property_name)

@@ -312,6 +312,7 @@ from .exceptions import (
     NotSupportedException,
     UnavailableException,
 )
+from .catalog import catalog_supports_model
 from .family_codec import apply_family, family_fault_name
 from .protocol import DreameVacuumProtocol
 from .map import DreameMapVacuumMapManager, DreameVacuumMapDecoder
@@ -2524,7 +2525,7 @@ class DreameVacuumDevice:
         if family is not None:
             apply_family(self, family, probe=False)
             return
-        if model.startswith(("xiaomi.", "mijia.")):
+        if self._is_unlisted_xiaomi(model):
             self._close_unknown_xiaomi(model)
 
     def _wants_map_manager(self) -> bool:
@@ -2537,6 +2538,11 @@ class DreameVacuumDevice:
             or DreameVacuumProperty.OBJECT_NAME in self.property_mapping
             or DreameVacuumAction.REQUEST_MAP in self.action_mapping
         )
+
+    def _is_unlisted_xiaomi(self, model: str) -> bool:
+        if not model.startswith(("xiaomi.", "mijia.")):
+            return False
+        return not catalog_supports_model(DEVICE_INFO, model)
 
     def _close_unknown_xiaomi(self, model: str) -> None:
         self.property_mapping = {}
@@ -2572,7 +2578,7 @@ class DreameVacuumDevice:
             return
         family = self._family_resolver(model)
         if family is None:
-            if model.startswith(("xiaomi.", "mijia.")):
+            if self._is_unlisted_xiaomi(model):
                 self._close_unknown_xiaomi(model)
             return
         # The MQTT callback reaches this method. Probing here would block that thread.
@@ -2621,20 +2627,82 @@ class DreameVacuumDevice:
             if isinstance(item, dict) and "piid" in item and item["piid"] is None:
                 raise InvalidActionException("action parameter piid is not mapped")
 
-    def _require_xiaomi_command(self, command: str, parameters: object) -> None:
+    def _require_xiaomi_command(self, command: str, parameters: object) -> object:
         if command in ("get_properties", "set_properties"):
-            items = parameters if isinstance(parameters, list) else []
-            for item in items:
-                if not isinstance(item, dict) or not self._address_is_mapped(
-                    item.get("siid"), item.get("piid"), properties=True
-                ):
-                    raise InvalidActionException(key="invalid_action", action=command)
-            return
-        if command == "action" and isinstance(parameters, dict) and self._address_is_mapped(
+            return self._xiaomi_property_parameters(command, parameters)
+        if command == "action":
+            return self._xiaomi_action_parameters(parameters)
+        raise InvalidActionException(key="invalid_action", action=command)
+
+    def _xiaomi_property_parameters(self, command: str, parameters: object) -> list[dict[str, object]]:
+        if not isinstance(parameters, list) or not parameters:
+            raise InvalidActionException(key="invalid_action", action=command)
+        allowed = {"did", "siid", "piid"}
+        if command == "set_properties":
+            allowed.add("value")
+        cleaned: list[dict[str, object]] = []
+        for item in parameters:
+            if not isinstance(item, dict) or not set(item) <= allowed or "siid" not in item or "piid" not in item:
+                raise InvalidActionException(key="invalid_action", action=command)
+            if command == "set_properties" and "value" not in item:
+                raise InvalidActionException(key="invalid_action", action=command)
+            siid = item.get("siid")
+            piid = item.get("piid")
+            if not self._address_is_mapped(siid, piid, properties=True):
+                raise InvalidActionException(key="invalid_action", action=command)
+            copied = dict(item)
+            if command == "set_properties":
+                prop = self._property_for_address(siid, piid)
+                copied["value"] = self._wire_value_for_property(prop, item.get("value"))
+            cleaned.append(copied)
+        return cleaned
+
+    def _xiaomi_action_parameters(self, parameters: object) -> dict[str, object]:
+        if not isinstance(parameters, dict) or not self._address_is_mapped(
             parameters.get("siid"), parameters.get("aiid"), properties=False
         ):
-            return
-        raise InvalidActionException(key="invalid_action", action=command)
+            raise InvalidActionException(key="invalid_action", action="action")
+        allowed = {"did", "siid", "aiid", "in"}
+        if not set(parameters) <= allowed:
+            raise InvalidActionException(key="invalid_action", action="action")
+        raw_inputs = parameters.get("in", [])
+        if not isinstance(raw_inputs, list):
+            raise InvalidActionException(key="invalid_action", action="action")
+        inputs: list[dict[str, object]] = []
+        for item in raw_inputs:
+            if not isinstance(item, dict) or not set(item) <= {"piid", "value"} or "piid" not in item or "value" not in item:
+                raise InvalidActionException(key="invalid_action", action="action")
+            piid = item.get("piid")
+            prop = self._property_for_piid(piid)
+            if prop is None:
+                raise InvalidActionException(key="invalid_action", action="action")
+            inputs.append({"piid": piid, "value": self._wire_value_for_property(prop, item.get("value"))})
+        copied = dict(parameters)
+        copied["in"] = inputs
+        return copied
+
+    def _wire_value_for_property(self, prop: DreameVacuumProperty | None, value: object) -> object:
+        convert = getattr(self._property_codec, "convert_outgoing", None)
+        if prop is None or convert is None:
+            return value
+        try:
+            return convert(prop.name, value)
+        except InvalidValueException:
+            raise
+        except Exception as err:
+            raise InvalidValueException(f"out of range: {prop.name}") from err
+
+    def _property_for_piid(self, piid: object) -> DreameVacuumProperty | None:
+        for prop, mapping in self.property_mapping.items():
+            if mapping.get("piid") == piid:
+                return prop
+        return None
+
+    def _property_for_address(self, siid: object, piid: object) -> DreameVacuumProperty | None:
+        for prop, mapping in self.property_mapping.items():
+            if mapping.get("siid") == siid and mapping.get("piid") == piid:
+                return prop
+        return None
 
     def _address_is_mapped(self, siid: object, iid: object, *, properties: bool) -> bool:
         table = self.property_mapping if properties else self.action_mapping
@@ -3213,7 +3281,12 @@ class DreameVacuumDevice:
         for prop, value in properties.items():
             wire = value
             if codec is not None:
-                wire = codec.convert_outgoing(prop.name, value)
+                try:
+                    wire = codec.convert_outgoing(prop.name, value)
+                except InvalidValueException:
+                    raise
+                except Exception as err:
+                    raise InvalidValueException(f"out of range: {prop.name}") from err
             wire_values[prop] = wire
 
         self.schedule_update(10)
@@ -4198,7 +4271,7 @@ class DreameVacuumDevice:
         ):  ## Commands for other vacuums are unanswered by the device, so they are rejected to prevent timeouts.
             raise InvalidActionException(key="invalid_action", action=command)
         if self._property_codec is not None or self._commands_fail_closed:
-            self._require_xiaomi_command(command, parameters)
+            parameters = self._require_xiaomi_command(command, parameters)
 
         self.schedule_update(10, True)
         response = self._protocol.send(command, parameters, 3)
@@ -6399,14 +6472,19 @@ class DreameVacuumDevice:
             if value == DreameVacuumCarpetCleaning.IGNORE.value:
                 return self.set_carpet_recognition(0)
             elif not self.status.carpet_recognition:
-                properties[DreameVacuumProperty.CARPET_RECOGNITION] = 1
-                if self.get_property(DreameVacuumProperty.CARPET_RECOGNITION) == 3:
-                    properties[DreameVacuumProperty.CARPET_BOOST] = 1
+                if DreameVacuumProperty.CARPET_RECOGNITION in self.property_mapping:
+                    properties[DreameVacuumProperty.CARPET_RECOGNITION] = 1
+                    if (
+                        self.get_property(DreameVacuumProperty.CARPET_RECOGNITION) == 3
+                        and DreameVacuumProperty.CARPET_BOOST in self.property_mapping
+                    ):
+                        properties[DreameVacuumProperty.CARPET_BOOST] = 1
             properties[DreameVacuumProperty.CARPET_CLEANING] = value
             if (
                 self.capability.mop_pad_unmounting
                 and value == DreameVacuumCarpetCleaning.REMOVE_MOP.value
                 and not self.status.auto_mount_mop
+                and DreameVacuumProperty.AUTO_MOUNT_MOP in self.property_mapping
             ):
                 properties[DreameVacuumProperty.AUTO_MOUNT_MOP] = 1
             self.set_properties(properties)

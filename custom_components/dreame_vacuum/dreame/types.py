@@ -9,6 +9,8 @@ from enum import IntEnum, Enum
 from dataclasses import dataclass, field, asdict
 from datetime import datetime
 
+from .catalog import catalog_brand_matches
+
 SEGMENT_TYPE_CODE_TO_NAME: Final = {
     0: "Room",
     1: "Living Room",
@@ -3268,6 +3270,8 @@ class DreameVacuumDeviceCapability:
             raise Exception("Unsupported Device!")
         device = device_info[0][device_info[3][model]]
         if not device or not (len(device) == 3 or len(device) == 4) or device[2] < 0:
+            raise Exception("Unsupported Device!")
+        if not catalog_brand_matches(device[0], model, self._device.info.model):
             raise Exception("Unsupported Device!")
         self._capability = device_info[1][device[2]]
         if self._capability is None:

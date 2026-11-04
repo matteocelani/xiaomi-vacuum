@@ -22,6 +22,8 @@ from custom_components.dreame_vacuum.dreame.protocol import DreameVacuumProtocol
 from custom_components.dreame_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumActionMapping,
+    DreameVacuumCarpetCleaning,
+    DreameVacuumDeviceCapability,
     DreameVacuumProperty,
     DreameVacuumPropertyMapping,
     DreameVacuumStatus,
@@ -34,7 +36,10 @@ from custom_components.dreame_vacuum.xiaomi.controls import (
     refresh_controls,
     write_control,
 )
-from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiControlException
+from custom_components.dreame_vacuum.xiaomi.exceptions import (
+    XiaomiControlException,
+    XiaomiValueException,
+)
 from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_S20_PLUS, MODEL_X20_MAX
 from custom_components.dreame_vacuum.xiaomi.value_limits import (
     is_uint8_address,
@@ -357,7 +362,13 @@ def test_catalog_decode_errors_and_brand_collisions_fail_closed() -> None:
 def test_wire_limits_allow_published_ranges_and_reject_the_rest() -> None:
     assert wire_allowed(MODEL_S20_PLUS, "VOLUME", 4) is True
     assert wire_allowed(MODEL_S20_PLUS, "VOLUME", 101) is False
-    assert wire_allowed(MODEL_S20_PLUS, "SCHEDULE", 1) is True
+    assert wire_allowed(MODEL_S20_PLUS, "SCHEDULE", 1) is False
+    assert wire_allowed(MODEL_S20_PLUS, "FAULTS", 1) is False
+    assert wire_allowed(MODEL_S20_PLUS, "CLEANING_PROPERTIES", 1) is False
+    assert wire_allowed(MODEL_S20_PLUS, "DND", 0) is True
+    assert wire_allowed(MODEL_S20_PLUS, "DND", 1) is True
+    assert wire_allowed(MODEL_S20_PLUS, "DND", 2) is False
+    assert wire_allowed("xiaomi.vacuum.missing", "VOLUME", 1) is False
     assert is_uint8_address("xiaomi.vacuum.missing", 2, 1) is False
 
 
@@ -369,3 +380,163 @@ def test_outgoing_suction_uses_the_family_offset_and_rejects_unknown_wires() -> 
         family.convert_outgoing("SUCTION_LEVEL", 40)
     assert family.convert_incoming("STATE", 99) == -1
     assert family.task_status_code(99, None) == -1
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("STATE", 1)
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("TASK_STATUS", 0)
+
+
+_DREAME_PROTOCOL_XIAOMI: tuple[str, ...] = (
+    "xiaomi.vacuum.c102cn",
+    "xiaomi.vacuum.c102gl",
+    "xiaomi.vacuum.d103cn",
+    "xiaomi.vacuum.d110ch",
+)
+
+
+def test_dreame_protocol_xiaomi_models_keep_the_dreame_catalog() -> None:
+    for model in _DREAME_PROTOCOL_XIAOMI:
+        assert resolve_family(model) is None
+        device = DreameVacuumDevice(
+            "Sim",
+            "",
+            "",
+            configured_model=model,
+            family_resolver=resolve_family,
+        )
+        assert device.property_mapping is DreameVacuumPropertyMapping
+        assert device.action_mapping is DreameVacuumActionMapping
+        assert device._property_codec is None
+        reported = DreameVacuumDevice("Sim", "", "", family_resolver=resolve_family)
+        reported.info = SimpleNamespace(model=model)
+        reported._apply_reported_family()
+        assert reported.property_mapping is DreameVacuumPropertyMapping
+        assert reported._property_codec is None
+
+
+def test_set_properties_turns_a_codec_error_into_invalid_value() -> None:
+    device = object.__new__(DreameVacuumDevice)
+    device.schedule_update = lambda *_args, **_kwargs: None
+    device.property_mapping = {DreameVacuumProperty.VOLUME: {"siid": 4, "piid": 2}}
+
+    def convert(name: str, value: object) -> object:
+        del value
+        raise XiaomiValueException(name)
+
+    device._property_codec = SimpleNamespace(convert_outgoing=convert)
+    sent: list[object] = []
+    device._protocol = SimpleNamespace(
+        set_properties=lambda values: sent.append(values) or [{"code": 0}]
+    )
+    with pytest.raises(InvalidValueException):
+        device.set_properties({DreameVacuumProperty.VOLUME: 4})
+    assert sent == []
+
+
+def test_set_carpet_cleaning_skips_properties_the_model_does_not_map() -> None:
+    def cleaning_device(mapping: dict[object, dict[str, int]]) -> DreameVacuumDevice:
+        device = object.__new__(DreameVacuumDevice)
+        device.property_mapping = mapping
+        device.status = SimpleNamespace(carpet_recognition=False, auto_mount_mop=False)
+        device.capability = SimpleNamespace(
+            mop_pad_lifting_plus=False,
+            auto_carpet_cleaning=False,
+            carpet_crossing=False,
+            mop_pad_unmounting=False,
+        )
+        device.get_property = lambda prop: (
+            0 if prop is DreameVacuumProperty.CARPET_CLEANING else None
+        )
+        return device
+
+    xiaomi = cleaning_device(
+        {DreameVacuumProperty.CARPET_CLEANING: {"siid": 2, "piid": 20}}
+    )
+    captured: list[dict[object, int]] = []
+    xiaomi.set_properties = lambda properties: captured.append(dict(properties))
+    xiaomi.set_carpet_cleaning(DreameVacuumCarpetCleaning.ADAPTATION)
+    assert captured == [
+        {DreameVacuumProperty.CARPET_CLEANING: DreameVacuumCarpetCleaning.ADAPTATION}
+    ]
+
+    dreame = cleaning_device(DreameVacuumPropertyMapping)
+    dreame_captured: list[dict[object, int]] = []
+    dreame.set_properties = lambda properties: dreame_captured.append(dict(properties))
+    dreame.set_carpet_cleaning(DreameVacuumCarpetCleaning.ADAPTATION)
+    assert dreame_captured == [
+        {
+            DreameVacuumProperty.CARPET_RECOGNITION: 1,
+            DreameVacuumProperty.CARPET_CLEANING: DreameVacuumCarpetCleaning.ADAPTATION,
+        }
+    ]
+
+
+def test_send_command_rejects_parameters_that_skip_the_allowlist() -> None:
+    family = resolve_family(MODEL_S20_PLUS)
+    assert family is not None
+    device = object.__new__(DreameVacuumDevice)
+    device._property_codec = family
+    device._commands_fail_closed = False
+    device.property_mapping = {
+        DreameVacuumProperty[name]: dict(address)
+        for name, address in family.property_overrides.items()
+    }
+    device.action_mapping = {
+        DreameVacuumAction[name]: dict(address)
+        for name, address in family.action_overrides.items()
+        if "siid" in address and "aiid" in address
+    }
+    device.schedule_update = lambda *_args, **_kwargs: None
+    sent: list[object] = []
+    device._protocol = SimpleNamespace(
+        send=lambda command, parameters, retry_count: (
+            sent.append((command, parameters, retry_count)) or {"ok": True}
+        )
+    )
+    with pytest.raises(InvalidActionException):
+        device.send_command("set_properties", {"siid": 4, "piid": 2, "value": 4})
+    with pytest.raises(InvalidActionException):
+        device.send_command("set_properties", [])
+    with pytest.raises(InvalidActionException):
+        device.send_command("get_properties", [])
+    with pytest.raises(InvalidActionException):
+        device.send_command(
+            "set_properties", [{"siid": 4, "piid": 2, "value": 4, "extra": 1}]
+        )
+    with pytest.raises(InvalidValueException):
+        device.send_command("set_properties", [{"siid": 4, "piid": 2, "value": 101}])
+    with pytest.raises(InvalidActionException):
+        device.send_command(
+            "action", {"siid": 2, "aiid": 1, "in": [{"piid": 99, "value": 1}]}
+        )
+    with pytest.raises(InvalidValueException):
+        device.send_command(
+            "action", {"siid": 2, "aiid": 1, "in": [{"piid": 20, "value": 9}]}
+        )
+    assert sent == []
+    device.send_command("set_properties", [{"siid": 4, "piid": 2, "value": 4}])
+    assert sent[-1][0] == "set_properties"
+    parameters = sent[-1][1]
+    assert isinstance(parameters, list)
+    assert parameters[0]["value"] == family.convert_outgoing("VOLUME", 4)
+    device.send_command(
+        "action", {"siid": 2, "aiid": 1, "in": [{"piid": 20, "value": 2}]}
+    )
+    action_parameters = sent[-1][1]
+    assert isinstance(action_parameters, dict)
+    assert action_parameters["in"] == [{"piid": 20, "value": 2}]
+
+
+def test_capability_load_rejects_a_brand_that_does_not_own_the_suffix() -> None:
+    device_info = [[[1, 1, 0]], [None], [], {"shared": 0}]
+    capability = object.__new__(DreameVacuumDeviceCapability)
+    capability._device = SimpleNamespace(
+        info=SimpleNamespace(model="mijia.vacuum.shared")
+    )
+    with pytest.raises(Exception, match="Unsupported Device"):
+        capability.load(device_info)
+    capability._device = SimpleNamespace(
+        info=SimpleNamespace(model="xiaomi.vacuum.shared")
+    )
+    with pytest.raises(Exception, match="Device capability missing"):
+        capability.load(device_info)

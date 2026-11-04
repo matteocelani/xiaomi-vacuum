@@ -3560,6 +3560,20 @@ def index_offset(model: str, property_name: str) -> int:
     return _INDEX_OFFSETS.get(model, {}).get(property_name, 0)
 
 
+# Bool properties are published without a value-list. Only 0 and 1 may be written.
+_BOOL_WIRE_NAMES: Final = frozenset(
+    {
+        "AUTO_DUST_COLLECTING",
+        "CARPET_BOOST",
+        "CHILD_LOCK",
+        "DND",
+        "RELOCATION_STATUS",
+        "RESUME_CLEANING",
+        "WATER_TANK",
+    }
+)
+
+
 def wire_allowed(model: str, property_name: str, value: int) -> bool:
     """Return whether the spec publishes this integer for the property."""
     listed = _WIRE_LISTS.get(model, {}).get(property_name)
@@ -3567,7 +3581,7 @@ def wire_allowed(model: str, property_name: str, value: int) -> bool:
         return value in listed
     bounds = _WIRE_RANGES.get(model, {}).get(property_name)
     if bounds is None:
-        return True
+        return property_name in _BOOL_WIRE_NAMES and value in (0, 1)
     start, end, step = bounds
     if step <= 0 or value < start or value > end:
         return False

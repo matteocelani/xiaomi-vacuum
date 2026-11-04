@@ -10,6 +10,7 @@ from typing import Final
 
 from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
 from custom_components.dreame_vacuum.dreame.exceptions import (
+    DeviceException,
     InvalidActionException,
     UnavailableException,
 )
@@ -2025,6 +2026,15 @@ def _send_each_writable_value(
         prop = DreameVacuumProperty[name]
         if spec.get("format") == "bool":
             send_bool_values(device, fake, prop, mapping)
+            continue
+        if name in {"STATE", "TASK_STATUS"}:
+            samples = _write_samples(spec)
+            assert samples
+            before = len(fake.writes)
+            stored = family.convert_incoming(name, samples[0])
+            with pytest.raises(DeviceException):
+                force_property_set(device, prop, stored)
+            assert len(fake.writes) == before
             continue
         for sample in _write_samples(spec):
             stored = family.convert_incoming(name, sample)

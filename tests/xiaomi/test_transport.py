@@ -71,8 +71,7 @@ def _handshake(device_id: int = 7, stamp: int = 100) -> bytes:
     struct.pack_into(">HH", packet, 0, 0x2131, 32)
     struct.pack_into(">I", packet, 8, device_id)
     struct.pack_into(">I", packet, 12, stamp)
-    token = bytes.fromhex(_TOKEN)
-    packet[16:32] = hashlib.md5(bytes(packet[:16]) + token).digest()
+    packet[16:32] = b"\xff" * 16
     return bytes(packet)
 
 
@@ -302,3 +301,31 @@ def test_spoofed_packets_do_not_latch_and_auth_failures_recover_after_backoff():
     now["at"] = 31.0
     assert transport.probe() is True
     assert transport.local_auth_failed is False
+
+
+def test_unsigned_handshake_is_accepted() -> None:
+    hello = _handshake()
+    assert hello[16:32] == b"\xff" * 16
+    transport, _sockets = _transport(_session())
+    assert transport.probe() is True
+    assert transport.local_auth_failed is False
+
+
+def test_handshake_rejects_the_wrong_magic() -> None:
+    packet = bytearray(_handshake())
+    packet[0] = 0
+    transport, _sockets = _transport([bytes(packet)])
+    assert transport.probe() is False
+    assert transport.local_auth_failed is False
+
+
+def test_three_checksum_failures_latch_auth() -> None:
+    bad_checksum = bytearray(_response({"id": 1, "result": {"model": "x"}}))
+    bad_checksum[16] ^= 0xFF
+    scripts: list[bytes | BaseException] = []
+    for _attempt in range(3):
+        scripts.extend([_handshake(), bytes(bad_checksum)])
+    transport, _sockets = _transport(scripts)
+    for _attempt in range(3):
+        assert transport.probe() is False
+    assert transport.local_auth_failed is True
