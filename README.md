@@ -74,6 +74,9 @@ Configure a Dreame, MOVA, Mijia, or TROUVER vacuum with the upstream guides. Tho
 | Marketing name | MIoT model |
 | --- | --- |
 | Xiaomi Robot Vacuum S20+ | `xiaomi.vacuum.b108gl` |
+| Mijia 扫拖机器人 2S | `mijia.vacuum.b108za` |
+| Mijia 扫拖机器人 3S | `mijia.vacuum.b108zb` |
+| Mijia 扫拖机器人 3S 国内 | `mijia.vacuum.b108zh` |
 | Xiaomi Robot Vacuum S20 | `xiaomi.vacuum.d106gl` |
 | Mijia 3C Enhanced | `xiaomi.vacuum.c103` |
 | Xiaomi Robot Vacuum S12 | `xiaomi.vacuum.b106eu` |

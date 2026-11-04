@@ -13,10 +13,19 @@ _GZIP_WINDOW_BITS: Final = zlib.MAX_WBITS | 32
 _BRAND_XIAOMI: Final = 1
 _BRAND_MOVA: Final = 2
 _BRAND_TROUVER: Final = 3
+_BRAND_MIJIA: Final = 4
 _PREFIX_XIAOMI: Final = "xiaomi"
 _PREFIX_MOVA: Final = "mova"
 _PREFIX_TROUVER: Final = "trouver"
 _PREFIX_DREAME: Final = "dreame"
+_PREFIX_MIJIA: Final = "mijia"
+# Equality, not a dict lookup, so 1.0 and True still match brand 1.
+_BRAND_PREFIXES: Final[tuple[tuple[int, str], ...]] = (
+    (_BRAND_XIAOMI, _PREFIX_XIAOMI),
+    (_BRAND_MOVA, _PREFIX_MOVA),
+    (_BRAND_TROUVER, _PREFIX_TROUVER),
+    (_BRAND_MIJIA, _PREFIX_MIJIA),
+)
 _RECORD_LENGTHS: Final = frozenset({3, 4})
 
 
@@ -107,12 +116,9 @@ def _decode_catalog(blob: str) -> list[object]:
 
 
 def _model_id(brand: object, code: object) -> str:
-    if brand == _BRAND_XIAOMI:
-        prefix = _PREFIX_XIAOMI
-    elif brand == _BRAND_MOVA:
-        prefix = _PREFIX_MOVA
-    elif brand == _BRAND_TROUVER:
-        prefix = _PREFIX_TROUVER
-    else:
-        prefix = _PREFIX_DREAME
+    prefix = _PREFIX_DREAME
+    for brand_code, brand_prefix in _BRAND_PREFIXES:
+        if brand == brand_code:
+            prefix = brand_prefix
+            break
     return f"{prefix}.vacuum.{code}"

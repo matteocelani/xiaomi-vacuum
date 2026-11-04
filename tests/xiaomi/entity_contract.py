@@ -66,6 +66,85 @@ class EntityCase:
     station_vacuum: bool = True
 
 
+_MIJIA_B108_ENTITIES: Final[frozenset[tuple[str, str]]] = frozenset(
+    {
+        ("binary_sensor", "charging_state"),
+        ("binary_sensor", "maintenance"),
+        ("binary_sensor", "problem"),
+        ("button", "reset_filter"),
+        ("button", "reset_main_brush"),
+        ("button", "reset_mop_pad"),
+        ("button", "reset_side_brush"),
+        ("number", "volume"),
+        ("select", "cleaning_mode"),
+        ("select", "suction_level"),
+        ("select", "water_volume"),
+        ("sensor", "battery_level"),
+        ("sensor", "charging_status"),
+        ("sensor", "cleaned_area"),
+        ("sensor", "cleaning_time"),
+        ("sensor", "error"),
+        ("sensor", "filter_left"),
+        ("sensor", "filter_time_left"),
+        ("sensor", "firmware_version"),
+        ("sensor", "main_brush_left"),
+        ("sensor", "main_brush_time_left"),
+        ("sensor", "mop_pad_left"),
+        ("sensor", "mop_pad_time_left"),
+        ("sensor", "relocation_status"),
+        ("sensor", "side_brush_left"),
+        ("sensor", "side_brush_time_left"),
+        ("sensor", "state"),
+        ("sensor", "task_status"),
+        ("sensor", "water_tank"),
+        ("switch", "carpet_boost"),
+        ("switch", "child_lock"),
+        ("switch", "dnd"),
+        ("switch", "resume_cleaning"),
+        ("vacuum", "dreame_vacuum"),
+    }
+)
+_MIJIA_B108_COUNTERS: Final[dict[str, tuple[object, str]]] = {
+    "BATTERY_LEVEL": (55, "55"),
+    "CLEANED_AREA": (12, "12"),
+    "CLEANING_TIME": (9, "9"),
+    "MAIN_BRUSH_LEFT": (80, "80"),
+    "MAIN_BRUSH_TIME_LEFT": (70, "70"),
+    "SIDE_BRUSH_LEFT": (81, "81"),
+    "SIDE_BRUSH_TIME_LEFT": (71, "71"),
+    "FILTER_LEFT": (82, "82"),
+    "FILTER_TIME_LEFT": (72, "72"),
+    "MOP_PAD_LEFT": (83, "83"),
+    "MOP_PAD_TIME_LEFT": (73, "73"),
+    "ERROR": (0, "no_error"),
+}
+_MIJIA_B108_STATUS: Final[dict[str, tuple[object, str]]] = {
+    "CHARGING_STATUS": (2, "not_charging"),
+    "STATE": (1, "idle"),
+    "TASK_STATUS": (1, "completed"),
+    "RELOCATION_STATUS": (0, "located"),
+    "WATER_TANK": (True, "installed"),
+}
+_MIJIA_B108_CONSUMABLE_LIFE: Final[tuple[str, ...]] = (
+    "MAIN_BRUSH_LEFT",
+    "SIDE_BRUSH_LEFT",
+    "FILTER_LEFT",
+    "MOP_PAD_LEFT",
+)
+
+
+def mijia_b108_entity_case(model: str, device_name: str) -> EntityCase:
+    """Entity case shared by the released mijia.vacuum.b108 models."""
+    return EntityCase(
+        model=model,
+        device_name=device_name,
+        entities=_MIJIA_B108_ENTITIES,
+        counter_samples=_MIJIA_B108_COUNTERS,
+        status_samples=_MIJIA_B108_STATUS,
+        consumable_life=_MIJIA_B108_CONSUMABLE_LIFE,
+    )
+
+
 async def exercise_home_assistant_entities(
     hass: HomeAssistant, case: EntityCase
 ) -> None:

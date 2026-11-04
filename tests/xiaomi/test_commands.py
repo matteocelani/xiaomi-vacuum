@@ -22,6 +22,9 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_H50_PRO,
     MODEL_H50_PRO_ROLLER,
     MODEL_H50_ROLLER,
+    MODEL_MIJIA_SWEEP_MOP_2S,
+    MODEL_MIJIA_SWEEP_MOP_3S,
+    MODEL_MIJIA_SWEEP_MOP_3S_ZH,
     MODEL_ROBOT_VACUUM_5_PRO,
     MODEL_ROBOT_VACUUM_6,
     MODEL_ROBOT_VACUUM_6_MAX,
@@ -92,6 +95,24 @@ def _device(model: str) -> tuple[DreameVacuumDevice, list[tuple[int, int]]]:
 def test_paused_start_uses_continue_sweep_and_skips_unmapped_actions():
     expected = {
         MODEL_S20_PLUS: {
+            "resume": (6, 1),
+            "start": (2, 1),
+            "pause": (2, 6),
+            "charge": (3, 1),
+        },
+        MODEL_MIJIA_SWEEP_MOP_2S: {
+            "resume": (6, 1),
+            "start": (2, 1),
+            "pause": (2, 6),
+            "charge": (3, 1),
+        },
+        MODEL_MIJIA_SWEEP_MOP_3S: {
+            "resume": (6, 1),
+            "start": (2, 1),
+            "pause": (2, 6),
+            "charge": (3, 1),
+        },
+        MODEL_MIJIA_SWEEP_MOP_3S_ZH: {
             "resume": (6, 1),
             "start": (2, 1),
             "pause": (2, 6),
@@ -250,6 +271,9 @@ def test_paused_start_uses_continue_sweep_and_skips_unmapped_actions():
 def test_property_reads_stay_inside_the_explicit_map():
     for model in (
         MODEL_S20_PLUS,
+        MODEL_MIJIA_SWEEP_MOP_2S,
+        MODEL_MIJIA_SWEEP_MOP_3S,
+        MODEL_MIJIA_SWEEP_MOP_3S_ZH,
         MODEL_X20_MAX,
         MODEL_X20_PRO,
         MODEL_ROBOT_VACUUM_5,
@@ -313,6 +337,14 @@ def test_property_reads_stay_inside_the_explicit_map():
         assert set(requested) <= allowed | controls
         if model != MODEL_E5:
             assert (7, 2) not in requested
+        if model == MODEL_S20_PLUS:
+            assert (2, 20) in requested
+        if model in (
+            MODEL_MIJIA_SWEEP_MOP_2S,
+            MODEL_MIJIA_SWEEP_MOP_3S,
+            MODEL_MIJIA_SWEEP_MOP_3S_ZH,
+        ):
+            assert (2, 20) not in requested
         if model in (
             MODEL_ROBOT_VACUUM_5,
             MODEL_S40_PRO,

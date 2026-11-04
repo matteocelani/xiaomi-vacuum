@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+from collections import Counter
 import gzip
 import json
 
@@ -66,6 +67,10 @@ def test_s20_plus_and_x20_max_load_from_the_current_catalog():
     assert models["xiaomi.vacuum.ov81cn"] == 1
     assert models["xiaomi.vacuum.d101"] == 1
     assert models["xiaomi.vacuum.c104"] == 1
+    assert models["mijia.vacuum.b108za"] == 1
+    assert models["mijia.vacuum.b108zb"] == 1
+    assert models["mijia.vacuum.b108zh"] == 1
+    assert "xiaomi.vacuum.b108za" not in models
     assert models["xiaomi.vacuum.c102gl"] == 1
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.b108gl") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.d109gl") is True
@@ -109,8 +114,54 @@ def test_s20_plus_and_x20_max_load_from_the_current_catalog():
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.ov81cn") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.d101") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.c104") is True
+    assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.b108za") is True
+    assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.b108zb") is True
+    assert catalog_supports_model(DEVICE_INFO, "mijia.vacuum.b108zh") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.c102gl") is True
     assert catalog_supports_model(DEVICE_INFO, "xiaomi.vacuum.notreal") is False
+
+
+def test_mijia_prefix_keeps_existing_brand_resolution():
+    blob = _blob(
+        [
+            [0, 1, 0],
+            [1, 1, 0],
+            [2, 1, 0],
+            [3, 1, 0],
+            [4, 1, 0],
+            [5, 1, 0],
+            [1.0, 1, 0],
+            [True, 1, 0],
+        ],
+        [[[1, 1]]],
+        ["key"],
+        {
+            "dreame": 0,
+            "xiaomi": 1,
+            "mova": 2,
+            "trouver": 3,
+            "mijia": 4,
+            "later": 5,
+            "float": 6,
+            "bool": 7,
+        },
+    )
+    models = load_model_catalog(blob)
+    assert models == {
+        "dreame.vacuum.dreame": 1,
+        "xiaomi.vacuum.xiaomi": 1,
+        "mova.vacuum.mova": 1,
+        "trouver.vacuum.trouver": 1,
+        "mijia.vacuum.mijia": 1,
+        "dreame.vacuum.later": 1,
+        "xiaomi.vacuum.float": 1,
+        "xiaomi.vacuum.bool": 1,
+    }
+    current = load_model_catalog(DEVICE_INFO)
+    prefixes = Counter(model.split(".", 1)[0] for model in current)
+    assert prefixes == Counter(
+        {"dreame": 620, "mova": 121, "xiaomi": 46, "trouver": 18, "mijia": 3}
+    )
 
 
 def test_catalog_prefixes_follow_the_brand_code():
