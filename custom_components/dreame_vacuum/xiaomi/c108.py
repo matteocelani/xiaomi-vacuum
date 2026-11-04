@@ -68,6 +68,47 @@ class _WireState(IntEnum):
     CHARGING_COMPLETED = 7
 
 
+class _WireFault(IntEnum):
+    """Fault codes published by the released E5 spec, which are not Dreame codes."""
+
+    NO_FAULTS = 0
+    LEFT_WHEEL_STUCK = 1
+    RIGHT_WHEEL_STUCK = 2
+    FRONT_BUMPER_STUCK = 3
+    SIDE_BRUSH_STUCK = 4
+    ANTI_DROP_SENSOR = 5
+    WHEEL_SUSPENDED = 6
+    FAN_ERROR = 7
+    BATTERY_LOW = 8
+    CHARGING_ERROR = 9
+    MACHINE_TRAPPED = 10
+    LEFT_WHEEL_ERROR = 11
+    RIGHT_WHEEL_ERROR = 12
+    SIDE_BRUSH_ERROR = 13
+    BATTERY_ERROR = 14
+    GROUND_SLOPE = 15
+
+
+_FAULT_NAMES: Final[dict[int, str]] = {
+    int(_WireFault.NO_FAULTS): "e5_no_faults",
+    int(_WireFault.LEFT_WHEEL_STUCK): "e5_left_wheel_stuck",
+    int(_WireFault.RIGHT_WHEEL_STUCK): "e5_right_wheel_stuck",
+    int(_WireFault.FRONT_BUMPER_STUCK): "e5_front_bumper_stuck",
+    int(_WireFault.SIDE_BRUSH_STUCK): "e5_side_brush_stuck",
+    int(_WireFault.ANTI_DROP_SENSOR): "e5_anti_drop_sensor",
+    int(_WireFault.WHEEL_SUSPENDED): "e5_wheel_suspended",
+    int(_WireFault.FAN_ERROR): "e5_fan_error",
+    int(_WireFault.BATTERY_LOW): "e5_battery_low",
+    int(_WireFault.CHARGING_ERROR): "e5_charging_error",
+    int(_WireFault.MACHINE_TRAPPED): "e5_machine_trapped",
+    int(_WireFault.LEFT_WHEEL_ERROR): "e5_left_wheel_error",
+    int(_WireFault.RIGHT_WHEEL_ERROR): "e5_right_wheel_error",
+    int(_WireFault.SIDE_BRUSH_ERROR): "e5_side_brush_error",
+    int(_WireFault.BATTERY_ERROR): "e5_battery_error",
+    int(_WireFault.GROUND_SLOPE): "e5_ground_slope",
+}
+
+
 _PROPERTIES: Final[dict[str, dict[str, int]]] = {
     "STATE": {"siid": 2, "piid": 1},
     "ERROR": {"siid": 2, "piid": 2},
@@ -126,4 +167,5 @@ E5: Final = XiaomiModel(
     state_by_wire=_STATES,
     task_by_wire={},
     controls=_CONTROLS,
+    fault_names=_FAULT_NAMES,
 )

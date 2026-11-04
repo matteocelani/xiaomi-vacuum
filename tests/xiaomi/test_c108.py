@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
 from custom_components.dreame_vacuum.xiaomi import MODEL_E5
 from custom_components.dreame_vacuum.xiaomi.profile import (
@@ -197,3 +200,35 @@ def test_rejected_control_traffic_is_not_stored(socket_enabled: None) -> None:
     """A refused read or write leaves the stored value unchanged."""
     del socket_enabled
     exercise_rejected_control_traffic(_CASE)
+
+
+def test_fault_names_follow_the_spec_value_list() -> None:
+    """Each c108 fault code uses the description published on that value."""
+    family = require_family(MODEL_E5)
+    spec = spec_index("c108.json")[("property", 2, 2)]
+    listed = spec["value-list"]
+    assert isinstance(listed, list)
+    strings = json.loads(
+        Path("custom_components/dreame_vacuum/strings.json").read_text(encoding="utf-8")
+    )
+    entity = strings["entity"]
+    assert isinstance(entity, dict)
+    sensor = entity["sensor"]
+    assert isinstance(sensor, dict)
+    error = sensor["error"]
+    assert isinstance(error, dict)
+    states = error["state"]
+    assert isinstance(states, dict)
+    seen: set[int] = set()
+    for item in listed:
+        assert isinstance(item, dict)
+        code = item["value"]
+        description = item["description"]
+        assert isinstance(code, int)
+        assert isinstance(description, str)
+        key = family.fault_name(code)
+        assert isinstance(key, str)
+        assert key != "unknown"
+        assert states[key] == description
+        seen.add(code)
+    assert family.fault_name(max(seen) + 1) == "unknown"
