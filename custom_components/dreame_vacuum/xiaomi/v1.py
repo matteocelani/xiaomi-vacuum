@@ -7,6 +7,7 @@ from typing import Final
 from .essential import (
     ESSENTIAL_ACTIONS,
     ESSENTIAL_CONTROLS,
+    ESSENTIAL_FAULT_NAMES,
     ESSENTIAL_PROPERTIES,
     ESSENTIAL_STATES,
 )
@@ -25,4 +26,5 @@ G1: Final[XiaomiModel] = XiaomiModel(
     state_by_wire=compose_codes(ESSENTIAL_STATES),
     task_by_wire={},
     controls=compose_controls(ESSENTIAL_CONTROLS),
+    fault_names=dict(ESSENTIAL_FAULT_NAMES),
 )

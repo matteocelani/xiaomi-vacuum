@@ -47,6 +47,35 @@ _LANGUAGE_OPTIONS: Final[tuple[tuple[int, str], ...]] = (
     (0, "simplified_chinese"),
     (1, "english"),
 )
+ESSENTIAL_CLEAR_CODE: Final = 0
+_LEFT_WHEEL: Final = 1
+_RIGHT_WHEEL: Final = 2
+_CLIFF: Final = 3
+_LOW_BATTERY: Final = 4
+_BUMP: Final = 5
+_MAIN_BRUSH: Final = 6
+_SIDE_BRUSH: Final = 7
+_FAN: Final = 8
+_DUSTBIN: Final = 9
+_CHARGING: Final = 10
+_NO_WATER: Final = 11
+_PICKED_UP: Final = 12
+ESSENTIAL_NO_FAULTS: Final = "essential_no_faults"
+ESSENTIAL_FAULT_NAMES: Final[dict[int, str]] = {
+    ESSENTIAL_CLEAR_CODE: "essential_everything_ok",
+    _LEFT_WHEEL: "essential_left_wheel",
+    _RIGHT_WHEEL: "essential_right_wheel",
+    _CLIFF: "essential_cliff",
+    _LOW_BATTERY: "essential_low_battery",
+    _BUMP: "essential_bump",
+    _MAIN_BRUSH: "essential_main_brush",
+    _SIDE_BRUSH: "essential_side_brush",
+    _FAN: "essential_fan",
+    _DUSTBIN: "essential_dustbin",
+    _CHARGING: "essential_charging",
+    _NO_WATER: "essential_no_water",
+    _PICKED_UP: "essential_picked_up",
+}
 
 
 class EssentialWireState(IntEnum):

@@ -2,8 +2,16 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
+import json
+from pathlib import Path
+
+from custom_components.dreame_vacuum.dreame.const import ERROR_CODE_TO_ERROR_NAME
+from custom_components.dreame_vacuum.dreame.types import (
+    DreameVacuumProperty,
+    DreameVacuumState,
+)
 from custom_components.dreame_vacuum.xiaomi import (
+    MODEL_E10,
     MODEL_MIJIA_ESSENTIAL,
     MODEL_MIJIA_ESSENTIAL_V3,
     MODEL_MIJIA_G1,
@@ -14,11 +22,13 @@ from custom_components.dreame_vacuum.xiaomi.profile import (
 )
 from custom_components.dreame_vacuum.xiaomi.sweep import SWEEP_PROPERTIES, SWEEP_STATES
 import pytest
+from tests.xiaomi.helpers import FakeMiio, release_device
 from tests.xiaomi.spec_helpers import (
     SpecCase,
     assert_controls_have_english_names,
     assert_controls_match_spec,
     assert_spec_is_fully_classified,
+    connect_device,
     exercise_control_values,
     exercise_mapped_actions,
     exercise_mapped_property_reads,
@@ -222,6 +232,53 @@ def test_the_three_records_share_the_essential_profile() -> None:
     assert [item.key for item in third.controls] == [
         item.key for item in first.controls
     ]
+
+
+_UNLISTED_FAULTS: tuple[int, ...] = (13, 99)
+_STRINGS = Path("custom_components/dreame_vacuum/strings.json")
+
+
+def test_every_fault_code_uses_the_spec_name_not_a_dreame_name(
+    socket_enabled: None,
+) -> None:
+    """Each published fault code shows that spec's description, never a Dreame name."""
+    del socket_enabled
+    document = json.loads(_STRINGS.read_text(encoding="utf-8"))
+    sensor = document["entity"]["sensor"]["error"]
+    state_names = sensor["state"]
+    descriptions = sensor["state_attributes"]["description"]["state"]
+    dreame_names = set(ERROR_CODE_TO_ERROR_NAME.values())
+    assert require_family(MODEL_E10).fault_name(1) is None
+    for case in _CASES:
+        listed = spec_index(case.spec_filename)[("property", 2, 2)].get("value-list")
+        assert isinstance(listed, list)
+        published = {
+            item["value"]: item["description"]
+            for item in listed
+            if isinstance(item, dict)
+        }
+        family = require_family(case.model)
+        error = family.property_overrides["ERROR"]
+        with FakeMiio(case.model) as fake:
+            device = connect_device(case.device_name + " Fault")
+            try:
+                for code, description in published.items():
+                    assert description
+                    fake.set_value(error["siid"], error["piid"], code)
+                    device._request_properties([DreameVacuumProperty.ERROR])
+                    name = device.status.error_name
+                    assert name not in dreame_names
+                    assert state_names[name] == description
+                    assert descriptions[name] == description
+                for code in _UNLISTED_FAULTS:
+                    fake.set_value(error["siid"], error["piid"], code)
+                    device._request_properties([DreameVacuumProperty.ERROR])
+                    assert device.status.error_name == "unknown"
+                    assert device.status.error_name != "no_error"
+                    assert device.status.error_name != "side_brush"
+                    assert device.status.error_name != "brush"
+            finally:
+                release_device(device)
 
 
 def test_released_version_one_is_the_document() -> None:

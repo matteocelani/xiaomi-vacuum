@@ -57,7 +57,6 @@ _COUNTER_SAMPLES: Final[dict[str, tuple[object, str]]] = {
     "BATTERY_LEVEL": (55, "55"),
     "CLEANING_COUNT": (7, "7"),
     "CLEANING_TIME": (9, "9"),
-    "ERROR": (0, "no_error"),
     "FILTER_LEFT": (82, "82"),
     "MAIN_BRUSH_LEFT": (80, "80"),
     "SIDE_BRUSH_LEFT": (81, "81"),
@@ -85,11 +84,16 @@ pytestmark = [
 
 def _case(model: str, device_name: str) -> EntityCase:
     """Entity case shared by the three released Essential models."""
+    counters = dict(_COUNTER_SAMPLES)
+    if model == MODEL_MIJIA_G1:
+        counters["ERROR"] = (0, "essential_everything_ok")
+    else:
+        counters["ERROR"] = (0, "essential_no_faults")
     return EntityCase(
         model=model,
         device_name=device_name,
         entities=_ENTITIES,
-        counter_samples=_COUNTER_SAMPLES,
+        counter_samples=counters,
         status_samples=_STATUS_SAMPLES,
         consumable_life=_CONSUMABLE_LIFE,
         omitted_legacy_selects=frozenset(

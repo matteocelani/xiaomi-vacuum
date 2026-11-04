@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
+from .essential import ESSENTIAL_CLEAR_CODE, ESSENTIAL_NO_FAULTS
 from .model import (
     MODEL_MIJIA_ESSENTIAL_V3,
     XiaomiModel,
@@ -30,4 +31,5 @@ ESSENTIAL_V3: Final[XiaomiModel] = regional_variant(
             G1.controls, "xiaomi_voice_language", _LANGUAGE_OPTIONS
         )
     },
+    fault_overrides={ESSENTIAL_CLEAR_CODE: ESSENTIAL_NO_FAULTS},
 )

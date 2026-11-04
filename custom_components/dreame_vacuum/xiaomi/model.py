@@ -100,6 +100,7 @@ class StoredTask(IntEnum):
 _ONE_INDEXED_PROPERTIES: Final[frozenset[str]] = frozenset(
     {"CLEANING_MODE", "SUCTION_LEVEL"}
 )
+_UNKNOWN_FAULT_NAME: Final = "unknown"
 _CHARGING: Final = 1
 _NOT_CHARGING: Final = 2
 _NOT_CHARGEABLE: Final = 3
@@ -147,6 +148,7 @@ class XiaomiModel:
     is_simple_cleaning_mode: bool = True
     should_correct_docked_activity: bool = True
     controls: tuple[XiaomiControl, ...] = ()
+    fault_names: dict[int, str] | None = None
 
     def convert_incoming(self, property_name: str, value: object) -> object:
         """Map a raw property value into the Dreame value domain."""
@@ -164,6 +166,15 @@ class XiaomiModel:
         if property_name in _ONE_INDEXED_PROPERTIES and number > 0:
             return number - 1
         return number
+
+    def fault_name(self, code: object) -> str | None:
+        """Return this family's fault translation key, or None for Dreame names."""
+        if self.fault_names is None:
+            return None
+        number = _as_int(code)
+        if number is None:
+            return _UNKNOWN_FAULT_NAME
+        return self.fault_names.get(number, _UNKNOWN_FAULT_NAME)
 
     def convert_outgoing(self, property_name: str, value: object) -> object:
         """Map a Dreame value to the integer the robot expects on the wire."""
@@ -311,6 +322,19 @@ def control_with_options(
     raise KeyError(key)
 
 
+def compose_fault_names(
+    base: Mapping[int, str] | None,
+    overrides: Mapping[int, str] | None = None,
+) -> dict[int, str] | None:
+    """Copy a fault-name table and apply the codes one spec renames."""
+    if overrides is None:
+        return None if base is None else dict(base)
+    merged = {} if base is None else {int(code): name for code, name in base.items()}
+    for code, name in overrides.items():
+        merged[int(code)] = name
+    return merged
+
+
 def alias_model(base: XiaomiModel, model: str) -> XiaomiModel:
     """Register another model code on an unchanged record."""
     return replace(base, model=model)
@@ -331,11 +355,16 @@ def regional_variant(
     state_omitted: Collection[int] | None = None,
     task_overrides: Mapping[int, int] | None = None,
     task_omitted: Collection[int] | None = None,
+    fault_overrides: Mapping[int, str] | None = None,
 ) -> XiaomiModel:
     """Copy one record and apply only the addresses a regional spec changes."""
+    names = base.fault_names
+    if fault_overrides is not None:
+        names = compose_fault_names(names, fault_overrides)
     return replace(
         base,
         model=model,
+        fault_names=names,
         property_overrides=compose_addresses(
             base.property_overrides, property_additions, property_omitted
         ),
