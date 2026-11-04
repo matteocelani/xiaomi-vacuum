@@ -1,0 +1,504 @@
+{
+  "fetched_on": "2026-11-04",
+  "source": "https://miot-spec.org/miot-spec-v2/instance?type=",
+  "models": {
+    "mijia.vacuum.b108za": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:mijia-b108za:1",
+      "spec_file": "b108za.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "mijia.vacuum.b108zb": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:mijia-b108zb:1",
+      "spec_file": "b108zb.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "mijia.vacuum.b108zh": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:mijia-b108zh:1",
+      "spec_file": "b108zh.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "mijia.vacuum.v1": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:mijia-v1:1",
+      "spec_file": "v1.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "mijia.vacuum.v2": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:mijia-v2:1",
+      "spec_file": "v2.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "mijia.vacuum.v3": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:mijia-v3:1",
+      "spec_file": "v3.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.b106bk": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b106bk:1",
+      "spec_file": "b106bk.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.b106eu": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b106eu:1",
+      "spec_file": "b106eu.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.b108gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b108gl:1",
+      "spec_file": "b108gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.b112": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b112:1",
+      "spec_file": "b112.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.b112bk": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b112bk:1",
+      "spec_file": "b112bk.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.b112gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b112gl:1",
+      "spec_file": "b112gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.c101": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c101:2",
+      "spec_file": "c101.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.c101eu": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c101eu:2",
+      "spec_file": "c101eu.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.c103": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c103:2",
+      "spec_file": "c103.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.c104": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c104:1",
+      "spec_file": "c104.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.c107": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c107:2",
+      "spec_file": "c107.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.c108": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c108:1",
+      "spec_file": "c108.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.d101": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d101:3",
+      "spec_file": "d101.json",
+      "version": 3,
+      "catalog_released": [
+        1,
+        2,
+        3
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.d102ev": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d102ev:1",
+      "spec_file": "d102ev.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.d102gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d102gl:1",
+      "spec_file": "d102gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.d106gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d106gl:1",
+      "spec_file": "d106gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.d109gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d109gl:2",
+      "spec_file": "d109gl.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.e101gb": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-e101gb:1",
+      "spec_file": "e101gb.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov21cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov21cn:2",
+      "spec_file": "ov21cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov21gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov21gl:2",
+      "spec_file": "ov21gl.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov31cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov31cn:2",
+      "spec_file": "ov31cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov31gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov31gl:2",
+      "spec_file": "ov31gl.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": false,
+      "description_drift": true
+    },
+    "xiaomi.vacuum.ov42cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov42cn:2",
+      "spec_file": "ov42cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov42gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov42gl:2",
+      "spec_file": "ov42gl.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov43gb": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov43gb:2",
+      "spec_file": "ov43gb.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov51gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov51gl:1",
+      "spec_file": "ov51gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov71gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov71gl:1",
+      "spec_file": "ov71gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov81cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov81cn:2",
+      "spec_file": "ov81cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.ov81gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov81gl:1",
+      "spec_file": "ov81gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv11cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv11cn:2",
+      "spec_file": "pv11cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv11gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv11gl:1",
+      "spec_file": "pv11gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv21cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv21cn:2",
+      "spec_file": "pv21cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv21gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv21gl:1",
+      "spec_file": "pv21gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv31cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv31cn:1",
+      "spec_file": "pv31cn.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv32cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv32cn:2",
+      "spec_file": "pv32cn.json",
+      "version": 2,
+      "catalog_released": [
+        1,
+        2
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv32gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv32gl:2",
+      "spec_file": "pv32gl.json",
+      "version": 2,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": false,
+      "description_drift": true
+    },
+    "xiaomi.vacuum.pv51gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv51gl:1",
+      "spec_file": "pv51gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.pv81gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv81gl:1",
+      "spec_file": "pv81gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.qv12cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv12cn:1",
+      "spec_file": "qv12cn.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.qv41cn": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv41cn:1",
+      "spec_file": "qv41cn.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": true,
+      "description_drift": false
+    },
+    "xiaomi.vacuum.qv41gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv41gl:1",
+      "spec_file": "qv41gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": false,
+      "description_drift": true
+    },
+    "xiaomi.vacuum.qv42gl": {
+      "urn": "urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv42gl:1",
+      "spec_file": "qv42gl.json",
+      "version": 1,
+      "catalog_released": [
+        1
+      ],
+      "canonical_identical": false,
+      "description_drift": true
+    }
+  }
+}
