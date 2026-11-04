@@ -88,6 +88,7 @@ class SpecCase:
     previous_spec_filename: str | None = None
     state_wire_eight: int | None = 19
     station_shell: bool = True
+    required_service_ids: tuple[int, ...] | None = None
 
 
 # S60+ and S60 omit the same items. Each model maps only its own extra addresses.
@@ -1644,7 +1645,12 @@ def assert_spec_is_fully_classified(case: SpecCase) -> None:
         kind = "property" if pair in case.property_reasons else "action"
         assert reason
         assert (kind, pair[0], pair[1]) in seen
-    for siid in _SERVICE_REASONS:
+    required_services = (
+        _SERVICE_REASONS
+        if case.required_service_ids is None
+        else case.required_service_ids
+    )
+    for siid in required_services:
         assert any(item[1] == siid for item in seen)
 
 

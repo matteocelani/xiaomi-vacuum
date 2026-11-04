@@ -1119,6 +1119,38 @@
           "s_shape": "S-shape",
           "y_shape": "Y-shape"
         }
+      },
+      "xiaomi_fan_level": {
+        "name": "Fan level",
+        "state": {
+          "silent": "Silent",
+          "standard": "Standard",
+          "medium": "Medium",
+          "strong": "Strong"
+        }
+      },
+      "xiaomi_target_water": {
+        "name": "Target water level",
+        "state": {
+          "level1": "Level 1",
+          "level2": "Level 2",
+          "level3": "Level 3"
+        }
+      },
+      "xiaomi_voice_language": {
+        "name": "Voice language",
+        "state": {
+          "simplified_chinese": "Simplified Chinese",
+          "traditional_chinese": "Traditional Chinese",
+          "english": "English",
+          "spanish": "Spanish",
+          "russian": "Russian",
+          "italian": "Italian",
+          "french": "French",
+          "german": "German",
+          "korean": "Korean",
+          "polish": "Polish"
+        }
       }
     },
     "sensor": {
@@ -2267,6 +2299,12 @@
           "filter_life": "Filter life",
           "side_brush_life": "Side brush life"
         }
+      },
+      "xiaomi_main_brush_minutes": {
+        "name": "Main brush time left"
+      },
+      "xiaomi_total_clean_time": {
+        "name": "Total cleaning time"
       }
     },
     "switch": {
@@ -2647,6 +2685,9 @@
       },
       "xiaomi_sweep_break": {
         "name": "Resume after interruption"
+      },
+      "xiaomi_alarm_enabled": {
+        "name": "Alarm"
       },
       "xiaomi_no_disturb": {
         "name": "Do not disturb"

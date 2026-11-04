@@ -77,6 +77,9 @@ Configure a Dreame, MOVA, Mijia, or TROUVER vacuum with the upstream guides. Tho
 | Mijia 扫拖机器人 2S | `mijia.vacuum.b108za` |
 | Mijia 扫拖机器人 3S | `mijia.vacuum.b108zb` |
 | Mijia 扫拖机器人 3S 国内 | `mijia.vacuum.b108zh` |
+| Mijia 扫拖机器人 G1 | `mijia.vacuum.v1` |
+| Mi Robot Vacuum-Mop Essential | `mijia.vacuum.v2` |
+| Mi Robot Vacuum-Mop Essential | `mijia.vacuum.v3` |
 | Xiaomi Robot Vacuum S20 | `xiaomi.vacuum.d106gl` |
 | Mijia 3C Enhanced | `xiaomi.vacuum.c103` |
 | Xiaomi Robot Vacuum S12 | `xiaomi.vacuum.b106eu` |

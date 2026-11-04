@@ -524,6 +524,29 @@ def test_apply_family_replaces_flags_when_the_capability_is_already_loaded():
     assert tuple(capability.list) == _S20_PLUS
 
 
+def test_essential_catalog_row_matches_the_other_mijia_record() -> None:
+    """The new index keys reuse the mijia record. The codec has not run."""
+    shared = _load("mijia.vacuum.b108za", None)
+    for model in ("mijia.vacuum.v1", "mijia.vacuum.v2", "mijia.vacuum.v3"):
+        copied = _load(model, None)
+        assert tuple(copied.list) == tuple(shared.list)
+        assert copied.self_wash_base is shared.self_wash_base
+        assert copied.mop_pad_lifting is shared.mop_pad_lifting
+
+
+def test_essential_models_derive_dnd_without_a_dock() -> None:
+    for model in ("mijia.vacuum.v1", "mijia.vacuum.v2", "mijia.vacuum.v3"):
+        capability = _load(model, resolve_family(model))
+        assert tuple(capability.list) == ("dnd", "disable_sensor_cleaning", "mijia")
+        assert capability.dnd is True
+        assert capability.dnd_task is False
+        assert capability.self_wash_base is False
+        assert capability.station_cleaning is False
+        assert capability.auto_empty_base is False
+        assert capability.lidar_navigation is False
+        assert capability.robot_type is RobotType.LIDAR
+
+
 def test_mijia_h40_derives_flags_without_a_dock() -> None:
     """Dust collection and detergent are unpublished, so those flags stay off."""
     capability = _load("xiaomi.vacuum.d101", resolve_family("xiaomi.vacuum.d101"))
