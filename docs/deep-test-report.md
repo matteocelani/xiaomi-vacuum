@@ -1,7 +1,7 @@
 # Xiaomi deep-test report
 
 Fetched 2026-11-04 from `https://miot-spec.org/miot-spec-v2/instance?type=<urn>`.
-Suites live in `tests/xiaomi/deep/test_<code>.py` and read `tests/xiaomi/specs/`.
+Suites live in `tests/xiaomi/deep/test_deep_<code>.py` and read `tests/xiaomi/specs/`.
 The run is `18077 passed, 483 xfailed, 0 failed` (`pytest tests/xiaomi/deep`).
 
 ## Summary
@@ -100,7 +100,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### mijia.vacuum.b108za
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:mijia-b108za:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108za.json`. Suite: `tests/xiaomi/deep/test_b108za.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108za.json`. Suite: `tests/xiaomi/deep/test_deep_b108za.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 57, mapped 27, omitted 26, open 4.
 - Spec actions 42, mapped 11, omitted 31.
@@ -112,7 +112,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### mijia.vacuum.b108zb
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:mijia-b108zb:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108zb.json`. Suite: `tests/xiaomi/deep/test_b108zb.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108zb.json`. Suite: `tests/xiaomi/deep/test_deep_b108zb.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 57, mapped 27, omitted 26, open 4.
 - Spec actions 42, mapped 11, omitted 31.
@@ -124,7 +124,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### mijia.vacuum.b108zh
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:mijia-b108zh:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108zh.json`. Suite: `tests/xiaomi/deep/test_b108zh.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108zh.json`. Suite: `tests/xiaomi/deep/test_deep_b108zh.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 57, mapped 27, omitted 26, open 4.
 - Spec actions 42, mapped 11, omitted 31.
@@ -136,7 +136,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### mijia.vacuum.v1
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:mijia-v1:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/v1.json`. Suite: `tests/xiaomi/deep/test_v1.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/v1.json`. Suite: `tests/xiaomi/deep/test_deep_v1.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 31, mapped 22, omitted 9, open 0.
 - Spec actions 9, mapped 9, omitted 0.
@@ -148,7 +148,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### mijia.vacuum.v2
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:mijia-v2:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/v2.json`. Suite: `tests/xiaomi/deep/test_v2.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/v2.json`. Suite: `tests/xiaomi/deep/test_deep_v2.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 31, mapped 22, omitted 9, open 0.
 - Spec actions 9, mapped 9, omitted 0.
@@ -160,7 +160,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### mijia.vacuum.v3
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:mijia-v3:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/v3.json`. Suite: `tests/xiaomi/deep/test_v3.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/v3.json`. Suite: `tests/xiaomi/deep/test_deep_v3.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 31, mapped 22, omitted 9, open 0.
 - Spec actions 9, mapped 9, omitted 0.
@@ -172,7 +172,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.b106bk
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b106bk:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b106bk.json`. Suite: `tests/xiaomi/deep/test_b106bk.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b106bk.json`. Suite: `tests/xiaomi/deep/test_deep_b106bk.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 125, mapped 34, omitted 80, open 11.
 - Spec actions 52, mapped 8, omitted 44.
@@ -184,7 +184,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.b106eu
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b106eu:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b106eu.json`. Suite: `tests/xiaomi/deep/test_b106eu.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b106eu.json`. Suite: `tests/xiaomi/deep/test_deep_b106eu.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 125, mapped 34, omitted 80, open 11.
 - Spec actions 52, mapped 8, omitted 44.
@@ -196,7 +196,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.b108gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b108gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108gl.json`. Suite: `tests/xiaomi/deep/test_b108gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b108gl.json`. Suite: `tests/xiaomi/deep/test_deep_b108gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 69, mapped 28, omitted 35, open 6.
 - Spec actions 47, mapped 11, omitted 36.
@@ -208,7 +208,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.b112
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b112:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b112.json`. Suite: `tests/xiaomi/deep/test_b112.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b112.json`. Suite: `tests/xiaomi/deep/test_deep_b112.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 112, mapped 28, omitted 74, open 10.
 - Spec actions 46, mapped 8, omitted 38.
@@ -220,7 +220,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.b112bk
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b112bk:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b112bk.json`. Suite: `tests/xiaomi/deep/test_b112bk.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b112bk.json`. Suite: `tests/xiaomi/deep/test_deep_b112bk.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 112, mapped 28, omitted 74, open 10.
 - Spec actions 46, mapped 8, omitted 38.
@@ -232,7 +232,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.b112gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-b112gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b112gl.json`. Suite: `tests/xiaomi/deep/test_b112gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/b112gl.json`. Suite: `tests/xiaomi/deep/test_deep_b112gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 112, mapped 28, omitted 74, open 10.
 - Spec actions 46, mapped 8, omitted 38.
@@ -244,7 +244,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.c101
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c101:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c101.json`. Suite: `tests/xiaomi/deep/test_c101.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c101.json`. Suite: `tests/xiaomi/deep/test_deep_c101.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 139, mapped 38, omitted 86, open 15.
 - Spec actions 57, mapped 8, omitted 49.
@@ -256,7 +256,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.c101eu
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c101eu:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c101eu.json`. Suite: `tests/xiaomi/deep/test_c101eu.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c101eu.json`. Suite: `tests/xiaomi/deep/test_deep_c101eu.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 144, mapped 38, omitted 91, open 15.
 - Spec actions 58, mapped 8, omitted 50.
@@ -268,7 +268,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.c103
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c103:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c103.json`. Suite: `tests/xiaomi/deep/test_c103.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c103.json`. Suite: `tests/xiaomi/deep/test_deep_c103.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 133, mapped 36, omitted 84, open 13.
 - Spec actions 58, mapped 8, omitted 50.
@@ -280,7 +280,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.c104
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c104:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c104.json`. Suite: `tests/xiaomi/deep/test_c104.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c104.json`. Suite: `tests/xiaomi/deep/test_deep_c104.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 127, mapped 34, omitted 82, open 11.
 - Spec actions 53, mapped 8, omitted 45.
@@ -292,7 +292,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.c107
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c107:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c107.json`. Suite: `tests/xiaomi/deep/test_c107.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c107.json`. Suite: `tests/xiaomi/deep/test_deep_c107.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 126, mapped 84, omitted 42, open 0.
 - Spec actions 68, mapped 33, omitted 35.
@@ -304,7 +304,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.c108
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c108:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c108.json`. Suite: `tests/xiaomi/deep/test_c108.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/c108.json`. Suite: `tests/xiaomi/deep/test_deep_c108.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 31, mapped 20, omitted 11, open 0.
 - Spec actions 13, mapped 10, omitted 3.
@@ -316,7 +316,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.d101
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d101:3`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d101.json`. Suite: `tests/xiaomi/deep/test_d101.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d101.json`. Suite: `tests/xiaomi/deep/test_deep_d101.py`.
 - Catalog released versions: [1, 2, 3]. Mapped version: 3.
 - Spec properties 89, mapped 53, omitted 36, open 0.
 - Spec actions 63, mapped 27, omitted 36.
@@ -328,7 +328,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.d102ev
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d102ev:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d102ev.json`. Suite: `tests/xiaomi/deep/test_d102ev.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d102ev.json`. Suite: `tests/xiaomi/deep/test_deep_d102ev.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 107, mapped 68, omitted 39, open 0.
 - Spec actions 62, mapped 29, omitted 33.
@@ -340,7 +340,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.d102gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d102gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d102gl.json`. Suite: `tests/xiaomi/deep/test_d102gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d102gl.json`. Suite: `tests/xiaomi/deep/test_deep_d102gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 114, mapped 70, omitted 44, open 0.
 - Spec actions 64, mapped 29, omitted 35.
@@ -352,7 +352,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.d106gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d106gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d106gl.json`. Suite: `tests/xiaomi/deep/test_d106gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d106gl.json`. Suite: `tests/xiaomi/deep/test_deep_d106gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 138, mapped 36, omitted 89, open 13.
 - Spec actions 59, mapped 8, omitted 51.
@@ -364,7 +364,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.d109gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-d109gl:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d109gl.json`. Suite: `tests/xiaomi/deep/test_d109gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/d109gl.json`. Suite: `tests/xiaomi/deep/test_deep_d109gl.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 120, mapped 32, omitted 59, open 29.
 - Spec actions 64, mapped 13, omitted 51.
@@ -376,7 +376,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.e101gb
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-e101gb:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/e101gb.json`. Suite: `tests/xiaomi/deep/test_e101gb.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/e101gb.json`. Suite: `tests/xiaomi/deep/test_deep_e101gb.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 148, mapped 98, omitted 50, open 0.
 - Spec actions 85, mapped 38, omitted 47.
@@ -388,7 +388,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov21cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov21cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov21cn.json`. Suite: `tests/xiaomi/deep/test_ov21cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov21cn.json`. Suite: `tests/xiaomi/deep/test_deep_ov21cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 175, mapped 117, omitted 58, open 0.
 - Spec actions 101, mapped 42, omitted 59.
@@ -400,7 +400,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov21gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov21gl:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov21gl.json`. Suite: `tests/xiaomi/deep/test_ov21gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov21gl.json`. Suite: `tests/xiaomi/deep/test_deep_ov21gl.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 172, mapped 115, omitted 57, open 0.
 - Spec actions 100, mapped 42, omitted 58.
@@ -412,7 +412,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov31cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov31cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov31cn.json`. Suite: `tests/xiaomi/deep/test_ov31cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov31cn.json`. Suite: `tests/xiaomi/deep/test_deep_ov31cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 147, mapped 92, omitted 54, open 1.
 - Spec actions 85, mapped 41, omitted 44.
@@ -424,7 +424,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov31gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov31gl:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov31gl.json`. Suite: `tests/xiaomi/deep/test_ov31gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov31gl.json`. Suite: `tests/xiaomi/deep/test_deep_ov31gl.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 145, mapped 91, omitted 53, open 1.
 - Spec actions 85, mapped 41, omitted 44.
@@ -437,7 +437,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov42cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov42cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov42cn.json`. Suite: `tests/xiaomi/deep/test_ov42cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov42cn.json`. Suite: `tests/xiaomi/deep/test_deep_ov42cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 167, mapped 108, omitted 58, open 1.
 - Spec actions 90, mapped 41, omitted 49.
@@ -449,7 +449,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov42gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov42gl:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov42gl.json`. Suite: `tests/xiaomi/deep/test_ov42gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov42gl.json`. Suite: `tests/xiaomi/deep/test_deep_ov42gl.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 161, mapped 108, omitted 52, open 1.
 - Spec actions 89, mapped 41, omitted 48.
@@ -461,7 +461,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov43gb
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov43gb:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov43gb.json`. Suite: `tests/xiaomi/deep/test_ov43gb.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov43gb.json`. Suite: `tests/xiaomi/deep/test_deep_ov43gb.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 167, mapped 114, omitted 53, open 0.
 - Spec actions 96, mapped 42, omitted 54.
@@ -473,7 +473,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov51gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov51gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov51gl.json`. Suite: `tests/xiaomi/deep/test_ov51gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov51gl.json`. Suite: `tests/xiaomi/deep/test_deep_ov51gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 148, mapped 98, omitted 50, open 0.
 - Spec actions 88, mapped 41, omitted 47.
@@ -485,7 +485,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov71gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov71gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov71gl.json`. Suite: `tests/xiaomi/deep/test_ov71gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov71gl.json`. Suite: `tests/xiaomi/deep/test_deep_ov71gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 129, mapped 81, omitted 48, open 0.
 - Spec actions 82, mapped 37, omitted 45.
@@ -497,7 +497,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov81cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov81cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov81cn.json`. Suite: `tests/xiaomi/deep/test_ov81cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov81cn.json`. Suite: `tests/xiaomi/deep/test_deep_ov81cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 102, mapped 50, omitted 52, open 0.
 - Spec actions 63, mapped 21, omitted 42.
@@ -509,7 +509,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.ov81gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov81gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov81gl.json`. Suite: `tests/xiaomi/deep/test_ov81gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/ov81gl.json`. Suite: `tests/xiaomi/deep/test_deep_ov81gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 149, mapped 99, omitted 50, open 0.
 - Spec actions 88, mapped 41, omitted 47.
@@ -521,7 +521,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv11cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv11cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv11cn.json`. Suite: `tests/xiaomi/deep/test_pv11cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv11cn.json`. Suite: `tests/xiaomi/deep/test_deep_pv11cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 178, mapped 112, omitted 64, open 2.
 - Spec actions 104, mapped 41, omitted 63.
@@ -533,7 +533,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv11gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv11gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv11gl.json`. Suite: `tests/xiaomi/deep/test_pv11gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv11gl.json`. Suite: `tests/xiaomi/deep/test_deep_pv11gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 169, mapped 110, omitted 57, open 2.
 - Spec actions 101, mapped 40, omitted 61.
@@ -545,7 +545,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv21cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv21cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv21cn.json`. Suite: `tests/xiaomi/deep/test_pv21cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv21cn.json`. Suite: `tests/xiaomi/deep/test_deep_pv21cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 170, mapped 107, omitted 61, open 2.
 - Spec actions 101, mapped 38, omitted 63.
@@ -557,7 +557,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv21gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv21gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv21gl.json`. Suite: `tests/xiaomi/deep/test_pv21gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv21gl.json`. Suite: `tests/xiaomi/deep/test_deep_pv21gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 167, mapped 108, omitted 57, open 2.
 - Spec actions 100, mapped 39, omitted 61.
@@ -569,7 +569,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv31cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv31cn:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv31cn.json`. Suite: `tests/xiaomi/deep/test_pv31cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv31cn.json`. Suite: `tests/xiaomi/deep/test_deep_pv31cn.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 169, mapped 108, omitted 61, open 0.
 - Spec actions 91, mapped 40, omitted 51.
@@ -581,7 +581,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv32cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv32cn:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv32cn.json`. Suite: `tests/xiaomi/deep/test_pv32cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv32cn.json`. Suite: `tests/xiaomi/deep/test_deep_pv32cn.py`.
 - Catalog released versions: [1, 2]. Mapped version: 2.
 - Spec properties 140, mapped 81, omitted 59, open 0.
 - Spec actions 86, mapped 35, omitted 51.
@@ -593,7 +593,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv32gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv32gl:2`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv32gl.json`. Suite: `tests/xiaomi/deep/test_pv32gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv32gl.json`. Suite: `tests/xiaomi/deep/test_deep_pv32gl.py`.
 - Catalog released versions: [1]. Mapped version: 2.
 - Spec properties 140, mapped 81, omitted 59, open 0.
 - Spec actions 86, mapped 34, omitted 52.
@@ -606,7 +606,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv51gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv51gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv51gl.json`. Suite: `tests/xiaomi/deep/test_pv51gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv51gl.json`. Suite: `tests/xiaomi/deep/test_deep_pv51gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 111, mapped 61, omitted 50, open 0.
 - Spec actions 69, mapped 24, omitted 45.
@@ -618,7 +618,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.pv81gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv81gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv81gl.json`. Suite: `tests/xiaomi/deep/test_pv81gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/pv81gl.json`. Suite: `tests/xiaomi/deep/test_deep_pv81gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 106, mapped 56, omitted 50, open 0.
 - Spec actions 67, mapped 22, omitted 45.
@@ -630,7 +630,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.qv12cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv12cn:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv12cn.json`. Suite: `tests/xiaomi/deep/test_qv12cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv12cn.json`. Suite: `tests/xiaomi/deep/test_deep_qv12cn.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 179, mapped 112, omitted 65, open 2.
 - Spec actions 105, mapped 41, omitted 64.
@@ -642,7 +642,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.qv41cn
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv41cn:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv41cn.json`. Suite: `tests/xiaomi/deep/test_qv41cn.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv41cn.json`. Suite: `tests/xiaomi/deep/test_deep_qv41cn.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 139, mapped 80, omitted 59, open 0.
 - Spec actions 86, mapped 35, omitted 51.
@@ -654,7 +654,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.qv41gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv41gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv41gl.json`. Suite: `tests/xiaomi/deep/test_qv41gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv41gl.json`. Suite: `tests/xiaomi/deep/test_deep_qv41gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 140, mapped 81, omitted 59, open 0.
 - Spec actions 87, mapped 35, omitted 52.
@@ -666,7 +666,7 @@ The owner has an S20+ (`xiaomi.vacuum.b108gl`). These checks need that device:
 ### xiaomi.vacuum.qv42gl
 
 - Spec: `urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv42gl:1`
-- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv42gl.json`. Suite: `tests/xiaomi/deep/test_qv42gl.py`.
+- Fetch date: 2026-11-04. File: `tests/xiaomi/specs/qv42gl.json`. Suite: `tests/xiaomi/deep/test_deep_qv42gl.py`.
 - Catalog released versions: [1]. Mapped version: 1.
 - Spec properties 127, mapped 77, omitted 50, open 0.
 - Spec actions 77, mapped 32, omitted 45.
