@@ -5,3 +5,5 @@
 /env
 *.zip
 .idea
+__pycache__/
+*.pyc
