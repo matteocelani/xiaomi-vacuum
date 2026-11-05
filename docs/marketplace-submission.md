@@ -7,7 +7,7 @@ The Home Assistant Marketplace (2026.11 and newer) uses this same catalog. Custo
 ## What this repository already prepares
 
 - `hacs.json` name is `Xiaomi Vacuum`, `zip_release` is true, and `filename` is `dreame_vacuum.zip`.
-- `manifest.json` domain stays `dreame_vacuum`. Name is `Xiaomi Vacuum`. Documentation is the README in this repository. Issue tracker is `https://github.com/matteocelani/xiaomi-vacuum/issues`. Code owners are `@matteocelani` and `@tasshack`. Version is `v2.1.0`.
+- `manifest.json` domain stays `dreame_vacuum`. Name is `Xiaomi Vacuum`. Documentation is the README in this repository. Issue tracker is `https://github.com/matteocelani/xiaomi-vacuum/issues`. Code owners are `@matteocelani` and `@tasshack`. Version is `v2.1.0`. `categories` is `appliances_cleaning.cleaning` (robot vacuums and mops).
 - `.github/workflows/validate.yaml` runs the HACS action with no `ignore` key.
 - `.github/workflows/hassfest.yaml` runs hassfest.
 - `.github/workflows/release.yaml` builds the zip when a GitHub Release is published. Files are at the archive root because HACS calls `extractall()` into `custom_components/dreame_vacuum/` and does not strip a leading folder.

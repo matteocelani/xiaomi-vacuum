@@ -4,6 +4,7 @@
   "after_dependencies": [
     "lovelace"
   ],
+  "categories": ["appliances_cleaning.cleaning"],
   "codeowners": [
     "@matteocelani",
     "@tasshack"
