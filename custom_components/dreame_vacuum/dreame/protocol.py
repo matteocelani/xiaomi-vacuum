@@ -163,6 +163,7 @@ class DreameVacuumDreameHomeCloudProtocol:
         _public_policy = None
         _private_root = None
         _store_lock = Lock()
+        _failures: dict[tuple[str, int], str] = {}
 
         @classmethod
         def _public_verifier_policy(cls) -> PolicyBuilder:
@@ -383,13 +384,35 @@ class DreameVacuumDreameHomeCloudProtocol:
             except OSError:
                 pass
             try:
-                return self._handshake()
+                result = self._handshake()
             except Exception as ex:
                 self._sock.close()
-                if isinstance(ex, OSError):
-                    raise
                 # paho's reconnect loop only handles OSError.
-                raise ConnectionError(f"TLS handshake failed: {ex!r}") from ex
+                error = ex if isinstance(ex, OSError) else ConnectionError(f"unexpected handshake data: {ex!r}")
+                self._report(f"TLS handshake with {self._host}:{self._port} failed: {error}")
+                if error is ex:
+                    raise
+                raise error from ex
+            self._report(None)
+            return result
+
+        def _report(self, message: str | None) -> None:
+            """Log one handshake failure per host; repeats stay at debug."""
+            key = (self._host, self._port)
+            if message is None:
+                self._failures.pop(key, None)
+                return
+            if self._failures.get(key) == message:
+                _LOGGER.debug("%s", message)
+                return
+            self._failures[key] = message
+            _LOGGER.warning("%s", message)
+
+        @staticmethod
+        def _alert(body: bytes) -> ConnectionError:
+            if len(body) >= 2:
+                return ConnectionError(f"server sent alert {body[1]}")
+            return ConnectionError("server sent alert")
 
         def _handshake(self):
             priv = x25519.X25519PrivateKey.generate()
@@ -451,6 +474,8 @@ class DreameVacuumDreameHomeCloudProtocol:
             typ, sh = self._read_record()
             while typ == 20:
                 typ, sh = self._read_record()
+            if typ == 21:
+                raise self._alert(sh)
             if typ != 22 or not sh or sh[0] != 2:
                 raise ConnectionError("expected ServerHello")
             i = 6 + 32
@@ -506,7 +531,7 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if typ == 20:
                     continue
                 if typ == 21:
-                    raise ConnectionError("alert during handshake")
+                    raise self._alert(body)
                 aad = bytes([typ]) + b"\x03\x03" + struct.pack("!H", len(body))
                 nonce = bytes(a ^ b for a, b in zip(s_hs_iv, b"\x00\x00\x00\x00" + struct.pack("!Q", sseq)))
                 cipher = ChaCha20Poly1305(s_hs_key) if self._cipher == 0x1303 else AESGCM(s_hs_key)
@@ -595,7 +620,7 @@ class DreameVacuumDreameHomeCloudProtocol:
                     break
                 typ, body = self._read_record()
                 if typ == 21:
-                    raise ConnectionError("alert during handshake")
+                    raise self._alert(body)
                 if typ != 22:
                     continue
                 buf += body
@@ -656,7 +681,7 @@ class DreameVacuumDreameHomeCloudProtocol:
                     ccs_seen = True
                     continue
                 if typ == 21:
-                    raise ConnectionError("alert")
+                    raise self._alert(body)
                 if typ == 22:
                     if ccs_seen:
                         svd = self._prf(master, b"server finished", ph(transcript).digest(), 12, ph)

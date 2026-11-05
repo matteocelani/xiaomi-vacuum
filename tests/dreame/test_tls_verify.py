@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+import logging
 
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes
@@ -160,6 +161,30 @@ def test_tls12_downgrade_sentinel_is_rejected() -> None:
     server_hello = bytes(6) + (b"\x00" * 24) + b"DOWNGRD" + b"\x01"
     with pytest.raises(ConnectionError, match="downgrade"):
         sock._handshake_tls12(b"", server_hello)
+
+
+def test_repeated_handshake_failure_is_logged_once(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    sock = _Socket("mqtt.example", 443, "mqtt.example", 1, None)
+    _Socket._failures.clear()
+    message = "TLS handshake with mqtt.example:443 failed: boom"
+    try:
+        with caplog.at_level(logging.DEBUG):
+            sock._report(message)
+            sock._report(message)
+        warnings = [
+            record for record in caplog.records if record.levelno >= logging.WARNING
+        ]
+        debugs = [
+            record for record in caplog.records if record.levelno == logging.DEBUG
+        ]
+        assert len(warnings) == 1
+        assert message in warnings[0].getMessage()
+        assert any(message in record.getMessage() for record in debugs)
+    finally:
+        sock._report(None)
+        assert ("mqtt.example", 443) not in _Socket._failures
 
 
 def test_handshake_signature_is_checked() -> None:
