@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from hypothesis import given, settings, strategies as st
-import pytest
 from tests.xiaomi.deep.checks import (
     check_action,
     check_address,
@@ -101,13 +100,9 @@ def test_one_failing_control_does_not_fail_the_refresh() -> None:
     check_control_refresh(MODEL)
 
 
-@pytest.mark.enable_socket
-@pytest.mark.allow_hosts(["127.0.0.1"])
 def test_start_custom_uses_a_spec_property() -> None:
     check_start_custom(MODEL)
 
 
-@pytest.mark.enable_socket
-@pytest.mark.allow_hosts(["127.0.0.1"])
 def test_batch_write_uses_outgoing_conversion() -> None:
     check_set_properties_conversion(MODEL)

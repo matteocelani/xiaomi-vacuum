@@ -41,7 +41,7 @@ from tests.xiaomi.deep.cases import (
     record_of,
     shifted_names,
 )
-from tests.xiaomi.helpers import FakeMiio, release_device
+from tests.xiaomi.helpers import release_device
 from tests.xiaomi.spec_helpers import LOOPBACK_HOST, LOOPBACK_MAC, LOOPBACK_TOKEN
 
 C_01 = "C-01: start_custom sends piid None because Xiaomi models do not map STATUS"
@@ -383,32 +383,42 @@ def check_control_refresh(model: str) -> None:
 
 
 def check_start_custom(model: str) -> None:
-    """start_custom never sends a missing piid. Unmapped actions are refused."""
+    """start_custom never sends a missing piid. Unmapped actions are refused.
+
+    The protocol is stubbed. These checks must not open a socket: the push
+    workflow blocks every socket, and a loopback miIO handshake is not what
+    the assertion is about.
+    """
     family = family_of(model)
-    with FakeMiio(model) as fake:
-        device = _connect(model)
-        before = len(fake.actions)
-        try:
-            if "START_CUSTOM" not in family.action_overrides:
-                with pytest.raises(InvalidActionException):
-                    device.start_custom(DreameVacuumStatus.ZONE_CLEANING.value)
-                assert len(fake.actions) == before
-                return
-            device.start_custom(DreameVacuumStatus.ZONE_CLEANING.value)
-        finally:
-            release_device(device)
-        payload = fake.action_inputs[-1]
-        assert isinstance(payload, list)
-        assert payload
-        assert isinstance(payload[0], dict)
-        piid = payload[0].get("piid")
-        assert isinstance(piid, int)
-        state = family.property_overrides["STATE"]
-        assert piid == state["piid"]
+    sent: list[object] = []
+    device = _bare_device(model)
+    device.schedule_update = _ignore_schedule
+    device._protocol.action = _record_action(sent)
+    try:
+        if "START_CUSTOM" not in family.action_overrides:
+            with pytest.raises(InvalidActionException):
+                device.start_custom(DreameVacuumStatus.ZONE_CLEANING.value)
+            assert sent == []
+            return
+        device.start_custom(DreameVacuumStatus.ZONE_CLEANING.value)
+    finally:
+        release_device(device)
+    payload = sent[-1]
+    assert isinstance(payload, list)
+    assert payload
+    assert isinstance(payload[0], dict)
+    piid = payload[0].get("piid")
+    assert isinstance(piid, int)
+    state = family.property_overrides["STATE"]
+    assert piid == state["piid"]
 
 
 def check_set_properties_conversion(model: str) -> None:
-    """A batch write uses the same outgoing conversion as a single write."""
+    """A batch write uses the same outgoing conversion as a single write.
+
+    The protocol is stubbed so the check records the wire value without a
+    socket. See check_start_custom.
+    """
     family = family_of(model)
     name = (
         "SUCTION_LEVEL"
@@ -417,26 +427,38 @@ def check_set_properties_conversion(model: str) -> None:
     )
     prop = DreameVacuumProperty[name]
     mapping = family.property_overrides[name]
-    with FakeMiio(model) as fake:
-        device = _connect(model)
-        try:
-            assert device.set_properties({prop: 1}) is True
-        finally:
-            release_device(device)
-        assert fake.writes[-1] == (mapping["siid"], mapping["piid"], 2)
+    sent: list[object] = []
+    device = _bare_device(model)
+    device.schedule_update = _ignore_schedule
+    device._protocol.set_properties = _record_properties(sent)
+    try:
+        assert device.set_properties({prop: 1}) is True
+    finally:
+        release_device(device)
+    assert sent[-1] == (mapping["siid"], mapping["piid"], 2)
 
 
-def _connect(model: str) -> DreameVacuumDevice:
-    device = DreameVacuumDevice(
-        model,
-        LOOPBACK_HOST,
-        LOOPBACK_TOKEN,
-        LOOPBACK_MAC,
-        account_type="mi",
-        family_resolver=resolve_family,
-    )
-    device.connect_device()
-    return device
+def _ignore_schedule(*_args: object, **_kwargs: object) -> None:
+    """Drop the delayed poll a write would schedule. It is not under test."""
+
+
+def _record_action(sent: list[object]) -> object:
+    def _action(
+        siid: int, aiid: int, parameters: object = None, retry_count: int = 2
+    ) -> list[dict[str, int]]:
+        del siid, aiid, retry_count
+        sent.append(parameters)
+        return [{"code": 0}]
+
+    return _action
+
+
+def _record_properties(sent: list[object]) -> object:
+    def _set_properties(values: list[tuple[int, int, object]]) -> list[dict[str, int]]:
+        sent.extend(values)
+        return [{"code": 0}]
+
+    return _set_properties
 
 
 def _bare_device(model: str) -> DreameVacuumDevice:
