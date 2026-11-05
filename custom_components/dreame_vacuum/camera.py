@@ -814,16 +814,8 @@ class DreameVacuumCameraEntity(DreameVacuumEntity, Camera):
     def update(self) -> None:
         map_data = self._map_data
         if map_data and self.device.cloud_connected and (self.map_index > 0 or self.device.status.located):
-            if self._default_map == True:
-                self._default_map = False
-                self._last_rendered = map_data.last_updated
-                self.coordinator.hass.async_create_task(
-                    self._update_image(
-                        map_data,
-                        self.device.status.robot_status,
-                        self.device.status.station_status,
-                    )
-                )
+            # Leave _default_map set so the first image request renders. Rendering every
+            # saved map as soon as the cloud returns exhausted memory on small hosts.
 
             self._device_active = self.device.status.active
             if map_data.last_updated:
