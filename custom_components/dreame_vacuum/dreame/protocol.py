@@ -34,7 +34,7 @@ from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.utils import CryptographyDeprecationWarning
 from cryptography.x509.verification import PolicyBuilder, Store
 from miio.miioprotocol import MiIOProtocol
-from urllib.parse import urlparse, parse_qs, quote, urlsplit
+from urllib.parse import urlparse, parse_qs, quote, urljoin, urlsplit
 import re
 
 from .exceptions import DeviceException
@@ -67,6 +67,7 @@ z0PJitlGIfun4TuQQhVCf5B2aA==
 -----END CERTIFICATE-----
 """
 _RSA_PSS_OID: Final = "1.2.840.113549.1.1.10"
+_MI_HOME_2FA_TIMEOUT: Final = 10
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -2265,6 +2266,54 @@ class DreameVacuumMiHomeCloudProtocol:
                     _LOGGER.warning("Failed to send 2FA code: %s", ex)
         return False
 
+    def _follow_phone_confirmation(
+        self,
+        response: requests.Response | None,
+        session: requests.Session,
+        headers: dict[str, str],
+    ) -> requests.Response | None:
+        """Follow the optional phone confirmation page Xiaomi adds after 2FA."""
+        if response is None or response.status_code != 200:
+            return response
+
+        # Only handle the phone verification page Xiaomi redirects to after 2FA.
+        url = urlsplit(response.url)
+        if (
+            url.scheme != "https"
+            or url.hostname != "account.xiaomi.com"
+            or url.path != "/fe/service/verifyPhone"
+        ):
+            return response
+
+        # Xiaomi treats this page as optional, its skipUrl continues the login.
+        skip_url = parse_qs(url.query).get("skipUrl", [""])[0]
+        if not skip_url:
+            return response
+
+        # Only follow the skipUrl when it points back to Xiaomi's own server.
+        target = urlsplit(urljoin("https://account.xiaomi.com/", skip_url))
+        if (
+            target.scheme != "https"
+            or target.hostname != "account.xiaomi.com"
+            or target.username
+            or target.password
+            or target.port not in (None, 443)
+        ):
+            _LOGGER.warning("2FA: Ignoring unexpected phone confirmation redirect.")
+            return response
+
+        _LOGGER.debug("2FA: Following optional phone confirmation step.")
+        try:
+            return session.get(
+                target.geturl(), headers=headers, allow_redirects=True, timeout=_MI_HOME_2FA_TIMEOUT
+            )
+        except Exception as ex:
+            # The request error can quote the redirect, so log only the type.
+            _LOGGER.warning(
+                "2FA: Could not follow phone confirmation step: %s", type(ex).__name__
+            )
+            return response
+
     def verify_code(self, code) -> bool:
         verification_url = self.verification_url
         session = self._get_session()
@@ -2347,6 +2396,7 @@ class DreameVacuumMiHomeCloudProtocol:
 
             if location_url:
                 response = session.get(location_url, headers=headers, allow_redirects=True, timeout=10)
+                response = self._follow_phone_confirmation(response, session, headers)
                 if response is not None and response.status_code == 200:
                     for c in session.cookies:
                         if c.name in ("userId", "cUserId") and c.value:
