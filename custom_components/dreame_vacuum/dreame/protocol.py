@@ -252,6 +252,12 @@ class DreameVacuumDreameHomeCloudProtocol:
                 raise ValueError("CA certificate without BasicConstraints") from ex
             if not basic.ca:
                 raise ValueError("issuer is not a CA")
+            try:
+                usage = cert.extensions.get_extension_for_class(x509.KeyUsage).value
+            except x509.ExtensionNotFound:
+                usage = None
+            if usage is not None and not usage.key_cert_sign:
+                raise ValueError("CA certificate without keyCertSign")
 
         @staticmethod
         def _verify_signed_by(cert: x509.Certificate, issuer: x509.Certificate) -> None:
@@ -376,6 +382,16 @@ class DreameVacuumDreameHomeCloudProtocol:
                         self._sock.setsockopt(socket.IPPROTO_TCP, getattr(socket, opt), val)
             except OSError:
                 pass
+            try:
+                return self._handshake()
+            except Exception as ex:
+                self._sock.close()
+                if isinstance(ex, OSError):
+                    raise
+                # paho's reconnect loop only handles OSError.
+                raise ConnectionError(f"TLS handshake failed: {ex!r}") from ex
+
+        def _handshake(self):
             priv = x25519.X25519PrivateKey.generate()
             pub = priv.public_key().public_bytes_raw()
             ext = b""
@@ -510,6 +526,10 @@ class DreameVacuumDreameHomeCloudProtocol:
                         cert_key = self._verify_chain(msg[4:], True)
                     elif msg[0] == 15 and cert_key is not None:
                         scheme = (msg[4] << 8) | msg[5]
+                        if scheme not in (0x0403, 0x0503, 0x0804, 0x0805, 0x0806):
+                            raise ConnectionError(
+                                f"signature scheme {scheme:#06x} not allowed in TLS 1.3"
+                            )
                         sig = msg[8 : 8 + ((msg[6] << 8) | msg[7])]
                         content = b" " * 64 + b"TLS 1.3, server CertificateVerify\x00" + h(transcript).digest()
                         self._verify_signature(cert_key, scheme, sig, content)
@@ -550,6 +570,8 @@ class DreameVacuumDreameHomeCloudProtocol:
         def _handshake_tls12(self, transcript, sh):
             self._tls12 = True
             server_random = sh[6:38]
+            if server_random[-8:-1] == b"DOWNGRD":
+                raise ConnectionError("TLS downgrade detected")
             ske = None
             cert_key = None
             got_shd = False

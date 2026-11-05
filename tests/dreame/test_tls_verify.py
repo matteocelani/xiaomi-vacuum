@@ -111,6 +111,57 @@ def test_public_store_rejects_a_private_leaf() -> None:
         sock._verify_chain(body, False)
 
 
+def test_ca_without_key_cert_sign_is_rejected() -> None:
+    root_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    bad_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    leaf_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    root_name = _name("Test Root")
+    bad_name = _name("Not A Signer")
+    root = _signed(root_key, root_key, root_name, root_name, hostname=None, ca=True)
+    bad = (
+        x509.CertificateBuilder()
+        .subject_name(bad_name)
+        .issuer_name(root_name)
+        .public_key(bad_key.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(datetime.now(UTC) - timedelta(minutes=5))
+        .not_valid_after(datetime.now(UTC) + timedelta(days=1))
+        .add_extension(x509.BasicConstraints(ca=True, path_length=None), critical=True)
+        .add_extension(
+            x509.KeyUsage(
+                digital_signature=True,
+                content_commitment=False,
+                key_encipherment=False,
+                data_encipherment=False,
+                key_agreement=False,
+                key_cert_sign=False,
+                crl_sign=False,
+                encipher_only=False,
+                decipher_only=False,
+            ),
+            critical=True,
+        )
+        .sign(root_key, hashes.SHA256())
+    )
+    leaf = _signed(
+        leaf_key,
+        bad_key,
+        _name("mqtt.example"),
+        bad_name,
+        hostname="mqtt.example",
+        ca=False,
+    )
+    with pytest.raises(ValueError, match="keyCertSign"):
+        _Socket._verify_chain_to_root([leaf, bad], root, "mqtt.example")
+
+
+def test_tls12_downgrade_sentinel_is_rejected() -> None:
+    sock = _Socket("mqtt.example", 443, "mqtt.example", 1, None)
+    server_hello = bytes(6) + (b"\x00" * 24) + b"DOWNGRD" + b"\x01"
+    with pytest.raises(ConnectionError, match="downgrade"):
+        sock._handshake_tls12(b"", server_hello)
+
+
 def test_handshake_signature_is_checked() -> None:
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     data = b"handshake"
