@@ -3,7 +3,7 @@ name: "Dreame Vacuum Card · Bug Report"
 about: "Something is wrong with the Dreame Vacuum Card on the dashboard (display, map, buttons, dialogs, styling). For device, connection or entity problems, use the Integration bug report instead."
 title: ""
 labels: bug, frontend
-assignees: Tasshack
+assignees: matteocelani
 
 ---
 

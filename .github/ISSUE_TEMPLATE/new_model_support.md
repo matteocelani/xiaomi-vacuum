@@ -1,9 +1,9 @@
 ---
 name: "Integration · New Model Support"
-about: "Request support for a Dreame device that the integration reports as unsupported. Support is added semi-automatically with new releases, so waiting for the next version is usually enough."
+about: "Request support for a device that the integration reports as unsupported. Support is added semi-automatically with new releases, so waiting for the next version is usually enough."
 title: "Support for [Device Name] ([Model Number])"
 labels: enhancement, model support
-assignees: Tasshack
+assignees: matteocelani
 
 ---
 

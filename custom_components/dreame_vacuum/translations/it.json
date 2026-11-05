@@ -82,7 +82,7 @@
         "data": {
           "devices": "Dispositivi supportati"
         },
-        "description": "Seleziona il dispositivo Dreame che desideri configurare."
+        "description": "Seleziona il dispositivo che desideri configurare."
       },
       "dvc": {
         "data": {
@@ -102,7 +102,7 @@
         }
       },
       "reauth_confirm": {
-        "description": "L'integrazione Dreame Vacuum richiede una nuova autenticazione per aggiornare i token o per aggiungere le credenziali cloud mancanti.",
+        "description": "L'integrazione Xiaomi Vacuum richiede una nuova autenticazione per aggiornare i token o per aggiungere le credenziali cloud mancanti.",
         "title": "Ri-autenticazione integrazione"
       }
     }

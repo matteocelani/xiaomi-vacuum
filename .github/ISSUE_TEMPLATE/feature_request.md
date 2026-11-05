@@ -3,7 +3,7 @@ name: "Integration · Feature Request"
 about: "Suggest a new feature or improvement for the integration (entities, services, device features, map data). For dashboard ideas, use the Dreame Vacuum Card feature request."
 title: ""
 labels: enhancement, integration
-assignees: Tasshack
+assignees: matteocelani
 
 ---
 

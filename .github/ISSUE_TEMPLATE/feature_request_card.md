@@ -3,7 +3,7 @@ name: "Dreame Vacuum Card · Feature Request"
 about: "Suggest a new feature or improvement for the Dreame Vacuum Card (layout, map display, controls, styling). For device or entity features, use the Integration feature request instead."
 title: ""
 labels: enhancement, frontend
-assignees: Tasshack
+assignees: matteocelani
 
 ---
 
