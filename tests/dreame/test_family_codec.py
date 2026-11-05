@@ -78,8 +78,8 @@ def test_apply_family_installs_only_explicit_x20_max_addresses():
 
     device._request_properties = original
     apply_family(device, family)
-    assert device._request_properties is original
-    assert not hasattr(device, "_xiaomi_values")
+    assert device._request_properties is not original
+    assert device._xiaomi_values == {}
     assert device._property_codec is family
     assert device._map_manager is None
     assert device.property_mapping[DreameVacuumProperty.STATE] == {"siid": 2, "piid": 2}
@@ -106,8 +106,8 @@ def test_apply_family_disables_s20_plus_map_requests():
 
     device._request_properties = original
     apply_family(device, family)
-    assert device._request_properties is original
-    assert not hasattr(device, "_xiaomi_values")
+    assert device._request_properties is not original
+    assert device._xiaomi_values == {}
     assert DreameVacuumAction.REQUEST_MAP not in device.action_mapping
     assert DreameVacuumAction.PLAY_SOUND not in device.action_mapping
     assert DreameVacuumAction.BACKUP_MAP not in device.action_mapping
