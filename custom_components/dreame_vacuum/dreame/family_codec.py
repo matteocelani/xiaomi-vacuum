@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from typing import Protocol, runtime_checkable
 
+from .exceptions import DeviceException
 from .types import DreameVacuumAction, DreameVacuumProperty
 
 _LOGGER = logging.getLogger(__name__)
@@ -47,21 +48,21 @@ def family_fault_name(device: object, code: object) -> str | None:
     return named
 
 
-def apply_family(device: object, family: object) -> None:
+def apply_family(device: object, family: object, *, probe: bool = True) -> None:
     """Install explicit maps, then keep a local transport so a later poll can retry."""
     property_overrides = family.property_overrides
     action_overrides = family.action_overrides
     device.property_mapping = _explicit_property_map(property_overrides)
     device.action_mapping = _explicit_action_map(action_overrides)
     device._property_codec = family
-    if device._map_manager is not None:
-        device._map_manager.action_mapping = device.action_mapping
+    _bind_map_manager(device)
     transport = _property_transport(device, family)
     if transport is None:
         device._protocol.property_transport = None
     else:
         # Keep the transport when the robot is offline so a later poll can retry.
-        if not transport.probe():
+        # probe is false on the event loop. connect_device probes from the executor.
+        if probe and not transport.probe():
             _LOGGER.warning(
                 "Local miIO probe failed for model %s; property calls will retry",
                 family.model,
@@ -90,7 +91,12 @@ def _install_control_refresh(device: object, family: object) -> None:
         changed = original(properties)
         if properties:
             return changed
-        if family.refresh_controls(device):
+        try:
+            refreshed = family.refresh_controls(device)
+        except Exception:
+            _LOGGER.debug("Xiaomi control refresh failed", exc_info=True)
+            return changed
+        if refreshed:
             return True
         return changed
 
@@ -105,6 +111,27 @@ def _property_transport(device: object, family: object) -> object | None:
     return family.build_property_transport(host, token)
 
 
+def _bind_map_manager(device: object) -> None:
+    manager = device._map_manager
+    if manager is None:
+        return
+    if _family_exposes_map(device):
+        manager.action_mapping = device.action_mapping
+        manager.property_mapping = device.property_mapping
+        return
+    device._map_manager = None
+
+
+def _family_exposes_map(device: object) -> bool:
+    properties = device.property_mapping
+    actions = device.action_mapping
+    return (
+        DreameVacuumProperty.MAP_DATA in properties
+        or DreameVacuumProperty.OBJECT_NAME in properties
+        or DreameVacuumAction.REQUEST_MAP in actions
+    )
+
+
 def _explicit_property_map(
     overrides: dict[str, dict[str, int]],
 ) -> dict[DreameVacuumProperty, dict[str, int]]:
@@ -113,7 +140,11 @@ def _explicit_property_map(
     for name, mapping in overrides.items():
         if "siid" not in mapping or "piid" not in mapping:
             continue
-        merged[DreameVacuumProperty[name]] = mapping
+        try:
+            prop = DreameVacuumProperty[name]
+        except KeyError as err:
+            raise DeviceException(f"unknown property name {name}") from err
+        merged[prop] = mapping
     return merged
 
 
@@ -124,5 +155,9 @@ def _explicit_action_map(
     for name, mapping in overrides.items():
         if "siid" not in mapping or "aiid" not in mapping:
             continue
-        merged[DreameVacuumAction[name]] = mapping
+        try:
+            action = DreameVacuumAction[name]
+        except KeyError as err:
+            raise DeviceException(f"unknown action name {name}") from err
+        merged[action] = mapping
     return merged

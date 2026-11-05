@@ -16,6 +16,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     CONF_NAME,
     CONF_HOST,
+    CONF_MODEL,
     CONF_TOKEN,
     CONF_PASSWORD,
     CONF_USERNAME,
@@ -173,6 +174,7 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
             entry.data.get(CONF_DID),
             self._auth_key,
             family_resolver=resolve_family,
+            configured_model=entry.data.get(CONF_MODEL),
         )
 
         self._device.listen(self._dust_collection_changed, DreameVacuumProperty.DUST_COLLECTION)
@@ -604,6 +606,7 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
         try:
             LOGGER.info("Integration starting...")
             await self.hass.async_add_executor_job(self._device.update)
+            self._remember_reported_model()
             if self._device is None or self._device.disconnected:
                 self.raise_error(None, UpdateFailed, "device_disconnected")
             if self._device.auth_failed:
@@ -640,6 +643,20 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
                 raise
 
             self.raise_error(ex, UpdateFailed, "update_failed")
+
+    def _remember_reported_model(self) -> None:
+        info = self._device.info if self._device is not None else None
+        model = info.model if info is not None else None
+        if not isinstance(model, str) or not model:
+            return
+        if resolve_family(model) is None:
+            return
+        current = self._entry.data.get(CONF_MODEL)
+        if isinstance(current, str) and current:
+            return
+        self.hass.config_entries.async_update_entry(
+            self._entry, data={**self._entry.data, CONF_MODEL: model}
+        )
 
     async def async_config_entry_first_refresh(self) -> None:
         try:

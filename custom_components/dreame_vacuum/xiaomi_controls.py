@@ -147,8 +147,10 @@ class XiaomiNumber(_XiaomiEntity, NumberEntity):
     ) -> None:
         super().__init__(coordinator, control)
         self._attr_mode = NumberMode.BOX
-        self._attr_native_min_value = float(control.minimum or 0)
-        self._attr_native_max_value = float(control.maximum or 0)
+        if control.minimum is None or control.maximum is None:
+            raise XiaomiControlException(control.key)
+        self._attr_native_min_value = float(control.minimum)
+        self._attr_native_max_value = float(control.maximum)
         self._attr_native_step = float(control.step)
 
     @property
@@ -248,6 +250,8 @@ class XiaomiButton(_XiaomiEntity, ButtonEntity):
                 translation_key="xiaomi_control_failed",
                 translation_placeholders={"control": exc.key},
             ) from exc
+        except DeviceException as exc:
+            self._raise_error(exc)
         self.coordinator.async_set_updated_data()
 
 

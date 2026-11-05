@@ -5,11 +5,15 @@ from __future__ import annotations
 from collections.abc import Collection, Mapping
 from dataclasses import dataclass, replace
 from enum import IntEnum
+import logging
 from typing import Final, Protocol, runtime_checkable
 
 from .controls import XiaomiControl, refresh_controls
-from .exceptions import XiaomiTransportException
+from .exceptions import XiaomiTransportException, XiaomiValueException
 from .transport import MiioPropertyTransport
+from .value_limits import index_offset, wire_allowed, wire_kind
+
+_LOGGER = logging.getLogger(__name__)
 
 MODEL_S20_PLUS: Final = "xiaomi.vacuum.b108gl"
 MODEL_X20: Final = "xiaomi.vacuum.c101eu"
@@ -97,10 +101,14 @@ class StoredTask(IntEnum):
     AUTO_CLEANING_PAUSED = 6
 
 
-_ONE_INDEXED_PROPERTIES: Final[frozenset[str]] = frozenset(
-    {"CLEANING_MODE", "SUCTION_LEVEL"}
-)
+_UNKNOWN_STORED: Final = -1
+# Populated when a mapped action's spec publishes input piids. Empty means none.
+_ACTION_INPUTS: Final[dict[tuple[str, int, int], frozenset[int]]] = {}
 _UNKNOWN_FAULT_NAME: Final = "unknown"
+_UNKNOWN_LOGGED: set[tuple[str, str, int]] = set()
+_STORED_STATE_VALUES: Final[frozenset[int]] = frozenset(
+    int(item) for item in StoredState
+)
 _CHARGING: Final = 1
 _NOT_CHARGING: Final = 2
 _NOT_CHARGEABLE: Final = 3
@@ -127,6 +135,39 @@ _ACTIVE_TASK_STATES: Final[frozenset[int]] = frozenset(
         int(StoredState.SWEEPING_AND_MOPPING),
     }
 )
+
+
+def _is_numeric_text(value: str) -> bool:
+    """Return whether the text is a number, including a signed or decimal one."""
+    text = value.strip()
+    if not text:
+        return False
+    try:
+        float(text)
+    except ValueError:
+        return False
+    return True
+
+
+def coerce_outgoing(kind: str, property_name: str, value: object) -> object:
+    """Return a value whose Python type matches the spec format."""
+    if kind == "string":
+        if isinstance(value, str) and not _is_numeric_text(value):
+            return value
+        raise XiaomiValueException(property_name)
+    if kind == "bool":
+        if isinstance(value, bool) or (isinstance(value, int) and value in (0, 1)):
+            return value
+        raise XiaomiValueException(property_name)
+    if kind == "float":
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise XiaomiValueException(property_name)
+        return value
+    if kind == "int":
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise XiaomiValueException(property_name)
+        return value
+    raise XiaomiValueException(property_name)
 
 
 @runtime_checkable
@@ -157,14 +198,19 @@ class XiaomiModel:
             return value
         if property_name == "STATE":
             mapped = self.state_by_wire.get(number)
-            return number if mapped is None else mapped
+            if mapped is None:
+                return _remember_unknown(self.model, property_name, number)
+            return mapped
         if property_name == "TASK_STATUS":
             mapped = self.task_by_wire.get(number)
-            return number if mapped is None else mapped
+            if mapped is None:
+                return _remember_unknown(self.model, property_name, number)
+            return mapped
         if property_name == "CHARGING_STATUS" and number == _NOT_CHARGEABLE:
             return _NOT_CHARGING
-        if property_name in _ONE_INDEXED_PROPERTIES and number > 0:
-            return number - 1
+        offset = index_offset(self.model, property_name)
+        if offset and number > 0:
+            return number - offset
         return number
 
     def fault_name(self, code: object) -> str | None:
@@ -176,13 +222,28 @@ class XiaomiModel:
             return _UNKNOWN_FAULT_NAME
         return self.fault_names.get(number, _UNKNOWN_FAULT_NAME)
 
+    def declared_inputs(self, siid: int, aiid: int) -> frozenset[int]:
+        """Return the spec input piids for one mapped action."""
+        return _ACTION_INPUTS.get((self.model, siid, aiid), frozenset())
+
     def convert_outgoing(self, property_name: str, value: object) -> object:
-        """Map a Dreame value to the integer the robot expects on the wire."""
-        if property_name not in _ONE_INDEXED_PROPERTIES or isinstance(value, bool):
-            return value
-        if isinstance(value, int):
-            return value + 1
-        return value
+        """Map a Dreame value to the value the robot expects on the wire."""
+        kind = wire_kind(self.model, property_name)
+        if kind is None:
+            raise XiaomiValueException(property_name)
+        if kind == "int" and property_name in {"STATE", "TASK_STATUS"}:
+            # Reject a non-integer before the state rule, which also rejects ints.
+            coerce_outgoing(kind, property_name, value)
+            raise XiaomiValueException(property_name)
+        if kind != "int":
+            return coerce_outgoing(kind, property_name, value)
+        number = coerce_outgoing(kind, property_name, value)
+        if not isinstance(number, int):
+            raise XiaomiValueException(property_name)
+        wire = number + index_offset(self.model, property_name)
+        if not wire_allowed(self.model, property_name, wire):
+            raise XiaomiValueException(property_name)
+        return wire
 
     def task_status_code(self, state: object, charging: object) -> int:
         """Derive task status from state, because sweep-type stays set while docked."""
@@ -196,6 +257,8 @@ class XiaomiModel:
             return int(StoredTask.AUTO_CLEANING_PAUSED)
         if state_code in _ACTIVE_TASK_STATES:
             return int(StoredTask.AUTO_CLEANING)
+        if state_code not in _STORED_STATE_VALUES:
+            return _UNKNOWN_STORED
         return int(StoredTask.COMPLETED)
 
     def build_property_transport(
@@ -397,6 +460,14 @@ def control_keys(device: object, domain: str) -> frozenset[str]:
     return frozenset(
         control.key for control in controls_of(device) if control.domain == domain
     )
+
+
+def _remember_unknown(model: str, property_name: str, number: int) -> int:
+    key = (model, property_name, number)
+    if key not in _UNKNOWN_LOGGED:
+        _UNKNOWN_LOGGED.add(key)
+        _LOGGER.debug("Unknown %s wire %s for model %s", property_name, number, model)
+    return _UNKNOWN_STORED
 
 
 def _as_int(value: object) -> int | None:

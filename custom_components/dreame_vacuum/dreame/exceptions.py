@@ -31,6 +31,10 @@ class InvalidActionException(DeviceException, ValueError):
     """ """
 
 
+class InvalidValueException(DeviceException):
+    """A property write was rejected before it reached the robot."""
+
+
 class DeviceUnavailableException(InvalidActionException):
     translation_key = "device_unavailable"
 

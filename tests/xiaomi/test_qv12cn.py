@@ -240,7 +240,7 @@ def test_the_record_is_its_own_station_profile_not_a_6_max_alias() -> None:
     assert "DETERGENT_TIME_LEFT" not in chinese.property_overrides
     assert "DETERGENT_TIME_LEFT" in base.property_overrides
     assert "START_CUSTOM" not in chinese.action_overrides
-    assert "START_CUSTOM" in base.action_overrides
+    assert "START_CUSTOM" not in base.action_overrides
     assert (18, 4) not in mapped_addresses(chinese, "property")
     assert (2, 9) not in mapped_addresses(chinese, "action")
     # Floor through c104. A later model may register without changing this.

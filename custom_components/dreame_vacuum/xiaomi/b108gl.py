@@ -74,7 +74,6 @@ _ACTIONS: Final[dict[str, dict[str, int]]] = {
     "RESUME": {"siid": 6, "aiid": 1},
     "CHARGE": {"siid": 3, "aiid": 1},
     "LOCATE": {"siid": 6, "aiid": 6},
-    "START_CUSTOM": {"siid": 6, "aiid": 7},
     "RESET_MAIN_BRUSH": {"siid": 8, "aiid": 1},
     "RESET_SIDE_BRUSH": {"siid": 9, "aiid": 1},
     "RESET_FILTER": {"siid": 10, "aiid": 1},

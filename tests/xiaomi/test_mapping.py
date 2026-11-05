@@ -52,6 +52,7 @@ from custom_components.dreame_vacuum.xiaomi.c101eu import X20 as X20_RECORD
 from custom_components.dreame_vacuum.xiaomi.d102ev import MIJIA_M30 as M30_RECORD
 from custom_components.dreame_vacuum.xiaomi.d102gl import X20_PRO as X20_PRO_RECORD
 from custom_components.dreame_vacuum.xiaomi.d106gl import S20 as S20_RECORD
+from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiValueException
 from custom_components.dreame_vacuum.xiaomi.mapping import (
     MODEL_H40,
     MODEL_ROBOT_VACUUM_5,
@@ -148,7 +149,7 @@ def test_s20_plus_state_and_task_values_convert_to_dreame_codes():
     assert family.convert_incoming("STATE", 4) == DreameVacuumState.SWEEPING
     assert family.convert_incoming("STATE", "1") == DreameVacuumState.IDLE
     assert family.convert_incoming("STATE", 7) == DreameVacuumState.REMOTE_CONTROL
-    assert family.convert_incoming("STATE", 99) == 99
+    assert family.convert_incoming("STATE", 99) == -1
     assert (
         family.convert_incoming("TASK_STATUS", 4)
         == DreameVacuumTaskStatus.ZONE_CLEANING
@@ -197,9 +198,11 @@ def test_cleaning_mode_and_suction_shift_only_on_the_wire_edges():
     assert family.convert_incoming("SUCTION_LEVEL", 2.0) == 1
     assert family.convert_outgoing("CLEANING_MODE", 0) == 1
     assert family.convert_outgoing("SUCTION_LEVEL", 2) == 3
-    assert family.convert_outgoing("CLEANING_MODE", False) is False
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("CLEANING_MODE", False)
     assert family.convert_outgoing("VOLUME", 4) == 4
-    assert family.convert_outgoing("CLEANING_MODE", "1") == "1"
+    with pytest.raises(XiaomiValueException):
+        family.convert_outgoing("CLEANING_MODE", "1")
     assert family.convert_incoming("SCHEDULE", "1-2-3") == "1-2-3"
     assert family.convert_incoming("VOLUME", True) is True
     assert family.convert_incoming("VOLUME", {"raw": 1}) == {"raw": 1}
@@ -222,7 +225,7 @@ def test_task_status_comes_from_state_when_sweep_type_would_stay_set():
     assert family.task_status_code(int(DreameVacuumState.ERROR), 2) == int(
         DreameVacuumTaskStatus.COMPLETED
     )
-    assert family.task_status_code(None, None) == int(DreameVacuumTaskStatus.COMPLETED)
+    assert family.task_status_code(None, None) == -1
 
 
 def test_robot_vacuum_5_composes_the_station_profile_and_extends_status():
@@ -243,7 +246,7 @@ def test_robot_vacuum_5_composes_the_station_profile_and_extends_status():
         vacuum_5.convert_incoming("STATE", 23) == DreameVacuumState.CHARGING_COMPLETED
     )
     assert vacuum_5.convert_incoming("STATE", 24) == DreameVacuumState.RETURNING
-    assert vacuum_5.convert_incoming("STATE", 25) == 25
+    assert vacuum_5.convert_incoming("STATE", 25) == -1
     assert (
         vacuum_5.convert_incoming("TASK_STATUS", 10)
         == DreameVacuumTaskStatus.FAST_MAPPING
@@ -975,7 +978,7 @@ def test_compose_rejects_an_omission_the_profile_does_not_define():
 def test_station_address_literals_are_declared_once():
     """Station address dicts are written only in the shared profile."""
     root = Path("custom_components/dreame_vacuum/xiaomi")
-    profile = (root / "profile.py").read_text(encoding="utf-8")
+    profile = (root / "station_tables.py").read_text(encoding="utf-8")
     for name in (
         "d102gl.py",
         "d109gl.py",

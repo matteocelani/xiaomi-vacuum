@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import base64
+import binascii
+from functools import lru_cache
 import json
 from typing import Final
 import zlib
@@ -105,14 +107,23 @@ def catalog_supports_model(blob: str, model: str) -> bool:
         key = keys[device[3]]
         if not isinstance(key, str) or len(key) < 1:
             return False
-    return True
+    return _model_id(device[0], code) == model
 
 
+@lru_cache(maxsize=4)
 def _decode_catalog(blob: str) -> list[object]:
-    decoded = json.loads(zlib.decompress(base64.b64decode(blob), _GZIP_WINDOW_BITS))
+    try:
+        decoded = json.loads(zlib.decompress(base64.b64decode(blob), _GZIP_WINDOW_BITS))
+    except (binascii.Error, OSError, json.JSONDecodeError, zlib.error) as err:
+        raise DeviceException("device catalog could not be decoded") from err
     if isinstance(decoded, list):
         return decoded
     raise DeviceException("device catalog is not a list")
+
+
+def catalog_brand_matches(brand: object, code: str, model: str) -> bool:
+    """Return whether this catalog brand owns the full model id."""
+    return _model_id(brand, code) == model
 
 
 def _model_id(brand: object, code: object) -> str:

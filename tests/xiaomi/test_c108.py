@@ -68,7 +68,7 @@ _CASE = SpecCase(
     service_reasons={
         1: "identity: manufacturer, model, and firmware come from miIO.info.",
     },
-    state_wire_eight=8,
+    state_wire_eight=-1,
     station_shell=False,
 )
 

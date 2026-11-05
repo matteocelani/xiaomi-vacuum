@@ -2602,7 +2602,87 @@ class DreameVacuumProtocol:
                 _LOGGER.warning("Error while disconnecting", exc_info=True)
         self._connected = False
 
+    def _cloud_reader(self) -> object | None:
+        if self.device_cloud is not None:
+            return self.device_cloud
+        return self.cloud
+
+    def _login_cloud_client(self, client: object) -> None:
+        logged_in = getattr(client, "logged_in", False)
+        if logged_in:
+            return
+        login = getattr(client, "login", None)
+        if not callable(login):
+            raise DeviceException(key="cloud_login_failed") from None
+        login()
+        if not getattr(client, "logged_in", False):
+            raise DeviceException(key="cloud_login_failed") from None
+        if getattr(client, "device_id", None):
+            return
+        cloud = self.cloud
+        if cloud is not None and cloud is not client and getattr(cloud, "device_id", None):
+            client._did = cloud.device_id
+            return
+        if self._mac and callable(getattr(client, "get_info", None)):
+            client.get_info(self._mac)
+
+    def _send_locked_read(
+        self, method: str, parameters: object, retry_count: int, timeout: object
+    ) -> object:
+        client = self._cloud_reader()
+        if client is None:
+            raise DeviceException(key="device_unavailable") from None
+        self._login_cloud_client(client)
+        response = client.send(
+            method, parameters=parameters, retry_count=retry_count, timeout=timeout
+        )
+        if response is None:
+            self._connected = False
+            raise DeviceException(key="cloud_unreachable") from None
+        self._connected = True
+        return response
+
+    def _send_locked_read_async(
+        self, callback: object, method: str, parameters: object, retry_count: int
+    ) -> None:
+        client = self._cloud_reader()
+        if client is None:
+            raise DeviceException(key="device_unavailable") from None
+        self._login_cloud_client(client)
+
+        def cloud_callback(response: object) -> None:
+            self._connected = response is not None
+            if callback is not None:
+                callback(response)
+
+        client.send_async(
+            cloud_callback, method, parameters=parameters, retry_count=retry_count
+        )
+
     def send_async(self, callback, method, parameters: Any = None, retry_count: int = 2):
+        transport = self.property_transport
+        if transport is not None and method in ("get_properties", "set_properties"):
+            response = transport.send(method, parameters, retry_count)
+            if response is not None:
+                if callback:
+                    callback(response)
+                return
+            auth_failed = bool(getattr(transport, "local_auth_failed", False))
+            if (
+                auth_failed
+                and method == "get_properties"
+                and self._cloud_reader() is not None
+            ):
+                self._send_locked_read_async(callback, method, parameters, retry_count)
+                return
+            if method == "set_properties" or auth_failed:
+                if method == "set_properties":
+                    _LOGGER.warning("Local miIO property write failed")
+                if callback:
+                    callback(None)
+                raise DeviceException(key="device_unavailable") from None
+            _LOGGER.debug("Local miIO property read failed")
+
         if (self.prefer_cloud or not self.device) and self.device_cloud:
             if not self.device_cloud.logged_in:
                 # Use different session for device cloud
@@ -2639,6 +2719,12 @@ class DreameVacuumProtocol:
                 return response
             # Cloud set_properties is ignored by these robots, so a failed local write stops here.
             auth_failed = bool(getattr(transport, "local_auth_failed", False))
+            if (
+                auth_failed
+                and method == "get_properties"
+                and self._cloud_reader() is not None
+            ):
+                return self._send_locked_read(method, parameters, retry_count, timeout)
             if method == "set_properties" or auth_failed:
                 if method == "set_properties":
                     _LOGGER.warning("Local miIO property write failed")
