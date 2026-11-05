@@ -282,7 +282,7 @@ class DreameMapVacuumMapManager:
     def _mapped_action(self, action: DreameVacuumAction) -> dict[str, int] | None:
         action_mapping = self.action_mapping
         if action_mapping is None:
-            raise InvalidActionException("map action mapping is not set")
+            return None
         mapping = action_mapping.get(action)
         if mapping is None or "siid" not in mapping or "aiid" not in mapping:
             return None
