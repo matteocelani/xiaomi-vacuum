@@ -734,7 +734,7 @@ SEGMENT_SELECTS: tuple[DreameVacuumSelectEntityDescription, ...] = (
             and device.status.auto_change_mop
         ),
         value_fn=lambda value, entity: entity.segment.mop_type.lower() if entity.segment.mop_type else None,
-        value_int_fn=lambda value, entity: value.upper(),
+        value_int_fn=lambda value, entity: value.upper() if value else None,
         exists_fn=lambda description, device: device.capability.auto_change_mop,
         options=lambda entity: ["a", "b", "c"],
     ),
