@@ -32,7 +32,7 @@ The 180 writable properties are no longer open xfails. 85 are entities, 90 are t
 - The weekday bitmask in `day` (0..255) does not say which bit is Monday.
 - Twice-clean is published on all 10 sweep models and is not an `in` parameter of add-ii, so the service rejects it instead of sending it.
 - Write-only sweep settings assume state after a write. The robot does not publish a read.
-- The two custom bools are unnamed. They are diagnostic and disabled by default.
+- The two custom bools are unnamed. They are diagnostic. Write-only settings are not polled; the entity shows the last accepted write.
 - `b108zh` fan mode in the committed spec is Full Speed (4), the same list as `b108za` and `b108zb`, not Strong (3).
 - The `pv32gl` catalog still lists only version 1 as released. The integration stays on version 2 and does not expose `ota-info`.
 

@@ -2562,7 +2562,7 @@ class DreameVacuumDevice:
 
     def _apply_reported_family(self) -> None:
         reported = self.info.model if self.info is not None else None
-        configured = self._configured_model
+        configured = getattr(self, "_configured_model", None)
         if (
             isinstance(configured, str)
             and configured

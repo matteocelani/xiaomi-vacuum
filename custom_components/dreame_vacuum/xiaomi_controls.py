@@ -66,11 +66,11 @@ class _XiaomiEntity(DreameVacuumEntity):
         control: XiaomiControl,
     ) -> None:
         self._control = control
+        self._attr_entity_registry_enabled_default = control.enabled_by_default
         super().__init__(coordinator, DreameVacuumEntityDescription(key=control.key))
         self._attr_entity_category = (
             EntityCategory.DIAGNOSTIC if control.diagnostic else EntityCategory.CONFIG
         )
-        self._attr_entity_registry_enabled_default = control.enabled_by_default
         self._attr_translation_placeholders = {}
 
     @property

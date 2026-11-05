@@ -6,7 +6,7 @@ Implemented after PR #37 (`14c364a`) and PR #35 (`7edbf2f`) landed on `master`. 
 
 What shipped:
 
-- 85 entities from shared family descriptors. X20 Max selects 27 station controls and replaces worry-free mode and mop-swing frequency with `control_with_options`. S20+ has its own tuple: edge swing is siid 2 piid 17 and edge-sweep frequency is siid 2 piid 18. Sweep write-only settings and the remember-map switch are opt-in additions on the models that publish them. The two custom bools are one descriptor each, diagnostic and disabled by default.
+- 85 entities from shared family descriptors. X20 Max selects 27 station controls and replaces worry-free mode and mop-swing frequency with `control_with_options`. S20+ has its own tuple: edge swing is siid 2 piid 17 and edge-sweep frequency is siid 2 piid 18. Sweep write-only settings and the remember-map switch are opt-in additions on the models that publish them. The two custom bools are one descriptor each and are diagnostic. Write-only controls are not polled. They stay enabled so a user can set them; the state is the last accepted write.
 - One service, `xiaomi_add_schedule`. It calls add-ii (siid 8, aiid 4) with one validated payload. A field that is not in that model's add-ii `in` list, including twice-clean on every model and clean-way, suction, and water outside the E10 trio, is rejected before any protocol call.
 - The 5 uncertain properties stay unmapped. The deep suite records the omission and names this document.
 - `pv32gl` stays on spec version 2. `ota-info` is not a button.

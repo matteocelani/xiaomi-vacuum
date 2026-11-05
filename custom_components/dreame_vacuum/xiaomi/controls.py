@@ -95,12 +95,8 @@ def uint8_switch(
 
 
 def diagnostic_switch(key: str, siid: int, piid: int) -> XiaomiControl:
-    """An unnamed boolean. Diagnostic and off until the user enables it."""
-    return replace(
-        boolean_switch(key, siid, piid),
-        diagnostic=True,
-        enabled_by_default=False,
-    )
+    """An unnamed boolean, filed as a diagnostic so it is not a primary control."""
+    return replace(boolean_switch(key, siid, piid), diagnostic=True)
 
 
 def write_only_select(
@@ -110,11 +106,7 @@ def write_only_select(
     options: tuple[tuple[int, str], ...],
 ) -> XiaomiControl:
     """A value-list the spec publishes as write-only. State is assumed."""
-    return replace(
-        enum_select(key, siid, piid, options),
-        enabled_by_default=False,
-        readable=False,
-    )
+    return replace(enum_select(key, siid, piid, options), readable=False)
 
 
 def write_only_number(
@@ -129,7 +121,6 @@ def write_only_number(
     """An integer range the spec publishes as write-only."""
     return replace(
         number_control(key, siid, piid, minimum, maximum, step),
-        enabled_by_default=False,
         readable=False,
         unit=unit,
     )
