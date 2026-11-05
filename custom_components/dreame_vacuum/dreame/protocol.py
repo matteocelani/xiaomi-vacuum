@@ -10,20 +10,29 @@ import queue
 import copy
 import os
 import socket
+import ssl
 import struct
+import warnings
 import errno
 import gzip
+from datetime import UTC, datetime
 from threading import Thread, Lock
 from time import sleep
 import time, locale
+import certifi
 import paho.mqtt
 from paho.mqtt.client import Client
 from typing import Any, Dict, Final, Optional, Tuple
 from Crypto.Cipher import ARC4, AES
 from Crypto.Util.Padding import pad
-from cryptography.hazmat.primitives.asymmetric import x25519, ec
+from cryptography import x509
+from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import ec, padding, rsa, x25519
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM, ChaCha20Poly1305
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+from cryptography.utils import CryptographyDeprecationWarning
+from cryptography.x509.verification import PolicyBuilder, Store
 from miio.miioprotocol import MiIOProtocol
 from urllib.parse import urlparse, parse_qs, quote, urlsplit
 import re
@@ -34,6 +43,30 @@ from .types import RestartableTimer
 DREAME_STRINGS: Final = (
     "H4sIAAAAAAAC/41U23LiOBD9FSpVQ81uLcYy4eJN8UDCMDCzCRtuAbamKCEJW4ksOZaAwNevWjYJzFN4MH36pu6jbv135XFlPJoxnDDPMBJf/XWFakGjaf9HnYNY3H3ZJOOfafPL5NWqus5xNU5wZmKVsGrgIS8sfeX/xkqymxIfjkuo5V176KY0Jliwas3z/T9s5C3WnJSW/R9i8YTEPOjtSX/xNnzpPc6TUfDYTztT1FvOZDwcdqO2DfDdzwraYLPVVkiwNiybcmrlNZe0qxLMpQVpplKWmYMVbTcDsJdTrPVeZRRSVfP+Knhr4qpyX6NeGIRiQpjWqxPM2CZjOn7H7C3lVrHiuTHiCgTDJJZm5QopUm81yyr28LwEQFBhjt4bKCwUGwyRbMcJs4Lg2swCsMuNyg3Dyd0gB8qQQkpxhhNd+DscQXSiKBOuOmLb1R8l2dMqRCXAIJP0TiUJPlW04QJC4U9a14JCiDWHFGBsj1AZEBox03WFdvOq9W/4jFqLpkBDJ2ISCgSdyvgRm3PaKo42oqSFplKch9NUcOIcq8/aeaer4nS1l0JhOs1Erhhqjeil1g1xona4AiPs5V3fW3w2qcgLvOvPTKpLZjK13dlezvJNctVFSv9zw18FpivrjNOIVWEEqo5WDjz28rv49m3yrI/bP+eD+lH29QB65dGbSF73y19N9bSc9qCne+oHz4fR63G7QY+3448LSJi7DrJr49WHNhPkA6QamJdsD9fII3clPGF2PJMU1t4P/IZfczuHrFSv13LRquo1mE/1EhuTVm2DgQemriXC9oj80ldqxb+5gmbXT2GwmIUx6Xcas2f6z9p/UJMeuaYv8e1jrddfRG1YyhuC5Q7rPtaxg3u2jsQ72nHN7QQO6EkTZbByMC7t02qXNbF738ZClFOBzUZlSbvz0B0NB92yc7TLrbbSlIFxmHPIU3aq7OBkgWX0W/KLF+DTJ1xEQUba/7Gj86UgIifiYX7r33+fNai/R5PjqH//PWzgvSOiYDG8ILFQNi6U9dOTiNw3Vu4dOK2S3eXILaGx3eiNHV4miaJcRmdOlyrJSLGb8A6ml+ZNgDBtXrN6iBsIoTVDtEX8ALFGfd0KEQlwYNWNJl6vW6TO/GbI/JAFpIVbtVoIc5e8GnP163+JjsKlZAYAAA=="
 )
+
+# Dreame MQTT brokers trust this private root, not the public GlobalSign CA of the same name.
+# SHA-256 6db9ea84c7e4c9aec692cd540ff52381f5e37dae47df8ebeb948a4461aeae425
+DREAME_MQTT_ROOT_CA: Final = b"""-----BEGIN CERTIFICATE-----
+MIIDDzCCAfegAwIBAgIJAPvMK3fFXUEgMA0GCSqGSIb3DQEBCwUAMB0xGzAZBgNV
+BAMMEkdsb2JhbFNpZ24gUm9vdCBDQTAgFw02OTEyMzExNjAwMDBaGA8yOTY5MDUw
+MjE2MDAwMFowHTEbMBkGA1UEAwwSR2xvYmFsU2lnbiBSb290IENBMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtdVI+1rZpIpB8YlmnzWFnvJyGzlBbxEh
+RwgSanox6OypwX27htEFFJzMxz5YGv9nABm3b3SUB+0zcAkJYw/Q9lZoT1w0m9Cr
+5KJMxofpD8JjsZWFE5hvJ5NIyRS4tOgimGsIfvHGMzihZ9sLnq7kBtX7u5hIv/A5
+eSvifaroS2NombTFMQrV6ZNIvpFALbMUbp02+mexm7P59c7OzJVupQAWJSFOepIu
+UwhyYLe1oR/HTiKcIuzDSp49QxhSNYuLpSUOYo/YU4GTMoKEhXD7u+AyeOzuHrnV
+H7+/U7TlXFtMkyt+ZwQw+s8+/jzi4v9jG5XL82uVbr2FN0EC0PEhrwIDAQABo1Aw
+TjAdBgNVHQ4EFgQUQXiLQz2aun8vl2Hy1RCja8nZ4qMwHwYDVR0jBBgwFoAUQXiL
+Qz2aun8vl2Hy1RCja8nZ4qMwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOC
+AQEAaAuVj1RNRRXfV7wk2VtLr6aKPoi7mlG9OSijHxAbmwV1KMyGR6gUpqToBpe/
+xQN+AjJK1Unex0hkN7+RZhpe8ajWqtniZ+oq9Xd+be0JW2KqZmA18r5arJj4DiCt
+Asa557/RNxuiIMc/uwvPtVq2C9uPX562esS02e2bRODH+l+aKcFzeCKotccJGej7
+NrfwypYpmoqrwko/4pe9cMBc3O1CLl2ZYy+YreHMFitmL6xGnC4a6HuTcZgK/ntj
+zewB8u+e2dMQwnBclahtLtb8oMmCHCWlgMTVU1MrjlWldvULalpMnIE5gsHKNXeC
+z0PJitlGIfun4TuQQhVCf5B2aA==
+-----END CERTIFICATE-----
+"""
+_RSA_PSS_OID: Final = "1.2.840.113549.1.1.10"
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -127,10 +160,185 @@ class DreameVacuumDreameHomeCloudProtocol:
                 out += hmac.new(secret, a + seed, h).digest()
             return out[:length]
 
-        def __init__(self, host, port, server_name, timeout, strings):
+        _public_policy = None
+        _private_root = None
+        _store_lock = Lock()
+
+        @classmethod
+        def _public_verifier_policy(cls) -> PolicyBuilder:
+            """Public CA policy for the HTTP API, built once."""
+            with cls._store_lock:
+                if cls._public_policy is None:
+                    certs = []
+                    with warnings.catch_warnings():
+                        # Some roots have a zero serial number: deprecated, rejected later.
+                        warnings.simplefilter("ignore", CryptographyDeprecationWarning)
+                        for der in ssl.create_default_context(cafile=certifi.where()).get_ca_certs(True):
+                            try:
+                                certs.append(x509.load_der_x509_certificate(der))
+                            except ValueError:
+                                pass
+                    cls._public_policy = PolicyBuilder().store(Store(certs))
+                return cls._public_policy
+
+        @classmethod
+        def _pinned_root(cls) -> x509.Certificate:
+            with cls._store_lock:
+                if cls._private_root is None:
+                    cls._private_root = x509.load_pem_x509_certificate(DREAME_MQTT_ROOT_CA)
+                return cls._private_root
+
+        def _verify_chain(self, body: bytes, tls13: bool) -> rsa.RSAPublicKey | ec.EllipticCurvePublicKey:
+            """Check the Certificate message against the right CA and the server name."""
+            chain: list[x509.Certificate] = []
+            try:
+                # TLS 1.3 adds a request context and per-entry extensions (RFC 8446 4.4.2).
+                index = 1 + body[0] if tls13 else 0
+                end = index + 3 + int.from_bytes(body[index : index + 3], "big")
+                index += 3
+                while index < end:
+                    length = int.from_bytes(body[index : index + 3], "big")
+                    chain.append(x509.load_der_x509_certificate(body[index + 3 : index + 3 + length]))
+                    index += 3 + length
+                    if tls13:
+                        index += 2 + int.from_bytes(body[index : index + 2], "big")
+                if self._private_ca:
+                    self._verify_private_chain(chain)
+                else:
+                    self._public_verifier_policy().build_server_verifier(x509.DNSName(self._sni)).verify(
+                        chain[0], chain[1:]
+                    )
+                key = chain[0].public_key()
+                if not isinstance(key, (rsa.RSAPublicKey, ec.EllipticCurvePublicKey)):
+                    raise ValueError("unsupported certificate public key")
+                return key
+            except Exception as ex:
+                # Crypto and parse errors must stay ConnectionError so MQTT can reconnect.
+                leaf = ""
+                if chain:
+                    subject = chain[0].subject.rfc4514_string()
+                    issuer = chain[0].issuer.rfc4514_string()
+                    leaf = f" (server certificate {subject}, issuer {issuer})"
+                raise ConnectionError(f"certificate verify failed: {ex}{leaf}") from ex
+
+        def _verify_private_chain(self, chain: list[x509.Certificate]) -> None:
+            self._verify_chain_to_root(chain, self._pinned_root(), self._sni)
+
+        @staticmethod
+        def _verify_chain_to_root(
+            chain: list[x509.Certificate], root: x509.Certificate, hostname: str
+        ) -> None:
+            if not chain:
+                raise ValueError("empty certificate chain")
+            path = list(chain)
+            digest = hashes.SHA256()
+            if path[-1].fingerprint(digest) != root.fingerprint(digest):
+                path.append(root)
+            now = datetime.now(UTC)
+            for cert in path:
+                if cert.not_valid_before_utc > now or cert.not_valid_after_utc < now:
+                    raise ValueError("certificate is outside its validity period")
+            for index, cert in enumerate(path[:-1]):
+                issuer = path[index + 1]
+                DreameVacuumDreameHomeCloudProtocol.DreameTLSSocket._require_ca(issuer)
+                DreameVacuumDreameHomeCloudProtocol.DreameTLSSocket._verify_signed_by(cert, issuer)
+            DreameVacuumDreameHomeCloudProtocol.DreameTLSSocket._require_hostname(path[0], hostname)
+
+        @staticmethod
+        def _require_ca(cert: x509.Certificate) -> None:
+            try:
+                basic = cert.extensions.get_extension_for_class(x509.BasicConstraints).value
+            except x509.ExtensionNotFound as ex:
+                raise ValueError("CA certificate without BasicConstraints") from ex
+            if not basic.ca:
+                raise ValueError("issuer is not a CA")
+
+        @staticmethod
+        def _verify_signed_by(cert: x509.Certificate, issuer: x509.Certificate) -> None:
+            key = issuer.public_key()
+            signature_hash = cert.signature_hash_algorithm
+            if signature_hash is None:
+                raise ValueError("certificate has no signature hash")
+            try:
+                if isinstance(key, rsa.RSAPublicKey):
+                    if cert.signature_algorithm_oid.dotted_string == _RSA_PSS_OID:
+                        key.verify(
+                            cert.signature,
+                            cert.tbs_certificate_bytes,
+                            padding.PSS(padding.MGF1(signature_hash), signature_hash.digest_size),
+                            signature_hash,
+                        )
+                        return
+                    key.verify(
+                        cert.signature,
+                        cert.tbs_certificate_bytes,
+                        padding.PKCS1v15(),
+                        signature_hash,
+                    )
+                    return
+                if isinstance(key, ec.EllipticCurvePublicKey):
+                    key.verify(
+                        cert.signature, cert.tbs_certificate_bytes, ec.ECDSA(signature_hash)
+                    )
+                    return
+            except InvalidSignature as ex:
+                raise ValueError("certificate signature is invalid") from ex
+            raise ValueError("unsupported certificate signature key")
+
+        @staticmethod
+        def _require_hostname(cert: x509.Certificate, hostname: str) -> None:
+            if not hostname:
+                raise ValueError("missing server name")
+            try:
+                names = cert.extensions.get_extension_for_class(x509.SubjectAlternativeName).value
+            except x509.ExtensionNotFound as ex:
+                raise ValueError("certificate has no subject alternative name") from ex
+            host = hostname.rstrip(".").encode("idna").decode("ascii").lower()
+            for name in names.get_values_for_type(x509.DNSName):
+                pattern = name.rstrip(".").encode("idna").decode("ascii").lower()
+                if pattern == host or DreameVacuumDreameHomeCloudProtocol.DreameTLSSocket._wildcard_match(
+                    pattern, host
+                ):
+                    return
+            raise ValueError("hostname does not match certificate")
+
+        @staticmethod
+        def _wildcard_match(pattern: str, host: str) -> bool:
+            if not pattern.startswith("*."):
+                return False
+            suffix = pattern[1:]
+            if not host.endswith(suffix):
+                return False
+            label = host[: -len(suffix)]
+            return bool(label) and "." not in label
+
+        @staticmethod
+        def _verify_signature(
+            key: rsa.RSAPublicKey | ec.EllipticCurvePublicKey,
+            scheme: int,
+            signature: bytes,
+            data: bytes,
+        ) -> None:
+            """Check a handshake signature for a scheme offered in the ClientHello."""
+            try:
+                if scheme in (0x0804, 0x0805, 0x0806):
+                    digest = {0x0804: hashes.SHA256, 0x0805: hashes.SHA384, 0x0806: hashes.SHA512}[scheme]()
+                    key.verify(signature, data, padding.PSS(padding.MGF1(digest), digest.digest_size), digest)
+                elif scheme in (0x0201, 0x0401, 0x0501, 0x0601):
+                    digest = {2: hashes.SHA1, 4: hashes.SHA256, 5: hashes.SHA384, 6: hashes.SHA512}[scheme >> 8]()
+                    key.verify(signature, data, padding.PKCS1v15(), digest)
+                elif scheme in (0x0403, 0x0503):
+                    key.verify(signature, data, ec.ECDSA(hashes.SHA256() if scheme == 0x0403 else hashes.SHA384()))
+                else:
+                    raise ValueError(f"unexpected signature scheme {scheme:#06x}")
+            except Exception as ex:
+                raise ConnectionError(f"server signature verify failed: {ex}") from ex
+
+        def __init__(self, host, port, server_name, timeout, strings, private_ca: bool = False):
             self._host = host
             self._port = port
             self._sni = server_name
+            self._private_ca = private_ca
             self._timeout = timeout
             self._strings = strings
             self._sock = None
@@ -275,6 +483,8 @@ class DreameVacuumDreameHomeCloudProtocol:
             sseq = 0
             buf = b""
             got_fin = False
+            cert_key = None
+            cert_verified = False
             while not got_fin:
                 typ, body = self._read_record()
                 if typ == 20:
@@ -296,6 +506,19 @@ class DreameVacuumDreameHomeCloudProtocol:
                         break
                     msg = buf[: 4 + mlen]
                     buf = buf[4 + mlen :]
+                    if msg[0] == 11:
+                        cert_key = self._verify_chain(msg[4:], True)
+                    elif msg[0] == 15 and cert_key is not None:
+                        scheme = (msg[4] << 8) | msg[5]
+                        sig = msg[8 : 8 + ((msg[6] << 8) | msg[7])]
+                        content = b" " * 64 + b"TLS 1.3, server CertificateVerify\x00" + h(transcript).digest()
+                        self._verify_signature(cert_key, scheme, sig, content)
+                        cert_verified = True
+                    elif msg[0] == 20:
+                        sfk = self._expand_label(s_hs, b"finished", b"", hlen, h)
+                        expected = hmac.new(sfk, h(transcript).digest(), h).digest()
+                        if not cert_verified or not hmac.compare_digest(msg[4:], expected):
+                            raise ConnectionError("server Finished verify failed")
                     transcript += msg
                     if msg[0] == 20:
                         got_fin = True
@@ -328,6 +551,7 @@ class DreameVacuumDreameHomeCloudProtocol:
             self._tls12 = True
             server_random = sh[6:38]
             ske = None
+            cert_key = None
             got_shd = False
             buf = sh
             while not got_shd:
@@ -338,7 +562,9 @@ class DreameVacuumDreameHomeCloudProtocol:
                     msg = buf[: 4 + mlen]
                     buf = buf[4 + mlen :]
                     transcript += msg
-                    if msg[0] == 12:
+                    if msg[0] == 11:
+                        cert_key = self._verify_chain(msg[4:], False)
+                    elif msg[0] == 12:
                         ske = msg[4 : 4 + mlen]
                     elif msg[0] == 14:
                         got_shd = True
@@ -351,11 +577,19 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if typ != 22:
                     continue
                 buf += body
-            if ske is None:
-                raise ConnectionError("no ServerKeyExchange")
+            if ske is None or cert_key is None:
+                raise ConnectionError("no ServerKeyExchange or Certificate")
             named_curve = (ske[1] << 8) | ske[2]
             pk_len = ske[3]
             server_pub = ske[4 : 4 + pk_len]
+            sig_at = 4 + pk_len
+            sig = ske[sig_at + 4 : sig_at + 4 + ((ske[sig_at + 2] << 8) | ske[sig_at + 3])]
+            self._verify_signature(
+                cert_key,
+                (ske[sig_at] << 8) | ske[sig_at + 1],
+                sig,
+                self._client_random + server_random + ske[:sig_at],
+            )
             if named_curve == 0x001D:
                 my = x25519.X25519PrivateKey.generate()
                 my_pub = my.public_key().public_bytes_raw()
@@ -390,6 +624,7 @@ class DreameVacuumDreameHomeCloudProtocol:
             self._sock.sendall(b"\x14\x03\x03\x00\x01\x01")
             vd = self._prf(master, b"client finished", ph(transcript).digest(), 12, ph)
             fin = bytes([20]) + struct.pack("!I", len(vd))[1:] + vd
+            transcript += fin
             enc = self._encrypt12(22, fin)
             self._sock.sendall(b"\x16\x03\x03" + struct.pack("!H", len(enc)) + enc)
             ccs_seen = False
@@ -402,8 +637,11 @@ class DreameVacuumDreameHomeCloudProtocol:
                     raise ConnectionError("alert")
                 if typ == 22:
                     if ccs_seen:
-                        self._decrypt12(22, body)
+                        svd = self._prf(master, b"server finished", ph(transcript).digest(), 12, ph)
+                        if not hmac.compare_digest(self._decrypt12(22, body), b"\x14\x00\x00\x0c" + svd):
+                            raise ConnectionError("server Finished verify failed")
                         break
+                    transcript += body
                     continue
             return self
 
@@ -561,7 +799,7 @@ class DreameVacuumDreameHomeCloudProtocol:
         def _create_socket_connection(self):
             timeout = getattr(self, "_connect_timeout", 15) or 15
             return DreameVacuumDreameHomeCloudProtocol.DreameTLSSocket(
-                self._host, int(self._port), self._host, timeout, self._userdata._strings
+                self._host, int(self._port), self._host, timeout, self._userdata._strings, private_ca=True
             ).connect()
 
         def _packet_queue(self, command, packet, *args, **kwargs):
