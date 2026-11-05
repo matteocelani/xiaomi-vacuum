@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch the inherited Dreame commit
+        run: git fetch --no-tags origin f5b8472b8e2e4bb3dff7bc2a81a5fd594eca9585
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
