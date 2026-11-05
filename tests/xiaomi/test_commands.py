@@ -10,6 +10,7 @@ from custom_components.dreame_vacuum.dreame.exceptions import InvalidActionExcep
 from custom_components.dreame_vacuum.dreame.map import DreameMapVacuumMapManager
 from custom_components.dreame_vacuum.dreame.types import (
     DreameVacuumAction,
+    DreameVacuumActionMapping,
     DreameVacuumProperty,
     DreameVacuumState,
 )
@@ -261,8 +262,10 @@ def test_paused_start_uses_continue_sweep_and_skips_unmapped_actions():
             assert manager._mapped_action(DreameVacuumAction.REQUEST_MAP) is None
             assert manager._mapped_action(DreameVacuumAction.UPDATE_MAP_DATA) is None
             manager.action_mapping = None
-            with pytest.raises(InvalidActionException):
+            assert (
                 manager._mapped_action(DreameVacuumAction.REQUEST_MAP)
+                == DreameVacuumActionMapping[DreameVacuumAction.REQUEST_MAP]
+            )
         finally:
             release_device(device)
 
