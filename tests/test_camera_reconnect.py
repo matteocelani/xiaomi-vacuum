@@ -39,7 +39,9 @@ def test_update_after_reconnect_waits_for_an_image_request() -> None:
         get_map=lambda _index: map_data,
     )
     object.__setattr__(entity, "coordinator", SimpleNamespace(device=device))
-    object.__setattr__(entity, "entity_description", SimpleNamespace(map_type="current"))
+    object.__setattr__(
+        entity, "entity_description", SimpleNamespace(map_type="current")
+    )
     entity.map_index = 0
     entity._default_map = True
     entity._last_rendered = None
