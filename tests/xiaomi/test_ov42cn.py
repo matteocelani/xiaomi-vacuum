@@ -60,6 +60,7 @@ _CASE = SpecCase(
     spec_filename="ov42cn.json",
     property_reasons=with_reason_overrides(
         H50_PRO_PROPERTY_REASONS,
+        drop=((20, 13),),
         add={
             (2, 104): ROBOT_VACUUM_6_PROPERTY_REASONS[(2, 104)],
             (2, 105): ROBOT_VACUUM_6_PROPERTY_REASONS[(2, 105)],
@@ -75,21 +76,21 @@ _CASE = SpecCase(
     ),
     state_after_read=_STATE_AFTER_READ,
     classification_counts={
-        "ov42cn.json": (149, 119),
+        "ov42cn.json": (150, 118),
         "ov42cn_v1.json": (148, 109),
     },
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov42cn:2",
     reason_prefix_counts={
         "identity": 10,
         "map": 119,
-        "needs council": 75,
+        "needs council": 74,
         "no ha meaning": 24,
     },
     absent_items=(
         ("property", 20, 9),
         ("property", 20, 11),
     ),
-    version_only_controls=frozenset({(22, 2)}),
+    version_only_controls=frozenset({(20, 13), (22, 2)}),
     action_spec_filenames=("ov42cn.json", "ov42cn_v1.json"),
     previous_spec_filename="ov42cn_v1.json",
 )

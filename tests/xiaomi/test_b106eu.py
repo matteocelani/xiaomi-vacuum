@@ -50,7 +50,6 @@ _PROPERTY_REASONS.update(
         (7, 40): "no ha meaning: clean preference is neither readable nor writable.",
         (7, 41): "no ha meaning: clean preference switch is an action parameter.",
         (7, 46): "no ha meaning: the sd flag is neither readable nor writable.",
-        (7, 47): "needs council: write-only carpet avoid has no readable state.",
         (7, 55): "map: map encryption stays unmapped until map support.",
         (8, 20): "no ha meaning: current order count is neither readable nor writable.",
     }
@@ -81,7 +80,7 @@ _STATE_AFTER_READ = {
 _REASON_PREFIX_COUNTS = {
     "identity": 5,
     "map": 66,
-    "needs council": 55,
+    "needs council": 54,
     "no ha meaning": 23,
 }
 
@@ -95,7 +94,7 @@ def _case(model: str, filename: str, spec_type: str) -> SpecCase:
         property_reasons=_PROPERTY_REASONS,
         action_reasons=_ACTION_REASONS,
         state_after_read=_STATE_AFTER_READ,
-        classification_counts={filename: (42, 149)},
+        classification_counts={filename: (44, 147)},
         spec_type=spec_type,
         reason_prefix_counts=_REASON_PREFIX_COUNTS,
         state_wire_eight=int(DreameVacuumState.UPGRADING),

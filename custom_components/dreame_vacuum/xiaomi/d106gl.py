@@ -20,7 +20,16 @@ from .model import (
     compose_controls,
     control_with_options,
 )
-from .sweep import SWEEP_ACTIONS, SWEEP_CONTROLS, SWEEP_PROPERTIES, SWEEP_STATES
+from .sweep import (
+    CARPET_AVOID,
+    MOP_AVOID,
+    REMEMBER_MAP,
+    SWEEP_ACTIONS,
+    SWEEP_AVOID,
+    SWEEP_CONTROLS,
+    SWEEP_PROPERTIES,
+    SWEEP_STATES,
+)
 
 _CLOSE_OPEN: Final[tuple[tuple[int, str], ...]] = (
     (0, "close"),
@@ -78,6 +87,10 @@ _ADDED_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
             (3, "high"),
         ),
     ),
+    CARPET_AVOID,
+    SWEEP_AVOID,
+    MOP_AVOID,
+    REMEMBER_MAP,
 )
 
 

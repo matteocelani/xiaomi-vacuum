@@ -325,7 +325,6 @@ ROBOT_VACUUM_5_PROPERTY_REASONS: Final[dict[tuple[int, int], str]] = {
     (20, 4): "needs council: self-check values are internal component codes.",
     (20, 5): "needs council: unnamed readable string.",
     (20, 6): "needs council: unnamed writable field has no spec description.",
-    (20, 10): "needs council: unnamed writable field has no spec description.",
     (20, 12): "no ha meaning: unnamed field is neither readable nor writable.",
 }
 
@@ -661,18 +660,13 @@ X20_PROPERTY_REASONS.update(
             41,
         ): "no ha meaning: clean preference switch is an action parameter.",
         (7, 46): "no ha meaning: the sd flag is neither readable nor writable.",
-        (7, 47): "needs council: write-only carpet avoid has no readable state.",
         (7, 52): "map: carpet display is map rendering.",
         (
             7,
             53,
         ): "no ha meaning: station act is an action parameter and is not readable.",
         (7, 55): "map: map encryption stays unmapped until map support.",
-        (7, 57): "needs council: write-only sweep avoid has no readable state.",
-        (7, 58): "needs council: write-only mop avoid has no readable state.",
         (7, 61): "no ha meaning: left time is neither readable nor writable.",
-        (7, 62): "needs council: write-only back-wash area has no readable state.",
-        (7, 63): "needs council: write-only dry time has no readable state.",
         (
             15,
             1,
@@ -760,11 +754,8 @@ S20_PROPERTY_REASONS.update(
             41,
         ): "no ha meaning: clean preference switch is an action parameter.",
         (7, 46): "no ha meaning: the sd flag is neither readable nor writable.",
-        (7, 47): "needs council: write-only carpet avoid has no readable state.",
         (7, 52): "map: carpet display is map rendering.",
         (7, 55): "map: map encryption stays unmapped until map support.",
-        (7, 57): "needs council: write-only sweep avoid has no readable state.",
-        (7, 58): "needs council: write-only mop avoid has no readable state.",
         (
             15,
             1,
@@ -946,9 +937,7 @@ VACUUM_6_MAX_PROPERTY_REASONS: Final[dict[tuple[int, int], str]] = {
     (20, 4): "no ha meaning: self-check items are neither readable nor writable.",
     (20, 5): "needs council: unnamed readable string.",
     (20, 6): "needs council: unnamed writable field has no published meaning.",
-    (20, 10): "needs council: unnamed writable field has no published meaning.",
     (20, 12): "no ha meaning: unnamed field is neither readable nor writable.",
-    (20, 13): "needs council: unnamed writable field has no published meaning.",
     (20, 14): "needs council: unnamed readable string.",
     (20, 15): "needs council: unnamed readable string.",
     (21, 7): "no ha meaning: stream common params are neither readable nor writable.",
@@ -1087,9 +1076,7 @@ VACUUM_6_PRO_PROPERTY_REASONS: Final[dict[tuple[int, int], str]] = {
     (20, 4): "no ha meaning: self-check items are neither readable nor writable.",
     (20, 5): "needs council: unnamed readable string.",
     (20, 6): "needs council: unnamed writable field has no published meaning.",
-    (20, 10): "needs council: unnamed writable field has no published meaning.",
     (20, 12): "no ha meaning: unnamed field is neither readable nor writable.",
-    (20, 13): "needs council: unnamed writable field has no published meaning.",
     (20, 14): "needs council: unnamed readable string.",
     (20, 15): "needs council: unnamed readable string.",
     (21, 7): "no ha meaning: stream common params are neither readable nor writable.",
@@ -1202,20 +1189,16 @@ MIJIA_B108_SERVICE_REASONS: Final[dict[int, str]] = {
     7: "map: map, room, and zone support stays off until its own change.",
 }
 MIJIA_B108_PROPERTY_REASONS: Final[dict[tuple[int, int], str]] = {
-    (2, 7): "needs council: clean times is not a Dreame property on the S20+ base.",
     (2, 10): "map: zone ids.",
     (2, 11): "map: restricted areas.",
     (2, 12): "map: virtual walls.",
     (2, 13): "map: room ids are not readable.",
     (2, 14): "map: room name is not readable.",
     (2, 15): "map: points are not readable.",
-    (2, 16): "needs council: mode repeats suction-level with a different value list.",
     (3, 3): "no ha meaning: battery voltage is not a Home Assistant battery sensor.",
-    (4, 1): "needs council: the alarm boolean is not the Dreame volume property.",
     (5, 2): "no ha meaning: current lock echoes the mapped child lock.",
     (6, 2): "no ha meaning: firmware is already exposed from miIO.info.",
     (6, 4): "needs council: DND time is one packed integer, not a start and end.",
-    (6, 7): "needs council: carpet avoidance is a boolean this base does not select.",
     (6, 8): "map: carpet display is map rendering.",
     (6, 10): "map: room information.",
     (6, 12): "no ha meaning: common params are neither readable nor writable.",
@@ -1271,12 +1254,12 @@ def mijia_b108_case(
         property_reasons=MIJIA_B108_PROPERTY_REASONS,
         action_reasons=MIJIA_B108_ACTION_REASONS,
         state_after_read=MIJIA_B108_STATE_AFTER_READ,
-        classification_counts={spec_filename: (38, 64)},
+        classification_counts={spec_filename: (42, 60)},
         spec_type=spec_type,
         reason_prefix_counts={
             "identity": 5,
             "map": 31,
-            "needs council": 23,
+            "needs council": 19,
             "no ha meaning": 5,
         },
         service_reasons=MIJIA_B108_SERVICE_REASONS,
@@ -1875,6 +1858,12 @@ def _classify_file(
             action_reasons=case.action_reasons,
             service_reasons=case.service_reasons,
         )
+        services = (
+            _SERVICE_REASONS if case.service_reasons is None else case.service_reasons
+        )
+        # One mapped property may live in a service the rest of which stays omitted.
+        if mapped and reason is not None and reason == services.get(siid):
+            reason = None
         assert mapped != bool(reason), (filename, kind, siid, iid, reason)
         if reason:
             assert reason.startswith(_REASON_PREFIXES), reason
@@ -2307,10 +2296,11 @@ def _exercise_one_control(
         _send_named_property_options(device, fake, family, control)
         return
     direct = specs[("property", control.siid, control.piid)]
-    for sample in spec_samples(direct, full_range_limit=_CONTROL_SAMPLE_LIMIT):
-        fake.set_value(control.siid, control.piid, sample)
-        family.refresh_controls(device)
-        assert read_control(device, control) == sample
+    if control.readable:
+        for sample in spec_samples(direct, full_range_limit=_CONTROL_SAMPLE_LIMIT):
+            fake.set_value(control.siid, control.piid, sample)
+            family.refresh_controls(device)
+            assert read_control(device, control) == sample
     if not control.writable:
         return
     for sample in spec_samples(direct, full_range_limit=_CONTROL_SAMPLE_LIMIT):

@@ -39,14 +39,14 @@ _CASE = SpecCase(
     action_reasons=with_reason_overrides(S20_ACTION_REASONS, drop=((14, 2),)),
     state_after_read=_STATE_AFTER_READ,
     classification_counts={
-        "c103.json": (44, 167),
-        "c103_v1.json": (44, 165),
+        "c103.json": (48, 163),
+        "c103_v1.json": (48, 161),
     },
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c103:2",
     reason_prefix_counts={
         "identity": 10,
         "map": 137,
-        "needs council": 149,
+        "needs council": 143,
         "no ha meaning": 36,
     },
     absent_items=(

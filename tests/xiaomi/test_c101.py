@@ -34,14 +34,14 @@ _CASE = SpecCase(
     action_reasons=with_reason_overrides(X20_ACTION_REASONS, drop=((14, 2),)),
     state_after_read=X20_STATE_AFTER_READ,
     classification_counts={
-        "c101.json": (46, 172),
-        "c101_v1.json": (46, 171),
+        "c101.json": (52, 166),
+        "c101_v1.json": (51, 166),
     },
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c101:2",
     reason_prefix_counts={
         "identity": 10,
         "map": 134,
-        "needs council": 159,
+        "needs council": 150,
         "no ha meaning": 40,
     },
     absent_items=(
@@ -57,6 +57,7 @@ _CASE = SpecCase(
     station_shell=False,
     action_spec_filenames=("c101.json", "c101_v1.json"),
     previous_spec_filename="c101_v1.json",
+    version_only_controls=frozenset({(7, 63)}),
 )
 
 pytestmark = [

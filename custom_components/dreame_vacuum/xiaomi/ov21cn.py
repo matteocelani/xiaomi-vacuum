@@ -22,9 +22,8 @@ from .profile import (
 _WORRY_FREE_MODE: Final[XiaomiControl] = select_controls(
     EXTENDED_STATION_CONTROLS, ("xiaomi_worry_free_mode",)
 )[0]
-# Writable on the custom service. The Xiaoai bind action returns an id and stays off.
+# Already exposed on this model. The unnamed copies on other models stay disabled.
 _PRECISE_DIAGNOSIS: Final = boolean_switch("xiaomi_precise_diagnosis", 20, 10)
-
 MIJIA_5_PRO: Final[XiaomiModel] = regional_variant(
     ROBOT_VACUUM_5_PRO,
     MODEL_MIJIA_5_PRO,

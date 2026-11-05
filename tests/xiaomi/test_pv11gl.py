@@ -31,12 +31,12 @@ _CASE = SpecCase(
     property_reasons=_PROPERTY_REASONS,
     action_reasons=_ACTION_REASONS,
     state_after_read=_STATE_AFTER_READ,
-    classification_counts={"pv11gl.json": (150, 125)},
+    classification_counts={"pv11gl.json": (152, 123)},
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv11gl:1",
     reason_prefix_counts={
         "identity": 5,
         "map": 59,
-        "needs council": 45,
+        "needs council": 43,
         "no ha meaning": 16,
     },
     absent_items=(

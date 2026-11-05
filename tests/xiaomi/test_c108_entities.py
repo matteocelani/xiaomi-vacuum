@@ -49,7 +49,7 @@ _ENTITIES: Final[frozenset[tuple[str, str]]] = frozenset(
 _COUNTER_SAMPLES: Final[dict[str, tuple[object, str]]] = {
     "BATTERY_LEVEL": (55, "55"),
     "CLEANING_COUNT": (7, "7"),
-    "ERROR": (0, "no_error"),
+    "ERROR": (0, "e5_no_faults"),
     "FILTER_LEFT": (82, "82"),
     "SIDE_BRUSH_LEFT": (81, "81"),
     "TOTAL_CLEANING_TIME": (40, "40"),

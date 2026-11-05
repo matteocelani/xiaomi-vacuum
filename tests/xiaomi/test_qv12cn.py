@@ -39,12 +39,12 @@ _CASE = SpecCase(
     property_reasons=MIJIA_7_MAX_PROPERTY_REASONS,
     action_reasons=MIJIA_7_MAX_ACTION_REASONS,
     state_after_read=MIJIA_7_MAX_STATE_AFTER_READ,
-    classification_counts={"qv12cn.json": (153, 136)},
+    classification_counts={"qv12cn.json": (155, 134)},
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-qv12cn:1",
     reason_prefix_counts={
         "identity": 5,
         "map": 62,
-        "needs council": 52,
+        "needs council": 50,
         "no ha meaning": 17,
     },
     absent_items=(

@@ -25,6 +25,7 @@ jobs:
             ruff \
             pytest \
             pytest-asyncio \
+            hypothesis \
             pycryptodome \
             python-miio \
             numpy \

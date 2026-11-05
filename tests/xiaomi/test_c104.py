@@ -47,7 +47,6 @@ _PROPERTY_REASONS = with_reason_overrides(
         (7, 40): "no ha meaning: clean preference is neither readable nor writable.",
         (7, 41): "no ha meaning: clean preference switch is an action parameter.",
         (7, 46): "no ha meaning: the sd flag is neither readable nor writable.",
-        (7, 47): "needs council: write-only carpet avoid has no readable state.",
         (7, 55): "map: map encryption stays unmapped until map support.",
         (8, 20): "no ha meaning: current order count is neither readable nor writable.",
         (13, 1): "needs council: standard filter life repeats the named sweep filter.",
@@ -97,12 +96,12 @@ _CASE = SpecCase(
     property_reasons=_PROPERTY_REASONS,
     action_reasons=_ACTION_REASONS,
     state_after_read=SWEEP_STATE_AFTER_READ,
-    classification_counts={"c104.json": (42, 153)},
+    classification_counts={"c104.json": (44, 151)},
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-c104:1",
     reason_prefix_counts={
         "identity": 5,
         "map": 66,
-        "needs council": 65,
+        "needs council": 64,
         "no ha meaning": 17,
     },
     checked_events=(

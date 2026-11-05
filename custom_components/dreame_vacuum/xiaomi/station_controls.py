@@ -9,6 +9,7 @@ from .controls import (
     action_button,
     binary_reading,
     boolean_switch,
+    diagnostic_switch,
     enum_select,
     enum_sensor,
     mapped_select,
@@ -782,3 +783,7 @@ H50_ROLLER_CONTROLS: Final[tuple[XiaomiControl, ...]] = compose_controls(
         "xiaomi_worry_free_mode": WORRY_FREE_THROUGH_BUTLER,
     },
 )
+
+# Unnamed custom-service bools. Diagnostic and disabled until a user turns them on.
+PRECISE_DIAGNOSIS: Final = diagnostic_switch("xiaomi_precise_diagnosis", 20, 10)
+WATER_LEVEL_REMIND: Final = diagnostic_switch("xiaomi_water_level_remind", 20, 13)

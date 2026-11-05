@@ -8,7 +8,7 @@ from .model import MODEL_MIJIA_ROBOT_VACUUM_5, XiaomiModel, regional_variant
 from .ov42gl import H50_PRO
 from .profile import HOST_TANK_WITH_NOT_INSTALLED
 
-_OMITTED_CONTROLS: Final = frozenset({"xiaomi_call_clean"})
+_OMITTED_CONTROLS: Final = frozenset({"xiaomi_call_clean", "xiaomi_water_level_remind"})
 
 MIJIA_ROBOT_VACUUM_5: Final[XiaomiModel] = regional_variant(
     H50_PRO,

@@ -182,7 +182,7 @@ def test_call_clean_and_the_host_tank_are_the_only_record_diff() -> None:
     dropped = {control.key for control in base.controls} - {
         control.key for control in current.controls
     }
-    assert dropped == {"xiaomi_call_clean"}
+    assert dropped == {"xiaomi_call_clean", "xiaomi_water_level_remind"}
     current_tank = next(
         control.options
         for control in current.controls

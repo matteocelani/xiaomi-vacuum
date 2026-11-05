@@ -20,7 +20,18 @@ from .model import (
     compose_controls,
     control_with_options,
 )
-from .sweep import SWEEP_ACTIONS, SWEEP_CONTROLS, SWEEP_PROPERTIES, SWEEP_STATES
+from .sweep import (
+    BACK_WASH_AREA,
+    CARPET_AVOID,
+    DRY_TIME,
+    MOP_AVOID,
+    REMEMBER_MAP,
+    SWEEP_ACTIONS,
+    SWEEP_AVOID,
+    SWEEP_CONTROLS,
+    SWEEP_PROPERTIES,
+    SWEEP_STATES,
+)
 
 _CLOSE_OPEN: Final[tuple[tuple[int, str], ...]] = (
     (0, "close"),
@@ -80,6 +91,12 @@ _ADDED_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
     ),
     enum_select("xiaomi_child_lock", 7, 59, _CLOSE_OPEN),
     enum_select("xiaomi_back_wash", 7, 60, _CLOSE_OPEN),
+    CARPET_AVOID,
+    SWEEP_AVOID,
+    MOP_AVOID,
+    BACK_WASH_AREA,
+    DRY_TIME,
+    REMEMBER_MAP,
 )
 
 

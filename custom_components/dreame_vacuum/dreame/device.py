@@ -2562,7 +2562,7 @@ class DreameVacuumDevice:
 
     def _apply_reported_family(self) -> None:
         reported = self.info.model if self.info is not None else None
-        configured = self._configured_model
+        configured = getattr(self, "_configured_model", None)
         if (
             isinstance(configured, str)
             and configured
@@ -4831,9 +4831,12 @@ class DreameVacuumDevice:
         if status is not DreameVacuumStatus.FAST_MAPPING.value and self.status.fast_mapping:
             raise UnavailableException(key="unavailable_while_fast_mapping")
 
+        status_property = DreameVacuumProperty.STATUS
+        if status_property not in self.property_mapping:
+            status_property = DreameVacuumProperty.STATE
         payload = [
             {
-                "piid": self._mapped_piid(DreameVacuumProperty.STATUS),
+                "piid": self._mapped_piid(status_property),
                 "value": status,
             }
         ]

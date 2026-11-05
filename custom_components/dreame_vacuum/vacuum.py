@@ -913,6 +913,22 @@ async def async_setup_entry(
         DreameVacuum.async_call_action.__name__,
     )
 
+    platform.async_register_entity_service(
+        "xiaomi_add_schedule",
+        {
+            vol.Required("enable"): cv.boolean,
+            vol.Required("day"): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
+            vol.Required("hour"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+            vol.Required("minute"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+            vol.Required("repeat"): cv.boolean,
+            vol.Optional("clean_way"): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
+            vol.Optional("suction"): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
+            vol.Optional("water"): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
+            vol.Optional("twice_clean"): cv.boolean,
+        },
+        DreameVacuum.async_xiaomi_add_schedule.__name__,
+    )
+
     activity_class = None
     ## For backwards compatibility
     try:
@@ -1367,6 +1383,22 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
         """Call action."""
         if key is not None and key != "":
             await self._try_command("call_action failed: %s", self.device.call_action_value, key, value)
+
+    async def async_xiaomi_add_schedule(self, **fields: object) -> None:
+        """Add one sweep-family schedule through the model's add-ii action."""
+
+        def _call() -> None:
+            from homeassistant.exceptions import HomeAssistantError
+
+            from .xiaomi.exceptions import XiaomiControlException
+            from .xiaomi.schedule import add_schedule
+
+            try:
+                add_schedule(self.device, fields)
+            except XiaomiControlException as error:
+                raise HomeAssistantError(str(error)) from error
+
+        await self.hass.async_add_executor_job(_call)
 
     async def async_rename_map(self, map_id, map_name="") -> None:
         """Rename a map"""

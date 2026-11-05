@@ -262,6 +262,40 @@ async def assert_entities_read_or_write(hass: HomeAssistant, case: EntityCase) -
                                 control.options[0][0],
                             )
                         continue
+                    if not control.readable and control.domain == "select":
+                        await _enable_control(hass, entry.entry_id, control)
+                        await hass.services.async_call(
+                            "select",
+                            "select_option",
+                            {
+                                "entity_id": _entity_id(
+                                    hass, entry.entry_id, "select", key
+                                ),
+                                "option": control.options[0][1],
+                            },
+                            blocking=True,
+                        )
+                        assert fake.writes[-1] == (
+                            control.siid,
+                            control.piid,
+                            control.options[0][0],
+                        )
+                        continue
+                    if not control.readable and control.domain == "number":
+                        await _enable_control(hass, entry.entry_id, control)
+                        await hass.services.async_call(
+                            "number",
+                            "set_value",
+                            {
+                                "entity_id": _entity_id(
+                                    hass, entry.entry_id, "number", key
+                                ),
+                                "value": control.minimum,
+                            },
+                            blocking=True,
+                        )
+                        assert fake.writes[-1][:2] == (control.siid, control.piid)
+                        continue
                     if control.aiid is not None:
                         await hass.services.async_call(
                             "button",
@@ -858,6 +892,7 @@ async def _exercise_one_control(
     hass: HomeAssistant, entry_id: str, fake: FakeMiio, control: XiaomiControl
 ) -> None:
     """Drive one Xiaomi control through its Home Assistant service."""
+    await _enable_control(hass, entry_id, control)
     if control.domain == "switch":
         await _flip_switch(hass, entry_id, control.key)
         return
@@ -907,10 +942,37 @@ def _entity_state(hass: HomeAssistant, entity_id: str) -> str:
     return state.state
 
 
+async def _enable_control(
+    hass: HomeAssistant, entry_id: str, control: XiaomiControl
+) -> None:
+    """Enable a control that is off in the registry until the user turns it on."""
+    if control.enabled_by_default:
+        return
+    registry = er.async_get(hass)
+    entity_id = _entity_id(hass, entry_id, str(control.domain), control.key)
+    current = registry.async_get(entity_id)
+    if current is None or current.disabled_by is None:
+        return
+    registry.async_update_entity(entity_id, disabled_by=None)
+    await hass.async_block_till_done()
+
+
 async def _seed_select(
     hass: HomeAssistant, entry_id: str, fake: FakeMiio, control: XiaomiControl
 ) -> None:
     """Publish the first option so the select is not unavailable."""
+    await _enable_control(hass, entry_id, control)
+    if not control.readable:
+        option = control.options[0][1]
+        entity_id = _entity_id(hass, entry_id, "select", control.key)
+        await hass.services.async_call(
+            "select",
+            "select_option",
+            {"entity_id": entity_id, "option": option},
+            blocking=True,
+        )
+        assert _entity_state(hass, entity_id) == option
+        return
     value = control.options[0][0]
     if control.siid is not None:
         fake.set_value(control.siid, control.piid, value)

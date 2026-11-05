@@ -66,6 +66,7 @@ class _XiaomiEntity(DreameVacuumEntity):
         control: XiaomiControl,
     ) -> None:
         self._control = control
+        self._attr_entity_registry_enabled_default = control.enabled_by_default
         super().__init__(coordinator, DreameVacuumEntityDescription(key=control.key))
         self._attr_entity_category = (
             EntityCategory.DIAGNOSTIC if control.diagnostic else EntityCategory.CONFIG
@@ -78,6 +79,8 @@ class _XiaomiEntity(DreameVacuumEntity):
         if not self.device.device_connected:
             return False
         if self._control.domain == "button":
+            return True
+        if self._control.writable and not self._control.readable:
             return True
         return _known(self._control, self._raw())
 
@@ -152,6 +155,8 @@ class XiaomiNumber(_XiaomiEntity, NumberEntity):
         self._attr_native_min_value = float(control.minimum)
         self._attr_native_max_value = float(control.maximum)
         self._attr_native_step = float(control.step)
+        if control.unit:
+            self._attr_native_unit_of_measurement = control.unit
 
     @property
     def native_value(self) -> int | None:

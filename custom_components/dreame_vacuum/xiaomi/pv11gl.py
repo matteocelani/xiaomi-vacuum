@@ -13,11 +13,13 @@ from .profile import (
     EXTENDED_STATION_STATES,
     EXTENDED_STATION_TASKS,
     HOST_TANK_WITH_NOT_INSTALLED,
+    PRECISE_DIAGNOSIS,
     STATION_ACTIONS,
     STATION_PROPERTIES,
     STATION_STATISTICS_PROPERTIES,
     SUMMON_STATES,
     SWEEP_SUMMON_STATES,
+    WATER_LEVEL_REMIND,
     WORRY_FREE_THROUGH_BUTLER,
     ExtendedStationWireState,
     compose_addresses,
@@ -47,7 +49,7 @@ ROBOT_VACUUM_6_MAX: Final = XiaomiModel(
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
     controls=compose_controls(
         EXTENDED_STATION_CONTROLS,
-        CAMERA_ROLLER_CONTROLS,
+        (*CAMERA_ROLLER_CONTROLS, PRECISE_DIAGNOSIS, WATER_LEVEL_REMIND),
         omitted=CAMERA_ROLLER_OMITTED_CONTROLS,
         replaced={
             "xiaomi_host_tank": HOST_TANK_WITH_NOT_INSTALLED,
