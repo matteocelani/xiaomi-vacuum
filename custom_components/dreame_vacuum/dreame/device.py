@@ -4831,9 +4831,12 @@ class DreameVacuumDevice:
         if status is not DreameVacuumStatus.FAST_MAPPING.value and self.status.fast_mapping:
             raise UnavailableException(key="unavailable_while_fast_mapping")
 
+        status_property = DreameVacuumProperty.STATUS
+        if status_property not in self.property_mapping:
+            status_property = DreameVacuumProperty.STATE
         payload = [
             {
-                "piid": self._mapped_piid(DreameVacuumProperty.STATUS),
+                "piid": self._mapped_piid(status_property),
                 "value": status,
             }
         ]

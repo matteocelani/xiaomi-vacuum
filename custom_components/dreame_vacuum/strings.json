@@ -958,6 +958,43 @@
           "span": "Cross"
         }
       },
+      "xiaomi_fan_mode": {
+        "name": "Fan mode",
+        "state": {
+          "silent": "Silent",
+          "basic": "Basic",
+          "strong": "Strong",
+          "full_speed": "Full speed"
+        }
+      },
+      "xiaomi_carpet_avoid": {
+        "name": "Carpet avoid",
+        "state": {
+          "close": "Off",
+          "open": "On"
+        }
+      },
+      "xiaomi_sweep_avoid": {
+        "name": "Sweep avoid",
+        "state": {
+          "close": "Off",
+          "open": "On"
+        }
+      },
+      "xiaomi_mop_avoid": {
+        "name": "Mop avoid",
+        "state": {
+          "close": "Off",
+          "open": "On"
+        }
+      },
+      "xiaomi_back_wash_area": {
+        "name": "Back wash area",
+        "state": {
+          "five": "5 m²",
+          "ten": "10 m²"
+        }
+      },
       "xiaomi_alarm": {
         "name": "Alarm",
         "state": {
@@ -2731,6 +2768,19 @@
       "xiaomi_edge_swing_tail_sweep": {
         "name": "Edge swing sweep"
       },
+      "xiaomi_remember_map": {
+        "name": "Remember map",
+        "state": {
+          "close": "Off",
+          "open": "On"
+        }
+      },
+      "xiaomi_precise_diagnosis": {
+        "name": "Precise diagnosis"
+      },
+      "xiaomi_water_level_remind": {
+        "name": "Water level reminder"
+      },
       "xiaomi_ai_managed_cleaning": {
         "name": "AI managed cleaning"
       },
@@ -3073,6 +3123,9 @@
       },
       "wetness_level": {
         "name": "Wetness"
+      },
+      "xiaomi_dry_time": {
+        "name": "Dry time"
       },
       "xiaomi_mop_wash_interval": {
         "name": "Mop wash interval"
@@ -3589,6 +3642,48 @@
     }
   },
   "services": {
+    "xiaomi_add_schedule": {
+      "name": "Add schedule",
+      "description": "Add one sweep-family cleaning schedule. The day field is a weekday bitmask from 0 to 255. Bit order is not in the spec, so confirm it on the robot before relying on it. Fields the model's add-ii action does not accept are rejected and are not sent.",
+      "fields": {
+        "enable": {
+          "name": "Enable",
+          "description": "Whether this schedule is enabled."
+        },
+        "day": {
+          "name": "Day",
+          "description": "Weekday bitmask from 0 to 255. The spec does not say which bit is Monday."
+        },
+        "hour": {
+          "name": "Hour",
+          "description": "Hour from 0 to 23."
+        },
+        "minute": {
+          "name": "Minute",
+          "description": "Minute from 0 to 59."
+        },
+        "repeat": {
+          "name": "Repeat",
+          "description": "Repeat this schedule. This is not a second cleaning pass."
+        },
+        "clean_way": {
+          "name": "Clean way",
+          "description": "0 sweep, 1 sweep and mop, 2 mop. Sent only when add-ii lists this input."
+        },
+        "suction": {
+          "name": "Suction",
+          "description": "Suction value from this model's spec. Sent only when add-ii lists this input."
+        },
+        "water": {
+          "name": "Water",
+          "description": "Water value from this model's spec. Sent only when add-ii lists this input."
+        },
+        "twice_clean": {
+          "name": "Twice clean",
+          "description": "Second cleaning pass. No model's add-ii action accepts this input, so the service rejects it."
+        }
+      }
+    },
     "vacuum_clean_segment": {
       "name": "Clean Segment",
       "description": "Start the cleaning operation in the selected rooms.",

@@ -69,17 +69,17 @@ _CASE = SpecCase(
     action_reasons=with_reason_overrides(ROBOT_VACUUM_5_ACTION_REASONS),
     state_after_read=_STATE_AFTER_READ,
     classification_counts={
-        "ov31cn.json": (133, 104),
+        "ov31cn.json": (134, 103),
         "ov31cn_v1.json": (130, 100),
     },
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov31cn:2",
     reason_prefix_counts={
         "identity": 10,
         "map": 108,
-        "needs council": 62,
+        "needs council": 61,
         "no ha meaning": 24,
     },
-    version_only_controls=frozenset({(20, 9), (20, 11), (22, 2)}),
+    version_only_controls=frozenset({(20, 9), (20, 10), (20, 11), (22, 2)}),
     action_spec_filenames=("ov31cn.json", "ov31cn_v1.json"),
     previous_spec_filename="ov31cn_v1.json",
 )

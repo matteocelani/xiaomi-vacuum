@@ -5,12 +5,6 @@ from __future__ import annotations
 from hypothesis import given, settings, strategies as st
 import pytest
 from tests.xiaomi.deep.checks import (
-    H_01,
-    H_02,
-    M_02,
-    M_03,
-    M_04,
-    M_05,
     check_action,
     check_address,
     check_capability_flags,
@@ -80,24 +74,20 @@ def test_status_wire_is_mapped_only_when_the_spec_lists_it(wire: int) -> None:
     check_status_wire(MODEL, wire)
 
 
-@pytest.mark.xfail(reason=M_03, strict=True)
 @settings(max_examples=12, deadline=None, derandomize=True)
 @given(st.integers(min_value=-5, max_value=12))
 def test_outgoing_value_outside_the_spec_is_refused(sample: int) -> None:
     check_outgoing_range(MODEL, sample)
 
 
-@pytest.mark.xfail(reason=M_04, strict=True)
 def test_unknown_status_does_not_complete_the_task() -> None:
     check_unknown_state_task(MODEL)
 
 
-@pytest.mark.xfail(reason=H_01, strict=True)
 def test_configured_model_installs_before_runtime_info() -> None:
     check_configured_family(MODEL)
 
 
-@pytest.mark.xfail(reason=M_02, strict=True)
 def test_async_property_calls_use_the_xiaomi_transport() -> None:
     check_send_async_transport()
 
@@ -106,13 +96,11 @@ def test_control_matches_its_spec_item(spec_control) -> None:
     check_control(spec_control)
 
 
-@pytest.mark.xfail(reason=M_05, strict=True)
 def test_one_failing_control_does_not_fail_the_refresh() -> None:
     check_control_refresh(MODEL)
 
 
 @pytest.mark.enable_socket
 @pytest.mark.allow_hosts(["127.0.0.1"])
-@pytest.mark.xfail(reason=H_02, strict=True)
 def test_batch_write_uses_outgoing_conversion() -> None:
     check_set_properties_conversion(MODEL)

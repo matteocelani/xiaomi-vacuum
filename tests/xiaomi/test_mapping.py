@@ -104,6 +104,7 @@ from custom_components.dreame_vacuum.xiaomi.profile import (
     SWEEP_DUST_ARREST,
     SWEEP_SUMMON_STATES,
     VIBRATION_MOP,
+    WATER_LEVEL_REMIND,
     WORRY_FREE_THROUGH_BUTLER,
     StoredState,
     SummonWireState,
@@ -260,9 +261,45 @@ def test_robot_vacuum_5_composes_the_station_profile_and_extends_status():
     assert "TOTAL_CLEANED_AREA" not in x20.property_overrides
     assert "REQUEST_MAP" not in vacuum_5.action_overrides
     assert "STATUS" not in vacuum_5.property_overrides
-    assert x20.controls == ()
-    assert resolve_family(MODEL_S20_PLUS).controls == ()
-    assert vacuum_5.controls is EXTENDED_STATION_CONTROLS
+    assert {control.key for control in x20.controls} == {
+        "xiaomi_alarm",
+        "xiaomi_auto_mop_dry",
+        "xiaomi_auto_water_change",
+        "xiaomi_carpet_avoidance",
+        "xiaomi_carpet_deep_cleaning",
+        "xiaomi_carpet_discriminate",
+        "xiaomi_clean_times",
+        "xiaomi_detergent_delivery",
+        "xiaomi_detergent_level",
+        "xiaomi_detergent_reminder",
+        "xiaomi_detergent_self_delivery",
+        "xiaomi_drying_time",
+        "xiaomi_dust_arrest_power",
+        "xiaomi_enable_mop_wash",
+        "xiaomi_mop_outer_swing",
+        "xiaomi_mop_swing_frequency",
+        "xiaomi_mop_wash_area",
+        "xiaomi_mop_wash_frequency",
+        "xiaomi_mop_wash_interval",
+        "xiaomi_mop_water_no_tank",
+        "xiaomi_obstacle_strategy",
+        "xiaomi_sweep_carpet_first",
+        "xiaomi_sweep_route",
+        "xiaomi_use_detergent",
+        "xiaomi_wash_water_output",
+        "xiaomi_wash_water_temperature",
+        "xiaomi_worry_free_mode",
+    }
+    assert {control.key for control in resolve_family(MODEL_S20_PLUS).controls} == {
+        "xiaomi_alarm",
+        "xiaomi_carpet_discriminate",
+        "xiaomi_clean_times",
+        "xiaomi_edge_sweep_frequency",
+        "xiaomi_edge_swing_tail_sweep",
+        "xiaomi_fan_mode",
+    }
+    assert vacuum_5.controls[:-1] == EXTENDED_STATION_CONTROLS
+    assert vacuum_5.controls[-1].key == "xiaomi_precise_diagnosis"
     assert x20.property_overrides is not STATION_PROPERTIES
     assert x20.property_overrides["STATE"] is not STATION_PROPERTIES["STATE"]
     assert vacuum_5.property_overrides["STATE"] is not x20.property_overrides["STATE"]
@@ -469,7 +506,8 @@ def test_robot_vacuum_5_pro_reuses_the_station_profile_and_adds_stream() -> None
     assert "xiaomi_laser_position" in present
     assert "xiaomi_obstacle_crossing" in present
     assert {control.key for control in h50.controls} - present == {
-        "xiaomi_self_check_results"
+        "xiaomi_self_check_results",
+        "xiaomi_water_level_remind",
     }
 
 
@@ -488,7 +526,11 @@ def test_h50_pro_reuses_the_s40_map_and_restores_published_controls() -> None:
     assert h50.task_by_wire is not s40.task_by_wire
     shared = {control.key: control for control in EXTENDED_STATION_CONTROLS}
     added = {control.key: control for control in S40_CLASS_CONTROLS}
-    extra = {"xiaomi_self_check_results", "xiaomi_solid_dirt_detection"}
+    extra = {
+        "xiaomi_self_check_results",
+        "xiaomi_solid_dirt_detection",
+        "xiaomi_water_level_remind",
+    }
     for control in h50.controls:
         if control.key in shared:
             assert control is shared[control.key]
@@ -496,6 +538,8 @@ def test_h50_pro_reuses_the_s40_map_and_restores_published_controls() -> None:
             assert control is added[control.key]
         elif control.key == "xiaomi_solid_dirt_detection":
             assert control is SOLID_DIRT_DETECTION
+        elif control.key == "xiaomi_water_level_remind":
+            assert control is WATER_LEVEL_REMIND
         else:
             assert control is SELF_CHECK_RESULTS
     omitted = set(shared) - {control.key for control in h50.controls}
@@ -692,6 +736,8 @@ def test_robot_vacuum_6_max_reuses_the_station_profile() -> None:
         "xiaomi_roller_time_left",
         "xiaomi_start_roller_wash",
         "xiaomi_stop_roller_wash",
+        "xiaomi_precise_diagnosis",
+        "xiaomi_water_level_remind",
     }
     present = {control.key: control for control in vacuum.controls}
     omitted = {

@@ -9,7 +9,7 @@ from custom_components.dreame_vacuum.xiaomi import MODEL_H50_PRO
 import pytest
 from tests.xiaomi.spec_helpers import (
     H50_PRO_ACTION_REASONS as _ACTION_REASONS,
-    H50_PRO_PROPERTY_REASONS as _PROPERTY_REASONS,
+    H50_PRO_PROPERTY_REASONS,
     SpecCase,
     assert_controls_have_english_names,
     assert_controls_match_spec,
@@ -22,6 +22,7 @@ from tests.xiaomi.spec_helpers import (
     exercise_writable_values,
     normalize_spec,
     spec_index,
+    with_reason_overrides,
 )
 
 _STATE_AFTER_READ: Final[dict[int, DreameVacuumState]] = {
@@ -55,21 +56,24 @@ _CASE = SpecCase(
     model=MODEL_H50_PRO,
     device_name="H50 Pro",
     spec_filename="ov42gl.json",
-    property_reasons=_PROPERTY_REASONS,
+    property_reasons=with_reason_overrides(
+        H50_PRO_PROPERTY_REASONS,
+        drop=((20, 13),),
+    ),
     action_reasons=_ACTION_REASONS,
     state_after_read=_STATE_AFTER_READ,
     classification_counts={
-        "ov42gl.json": (149, 112),
+        "ov42gl.json": (150, 111),
         "ov42gl_v1.json": (148, 109),
     },
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-ov42gl:2",
     reason_prefix_counts={
         "identity": 10,
         "map": 116,
-        "needs council": 72,
+        "needs council": 71,
         "no ha meaning": 23,
     },
-    version_only_controls=frozenset({(22, 2)}),
+    version_only_controls=frozenset({(20, 13), (22, 2)}),
     absent_items=(
         ("property", 20, 9),
         ("property", 20, 11),

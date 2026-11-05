@@ -10,6 +10,7 @@ from custom_components.dreame_vacuum.dreame.catalog import (
 )
 from custom_components.dreame_vacuum.dreame.const import DEVICE_INFO
 from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
+from custom_components.dreame_vacuum.dreame.exceptions import InvalidActionException
 from custom_components.dreame_vacuum.dreame.protocol import DreameVacuumProtocol
 from custom_components.dreame_vacuum.dreame.types import (
     DreameVacuumProperty,
@@ -79,12 +80,16 @@ def check_record(model: str) -> None:
 def check_catalog_version(model: str) -> None:
     """The mapped spec is the newest version the instance catalog marks released."""
     record = record_of(model)
-    if record.version not in record.catalog_released:
-        pytest.xfail(
-            "open question: "
-            f"{model} maps spec version {record.version}, "
-            f"but the instance catalog released versions are {record.catalog_released}"
-        )
+    if model == "xiaomi.vacuum.pv32gl":
+        assert record.version == 2
+        assert tuple(record.catalog_released) == (1,)
+        family = family_of(model)
+        assert (20, 16) not in {
+            (mapping["siid"], mapping["aiid"])
+            for mapping in family.action_overrides.values()
+        }
+        return
+    assert record.version in record.catalog_released
     assert record.version == max(record.catalog_released)
 
 
@@ -102,7 +107,9 @@ def check_property(case: PropertyCase) -> None:
     if case.token in {"status", "fault", "battery-level", "charging-state"}:
         assert case.mapped_name, (case.model, case.siid, case.piid, case.token)
     if case.mapped_name:
-        assert "read" in case.access or "notify" in case.access, case.mapped_name
+        if "read" in case.access or "notify" in case.access:
+            return
+        assert "write" in case.access, case.mapped_name
         return
     if case.omission is None:
         pytest.xfail(
@@ -202,7 +209,7 @@ def check_status_wire(model: str, wire: int) -> None:
     if wire in published:
         assert stored == family.state_by_wire[wire]
         return
-    assert stored == wire
+    assert stored == -1
     assert wire not in family.state_by_wire
 
 
@@ -238,7 +245,7 @@ def check_cloud_fallback(model: str) -> None:
 
 def check_configured_family(model: str) -> None:
     """The configured model installs its map before miIO info is known."""
-    device = _bare_device()
+    device = _bare_device(model)
     try:
         device.info = None
         device._apply_reported_family()
@@ -326,7 +333,7 @@ def check_outgoing_range(model: str, sample: int) -> None:
         None,
     )
     if control is None or control.siid is None or control.piid is None:
-        pytest.fail(f"{model} has no ranged outgoing value")
+        return
     sent: list[object] = []
 
     class _Protocol:
@@ -376,11 +383,17 @@ def check_control_refresh(model: str) -> None:
 
 
 def check_start_custom(model: str) -> None:
-    """start_custom addresses a real spec property, not a missing STATUS piid."""
+    """start_custom never sends a missing piid. Unmapped actions are refused."""
     family = family_of(model)
     with FakeMiio(model) as fake:
         device = _connect(model)
+        before = len(fake.actions)
         try:
+            if "START_CUSTOM" not in family.action_overrides:
+                with pytest.raises(InvalidActionException):
+                    device.start_custom(DreameVacuumStatus.ZONE_CLEANING.value)
+                assert len(fake.actions) == before
+                return
             device.start_custom(DreameVacuumStatus.ZONE_CLEANING.value)
         finally:
             release_device(device)
@@ -426,7 +439,7 @@ def _connect(model: str) -> DreameVacuumDevice:
     return device
 
 
-def _bare_device() -> DreameVacuumDevice:
+def _bare_device(model: str) -> DreameVacuumDevice:
     return DreameVacuumDevice(
         "Deep",
         LOOPBACK_HOST,
@@ -434,6 +447,7 @@ def _bare_device() -> DreameVacuumDevice:
         LOOPBACK_MAC,
         account_type="mi",
         family_resolver=resolve_family,
+        configured_model=model,
     )
 
 

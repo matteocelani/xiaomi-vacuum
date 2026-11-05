@@ -27,6 +27,7 @@ from .station_controls import (
     HOST_TANK_WITH_NOT_INSTALLED,
     LIDAR_HARDWARE_CONTROLS,
     MOP_TEMPERATURE,
+    PRECISE_DIAGNOSIS,
     ROLLER_CLEANING_MODE,
     ROLLER_CONTROLS,
     S40_CLASS_CONTROLS,
@@ -37,6 +38,7 @@ from .station_controls import (
     STREAM_CONTROLS,
     SWEEP_DUST_ARREST,
     VIBRATION_MOP,
+    WATER_LEVEL_REMIND,
     WORRY_FREE_THROUGH_BUTLER,
 )
 from .station_tables import (
@@ -78,6 +80,7 @@ __all__ = [
     "HOST_TANK_WITH_NOT_INSTALLED",
     "LIDAR_HARDWARE_CONTROLS",
     "MOP_TEMPERATURE",
+    "PRECISE_DIAGNOSIS",
     "ROLLER_CLEANING_MODE",
     "ROLLER_CONTROLS",
     "S40_CLASS_CONTROLS",
@@ -98,6 +101,7 @@ __all__ = [
     "SWEEP_DUST_ARREST",
     "SWEEP_SUMMON_STATES",
     "VIBRATION_MOP",
+    "WATER_LEVEL_REMIND",
     "WORRY_FREE_THROUGH_BUTLER",
     "ExtendedStationWireState",
     "ExtendedStationWireTask",

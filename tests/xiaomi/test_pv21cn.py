@@ -55,14 +55,14 @@ _CASE = SpecCase(
     ),
     state_after_read=VACUUM_6_PRO_STATE_AFTER_READ,
     classification_counts={
-        "pv21cn.json": (145, 131),
-        "pv21cn_v1.json": (145, 130),
+        "pv21cn.json": (147, 129),
+        "pv21cn_v1.json": (147, 128),
     },
     spec_type="urn:miot-spec-v2:device:vacuum:0000A006:xiaomi-pv21cn:2",
     reason_prefix_counts={
         "identity": 10,
         "map": 124,
-        "needs council": 95,
+        "needs council": 91,
         "no ha meaning": 32,
     },
     absent_items=(

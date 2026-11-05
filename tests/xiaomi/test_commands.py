@@ -508,6 +508,11 @@ def test_property_reads_stay_inside_the_explicit_map():
             MODEL_X20,
             MODEL_S12,
             MODEL_T12,
+            MODEL_S20_PLUS,
+            MODEL_MIJIA_SWEEP_MOP_2S,
+            MODEL_MIJIA_SWEEP_MOP_3S,
+            MODEL_MIJIA_SWEEP_MOP_3S_ZH,
+            MODEL_X20_MAX,
         ):
             assert controls == set()
             assert (4, 1) not in requested

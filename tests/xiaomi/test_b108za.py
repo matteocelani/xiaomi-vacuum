@@ -112,7 +112,16 @@ def test_the_record_is_an_s20_plus_variant_without_carpet_cleaning() -> None:
     }
     assert current.property_overrides == without_carpet
     assert current.action_overrides == base.action_overrides
-    assert current.controls == ()
+    assert {control.key for control in current.controls} == {
+        "xiaomi_alarm",
+        "xiaomi_carpet_avoidance",
+        "xiaomi_clean_times",
+        "xiaomi_fan_mode",
+    }
+    fan = next(
+        control for control in current.controls if control.key == "xiaomi_fan_mode"
+    )
+    assert fan.options == ((1, "silent"), (2, "basic"), (4, "full_speed"))
     assert current.state_by_wire[7] == int(DreameVacuumState.WATER_CHECK)
     assert current.convert_incoming("STATE", 7) == int(DreameVacuumState.WATER_CHECK)
     assert base.state_by_wire[7] == int(DreameVacuumState.REMOTE_CONTROL)

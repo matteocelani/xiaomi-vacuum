@@ -12,6 +12,9 @@ from .controls import (
     enum_sensor,
     measurement,
     number_control,
+    uint8_switch,
+    write_only_number,
+    write_only_select,
 )
 from .model import StoredState, wire_map
 
@@ -132,4 +135,24 @@ SWEEP_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
     action_button("xiaomi_reset_side_brush", 7, 1, ((17, 2),)),
     action_button("xiaomi_reset_filter", 7, 1, ((17, 4),)),
     action_button("xiaomi_reset_mop", 7, 1, ((17, 8),)),
+)
+
+_CLOSE_OPEN: Final[tuple[tuple[int, str], ...]] = ((0, "close"), (1, "open"))
+
+# Write-only sweep settings. Models that do not publish a key must not receive it.
+CARPET_AVOID: Final = write_only_select("xiaomi_carpet_avoid", 7, 47, _CLOSE_OPEN)
+SWEEP_AVOID: Final = write_only_select("xiaomi_sweep_avoid", 7, 57, _CLOSE_OPEN)
+MOP_AVOID: Final = write_only_select("xiaomi_mop_avoid", 7, 58, _CLOSE_OPEN)
+BACK_WASH_AREA: Final = write_only_select(
+    "xiaomi_back_wash_area",
+    7,
+    62,
+    ((5, "five"), (10, "ten")),
+)
+DRY_TIME: Final = write_only_number("xiaomi_dry_time", 7, 63, 4, 12, unit="h")
+REMEMBER_MAP: Final = uint8_switch(
+    "xiaomi_remember_map",
+    10,
+    1,
+    _CLOSE_OPEN,
 )

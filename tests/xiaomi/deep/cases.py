@@ -11,6 +11,7 @@ from typing import Final
 from custom_components.dreame_vacuum.xiaomi.controls import XiaomiControl
 from custom_components.dreame_vacuum.xiaomi.mapping import resolve_family
 from custom_components.dreame_vacuum.xiaomi.model import XiaomiModel
+from custom_components.dreame_vacuum.xiaomi.schedule import schedule_property_name
 from tests.xiaomi.deep.corpus import SpecRecord, load_record, spec_token
 
 _STRINGS: Final = Path("custom_components/dreame_vacuum/strings.json")
@@ -53,6 +54,29 @@ _COUNCIL_NEEDLES: Final = (
     "spec-test",
 )
 _UNNAMED_TOKENS: Final = frozenset({"spec-test", "cmd", "flag"})
+_PLAN: Final = "docs/unmapped-props-plan.md"
+_DOCUMENTED_OMISSIONS: Final = {
+    ("xiaomi.vacuum.b112", 10, 1): (
+        "needs council: remember-state publishes only Close, so a switch cannot turn on. "
+        f"See {_PLAN}."
+    ),
+    ("xiaomi.vacuum.b112bk", 10, 1): (
+        "needs council: remember-state publishes only Close, so a switch cannot turn on. "
+        f"See {_PLAN}."
+    ),
+    ("xiaomi.vacuum.b112gl", 10, 1): (
+        "needs council: remember-state publishes only Close, so a switch cannot turn on. "
+        f"See {_PLAN}."
+    ),
+    ("xiaomi.vacuum.d109gl", 20, 7): (
+        "needs council: sewage-self-cleaning has no description and no known station meaning. "
+        f"See {_PLAN}."
+    ),
+    ("xiaomi.vacuum.d109gl", 20, 8): (
+        "needs council: self-cleaning-time is an unnamed uint32 with no unit. "
+        f"See {_PLAN}."
+    ),
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -194,12 +218,18 @@ def property_cases(model: str) -> tuple[PropertyCase, ...]:
         values = _value_list(item.get("value-list"))
         bounds = _value_range(item.get("value-range"))
         unit = item.get("unit")
-        name = mapped.get((siid, piid))
+        name = mapped.get((siid, piid)) or schedule_property_name(model, siid, piid)
         omission = (
             None
             if name
             else _property_omission(
-                siid, token, description, access, _text(item.get("format"))
+                model,
+                siid,
+                piid,
+                token,
+                description,
+                access,
+                _text(item.get("format")),
             )
         )
         found.append(
@@ -444,12 +474,17 @@ def _items(
 
 
 def _property_omission(
+    model: str,
     siid: int,
+    piid: int,
     token: str,
     description: str,
     access: tuple[str, ...],
     value_format: str,
 ) -> str | None:
+    documented = _DOCUMENTED_OMISSIONS.get((model, siid, piid))
+    if documented:
+        return documented
     if token in _REQUIRED_TOKENS:
         return None
     if siid == 1:

@@ -1,8 +1,19 @@
 # Plan for the 180 unmapped writable properties
 
-Approved as written on 2026-11-04. The owner accepted 85 entities, one `xiaomi_add_schedule` service for the 90 order fields, and the 5 uncertain properties left unmapped with documented omission reasons. `xiaomi.vacuum.pv32gl` stays on spec version 2. `ota-info` (siid 20, aiid 16) is not exposed. Phase 2 does not start until PR #37 is merged.
+Approved as written on 2026-11-04. The owner accepted 85 entities, one `xiaomi_add_schedule` service for the 90 order fields, and the 5 uncertain properties left unmapped with documented omission reasons. `xiaomi.vacuum.pv32gl` stays on spec version 2. `ota-info` (siid 20, aiid 16) is not exposed.
 
-Research only. No product code in this change. Implementation waits until PR #37 (`cursor/review-fail-closed-3510`) is on `master`, because that branch is rewriting `value_limits.py`, `model.py`, the family modules, and `device.py`.
+Implemented after PR #37 (`14c364a`) and PR #35 (`7edbf2f`) landed on `master`. The branch is rebased onto `7edbf2f`.
+
+What shipped:
+
+- 85 entities from shared family descriptors. X20 Max selects 27 station controls and replaces worry-free mode and mop-swing frequency with `control_with_options`. S20+ has its own tuple: edge swing is siid 2 piid 17 and edge-sweep frequency is siid 2 piid 18. Sweep write-only settings and the remember-map switch are opt-in additions on the models that publish them. The two custom bools are one descriptor each, diagnostic and disabled by default.
+- One service, `xiaomi_add_schedule`. It calls add-ii (siid 8, aiid 4) with one validated payload. A field that is not in that model's add-ii `in` list, including twice-clean on every model and clean-way, suction, and water outside the E10 trio, is rejected before any protocol call.
+- The 5 uncertain properties stay unmapped. The deep suite records the omission and names this document.
+- `pv32gl` stays on spec version 2. `ota-info` is not a button.
+
+One spec correction: the committed `b108zh` document publishes fan mode `1 Silent, 2 Basic, 4 Full Speed`, the same list as `b108za` and `b108zb`. It does not publish wire 3. `b108zh` therefore stays an alias of the 2S record. Offering Strong (3) would send a value the spec does not publish.
+
+Day remains a weekday bitmask, 0..255. The spec still does not say which bit is Monday. The service is available, and the field description says to confirm the bit order on a real robot.
 
 Fetched 2026-11-04 from `https://miot-spec.org/miot-spec-v2/instance?type=<urn>`. These are the properties the deep suite xfailed as "published writable, no map, no omission rule": 180 property instances, 59 distinct spec shapes, 24 models. The other 24 models have none.
 

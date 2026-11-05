@@ -1,3 +1,64 @@
+xiaomi_add_schedule:
+  target:
+    entity:
+      integration: dreame_vacuum
+      domain: vacuum
+  fields:
+    enable:
+      required: true
+      selector:
+        boolean:
+    day:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: box
+    hour:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 23
+          mode: box
+    minute:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 59
+          mode: box
+    repeat:
+      required: true
+      selector:
+        boolean:
+    clean_way:
+      required: false
+      selector:
+        number:
+          min: 0
+          max: 2
+          mode: box
+    suction:
+      required: false
+      selector:
+        number:
+          min: 0
+          max: 4
+          mode: box
+    water:
+      required: false
+      selector:
+        number:
+          min: 0
+          max: 3
+          mode: box
+    twice_clean:
+      required: false
+      selector:
+        boolean:
+
 vacuum_clean_segment:
   target:
     entity:

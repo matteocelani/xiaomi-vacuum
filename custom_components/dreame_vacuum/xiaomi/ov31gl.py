@@ -10,11 +10,13 @@ from .profile import (
     EXTENDED_STATION_CONTROLS,
     EXTENDED_STATION_STATES,
     EXTENDED_STATION_TASKS,
+    PRECISE_DIAGNOSIS,
     STATION_ACTIONS,
     STATION_PROPERTIES,
     STATION_STATISTICS_PROPERTIES,
     compose_addresses,
     compose_codes,
+    compose_controls,
 )
 
 _PROPERTIES: Final[dict[str, dict[str, int]]] = compose_addresses(
@@ -28,5 +30,5 @@ ROBOT_VACUUM_5: Final = XiaomiModel(
     action_overrides=compose_addresses(STATION_ACTIONS),
     state_by_wire=compose_codes(EXTENDED_STATION_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
-    controls=EXTENDED_STATION_CONTROLS,
+    controls=compose_controls(EXTENDED_STATION_CONTROLS, (PRECISE_DIAGNOSIS,)),
 )

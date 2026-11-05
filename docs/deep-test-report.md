@@ -2,24 +2,24 @@
 
 Fetched 2026-11-04 from `https://miot-spec.org/miot-spec-v2/instance?type=<urn>`.
 Suites live in `tests/xiaomi/deep/test_deep_<code>.py` and read `tests/xiaomi/specs/`.
-The run is `18077 passed, 483 xfailed, 0 failed` (`pytest tests/xiaomi/deep`).
+The run after the approved surface landed is `19108 passed, 0 xfailed, 0 failed` (`pytest tests/xiaomi/deep`).
 
 ## Summary
 
-48 models. Spec properties 5932, spec actions 3273, mapped properties 3181, omitted properties 2571, mapped actions 1216, omitted actions 2057, controls 2696, spec value-list samples 1543, named fault codes 55.
+48 models. The 85 approved entities and the `xiaomi_add_schedule` service are covered by spec-generated writes in `tests/xiaomi/deep/test_deep_surface.py`. The five properties left out of the plan stay unmapped, and each omission names `docs/unmapped-props-plan.md`. `pv32gl` stays on spec version 2, and `ota-info` (siid 20, aiid 16) is not mapped.
 
-Confirmed code bugs: 8. Fixed here: 1. Left xfailed for the other branch: 7. Open questions: 181 xfailed cases (180 writable properties with no map, plus the Robot Vacuum 6 spec version).
+The seven fail-closed bugs from PR #37 are on `master` and the old xfails are gone. `start_custom` uses `STATE` when `STATUS` is unmapped and still raises, without sending, when the custom action itself is unmapped. A control refresh that gets a non-list batch reads the controls one by one. An unpublished status wire is stored as `-1`, not as a completed task.
 
 | Id | Severity | Cases | Status | What the suite shows |
 | --- | --- | --- | --- | --- |
 | E5 faults | medium | 16 codes | fixed in `15d0c30` | c108 value-list was shown with Dreame error names |
-| C-01 | high | 33 | xfail, not fixed here | `start_custom` sends `piid` None because `STATUS` is not mapped |
-| H-01 | high | 48 | xfail, not fixed here | the family is applied only from runtime `info.model`, so the Dreame map stays until then |
-| H-02 | high | 34 | xfail, not fixed here | `set_properties` skips `convert_outgoing` |
-| M-02 | medium | 48 | xfail, not fixed here | `send_async` ignores the Xiaomi transport |
-| M-03 | medium | 48 | xfail, not fixed here | outgoing values are not range-checked, and the +1 offset is global |
-| M-04 | medium | 48 | xfail, not fixed here | an unknown status wire makes task status `COMPLETED` |
-| M-05 | medium | 43 | xfail, not fixed here | one failed control read fails the whole refresh |
+| C-01 | high | 33 | passing on the fail-closed master | `start_custom` does not send a missing piid |
+| H-01 | high | 48 | passing on the fail-closed master | the configured model installs its family before miIO info |
+| H-02 | high | 34 | passing on the fail-closed master | `set_properties` uses `convert_outgoing` |
+| M-02 | medium | 48 | passing on the fail-closed master | `send_async` uses the Xiaomi transport |
+| M-03 | medium | 48 | passing on the fail-closed master | outgoing values outside the spec list or range are refused |
+| M-04 | medium | 48 | passing on the fail-closed master | an unknown status wire does not complete the task |
+| M-05 | medium | 43 | passing on the fail-closed master | one failed control read does not fail the refresh |
 
 Mapped addresses, control options, control ranges, status value-lists, task value-lists, and fault labels that the spec names all match the fetched documents. Alias and regional records do not point at an siid/piid the sub-model's spec lacks. Missing or invalid miIO credentials keep the cloud path.
 
@@ -27,7 +27,16 @@ Four latest documents differ from the live fetch by a doubled space in the "Freq
 
 ## Open questions
 
-180 writable properties are published, not mapped, and do not match the identity, map, schedule, voice, remote, or opaque-string omission rules. They are xfailed as product questions, not patched here.
+The 180 writable properties are no longer open xfails. 85 are entities, 90 are the `xiaomi_add_schedule` service, and 5 stay omitted with a reason in this file's plan. What is still unanswered, and does not fail the suite:
+
+- The weekday bitmask in `day` (0..255) does not say which bit is Monday.
+- Twice-clean is published on all 10 sweep models and is not an `in` parameter of add-ii, so the service rejects it instead of sending it.
+- Write-only sweep settings assume state after a write. The robot does not publish a read.
+- The two custom bools are unnamed. They are diagnostic and disabled by default.
+- `b108zh` fan mode in the committed spec is Full Speed (4), the same list as `b108za` and `b108zb`, not Strong (3).
+- The `pv32gl` catalog still lists only version 1 as released. The integration stays on version 2 and does not expose `ota-info`.
+
+The table below is the original inventory. The implementation is in `docs/unmapped-props-plan.md`.
 
 | Count | Token | Description |
 | --- | --- | --- |

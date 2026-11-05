@@ -48,7 +48,7 @@ _STATE_AFTER_READ: Final[dict[int, DreameVacuumState]] = {
     24: DreameVacuumState.RETURNING,
 }
 
-_V2_ONLY_CONTROLS: Final[set[tuple[int, int]]] = {(20, 9), (20, 11)}
+_V2_ONLY_CONTROLS: Final[set[tuple[int, int]]] = {(20, 9), (20, 10), (20, 11)}
 
 _CASE = SpecCase(
     model=MODEL_ROBOT_VACUUM_5,
@@ -58,7 +58,7 @@ _CASE = SpecCase(
     action_reasons=_ACTION_REASONS,
     state_after_read=_STATE_AFTER_READ,
     classification_counts={
-        "ov31gl.json": (132, 103),
+        "ov31gl.json": (133, 102),
         "ov31gl_v1.json": (130, 100),
     },
     version_only_controls=frozenset(_V2_ONLY_CONTROLS),

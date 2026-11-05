@@ -17,6 +17,7 @@ from .profile import (
     STATION_ACTIONS,
     STATION_PROPERTIES,
     STATION_STATISTICS_PROPERTIES,
+    WATER_LEVEL_REMIND,
     compose_addresses,
     compose_codes,
     compose_controls,
@@ -25,6 +26,7 @@ from .profile import (
 _ADDED_CONTROLS: Final = (
     SOLID_DIRT_DETECTION,
     SELF_CHECK_RESULTS,
+    WATER_LEVEL_REMIND,
 )
 
 H50_PRO: Final = XiaomiModel(

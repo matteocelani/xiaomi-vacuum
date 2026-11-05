@@ -5,8 +5,40 @@ from __future__ import annotations
 from enum import IntEnum
 from typing import Final
 
+from .controls import XiaomiControl, boolean_switch, enum_select
 from .model import MODEL_S20_PLUS, XiaomiModel
-from .profile import StoredState, StoredTask, wire_map
+from .profile import (
+    EXTENDED_STATION_CONTROLS,
+    StoredState,
+    StoredTask,
+    select_controls,
+    wire_map,
+)
+
+# Same labels as the station outswing list. The address is piid 18, not 68.
+_EDGE_SWEEP_FREQUENCY: Final[tuple[tuple[int, str], ...]] = (
+    (1, "seven_sweeps"),
+    (2, "every_time"),
+)
+_ALARM: Final = select_controls(EXTENDED_STATION_CONTROLS, ("xiaomi_alarm",))[0]
+_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
+    enum_select(
+        "xiaomi_clean_times",
+        2,
+        7,
+        ((1, "one_time"), (2, "two_time")),
+    ),
+    enum_select(
+        "xiaomi_fan_mode",
+        2,
+        16,
+        ((1, "silent"), (2, "basic"), (3, "strong")),
+    ),
+    boolean_switch("xiaomi_edge_swing_tail_sweep", 2, 17),
+    enum_select("xiaomi_edge_sweep_frequency", 2, 18, _EDGE_SWEEP_FREQUENCY),
+    boolean_switch("xiaomi_carpet_discriminate", 2, 21),
+    _ALARM,
+)
 
 
 class _WireState(IntEnum):
@@ -113,4 +145,5 @@ S20_PLUS: Final = XiaomiModel(
     action_overrides=_ACTIONS,
     state_by_wire=_STATES,
     task_by_wire=_TASKS,
+    controls=_CONTROLS,
 )

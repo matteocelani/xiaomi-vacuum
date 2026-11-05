@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 from typing import Final, Protocol, runtime_checkable
 
@@ -58,6 +58,9 @@ class XiaomiControl:
     diagnostic: bool = False
     unit: str | None = None
     action_parameters: tuple[tuple[int, int], ...] = ()
+    enabled_by_default: bool = True
+    readable: bool = True
+    bool_as_int: bool = False
 
 
 def boolean_switch(key: str, siid: int, piid: int) -> XiaomiControl:
@@ -69,6 +72,66 @@ def boolean_switch(key: str, siid: int, piid: int) -> XiaomiControl:
         piid=piid,
         writable=True,
         value_kind=ValueKind.BOOL,
+    )
+
+
+def uint8_switch(
+    key: str,
+    siid: int,
+    piid: int,
+    options: tuple[tuple[int, str], ...],
+) -> XiaomiControl:
+    """A switch whose spec is a uint8 value-list of 0 and 1."""
+    return XiaomiControl(
+        key=key,
+        domain=ControlDomain.SWITCH,
+        siid=siid,
+        piid=piid,
+        writable=True,
+        value_kind=ValueKind.BOOL,
+        options=options,
+        bool_as_int=True,
+    )
+
+
+def diagnostic_switch(key: str, siid: int, piid: int) -> XiaomiControl:
+    """An unnamed boolean. Diagnostic and off until the user enables it."""
+    return replace(
+        boolean_switch(key, siid, piid),
+        diagnostic=True,
+        enabled_by_default=False,
+    )
+
+
+def write_only_select(
+    key: str,
+    siid: int,
+    piid: int,
+    options: tuple[tuple[int, str], ...],
+) -> XiaomiControl:
+    """A value-list the spec publishes as write-only. State is assumed."""
+    return replace(
+        enum_select(key, siid, piid, options),
+        enabled_by_default=False,
+        readable=False,
+    )
+
+
+def write_only_number(
+    key: str,
+    siid: int,
+    piid: int,
+    minimum: int,
+    maximum: int,
+    step: int = 1,
+    unit: str | None = None,
+) -> XiaomiControl:
+    """An integer range the spec publishes as write-only."""
+    return replace(
+        number_control(key, siid, piid, minimum, maximum, step),
+        enabled_by_default=False,
+        readable=False,
+        unit=unit,
     )
 
 
@@ -249,7 +312,7 @@ def refresh_controls(device: object, controls: tuple[XiaomiControl, ...]) -> boo
     pending = [
         control
         for control in controls
-        if control.siid is not None and control.piid is not None
+        if control.readable and control.siid is not None and control.piid is not None
     ]
     if not pending:
         return False
@@ -268,6 +331,7 @@ def refresh_controls(device: object, controls: tuple[XiaomiControl, ...]) -> boo
         except Exception:  # noqa: BLE001 - one control must not fail the property poll
             continue
         if not isinstance(result, list):
+            changed = _read_one_by_one(device, store, batch) or changed
             continue
         changed = _store_batch(store, batch, result) or changed
         _drop_failed(store, batch, result)
@@ -285,8 +349,12 @@ def _stored_values(device: object) -> dict[str, object] | None:
 
 def _validated_value(device: object, control: XiaomiControl, value: object) -> object:
     wire = value
-    if isinstance(value, bool) and _control_is_uint8(device, control):
+    if isinstance(value, bool) and (
+        control.bool_as_int or _control_is_uint8(device, control)
+    ):
         wire = 1 if value else 0
+    if control.value_kind == ValueKind.BOOL and wire not in (False, True, 0, 1):
+        raise XiaomiControlException(control.key)
     if control.options and wire not in {item for item, _slug in control.options}:
         raise XiaomiControlException(control.key)
     missing_range = control.minimum is None or control.maximum is None
@@ -312,6 +380,26 @@ def _control_is_uint8(device: object, control: XiaomiControl) -> bool:
     if not isinstance(model, str) or control.siid is None or control.piid is None:
         return False
     return is_uint8_address(model, control.siid, control.piid)
+
+
+def _read_one_by_one(
+    device: object,
+    store: dict[str, object],
+    batch: list[XiaomiControl],
+) -> bool:
+    """Read each control alone when a batch response is not a list."""
+    changed = False
+    for control in batch:
+        items = [{"did": control.key, "siid": control.siid, "piid": control.piid}]
+        try:
+            result = device._protocol.get_properties(items)
+        except Exception:  # noqa: BLE001 - one control must not fail the property poll
+            continue
+        if not isinstance(result, list):
+            continue
+        changed = _store_batch(store, [control], result) or changed
+        _drop_failed(store, [control], result)
+    return changed
 
 
 def _drop_failed(
