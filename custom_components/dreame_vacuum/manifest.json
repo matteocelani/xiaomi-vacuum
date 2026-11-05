@@ -1,19 +1,20 @@
 {
   "domain": "dreame_vacuum",
-  "name": "Dreame Vacuum",
+  "name": "Xiaomi Vacuum",
   "after_dependencies": [
     "lovelace"
   ],
   "codeowners": [
+    "@matteocelani",
     "@tasshack"
   ],
   "config_flow": true,
   "dependencies": [
     "http"
   ],
-  "documentation": "https://dreame-vacuum.tasshack.com/configuration",
+  "documentation": "https://github.com/matteocelani/xiaomi-vacuum#readme",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/Tasshack/dreame-vacuum/issues",
+  "issue_tracker": "https://github.com/matteocelani/xiaomi-vacuum/issues",
   "requirements": [
     "numpy",
     "pycryptodome",
@@ -21,5 +22,5 @@
     "mini-racer",
     "paho-mqtt"
   ],
-  "version": "v2.0.2"
+  "version": "v2.1.0"
 }

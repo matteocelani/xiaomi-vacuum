@@ -3,7 +3,7 @@ name: "Question · Integration or Dreame Vacuum Card"
 about: "Ask for help or clarification about the dreame_vacuum integration or the Dreame Vacuum Card. Bugs and feature ideas have their own templates."
 title: ""
 labels: question
-assignees: Tasshack
+assignees: matteocelani
 
 ---
 

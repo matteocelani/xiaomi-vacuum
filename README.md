@@ -45,15 +45,40 @@ The project name is **Xiaomi Vacuum**. The integration shows up in Home Assistan
 | Installed folder | `custom_components/dreame_vacuum` |
 | Entities and services | `dreame_vacuum.*` |
 | Config entries | stored on `dreame_vacuum` |
-| Name in HACS and Home Assistant | Dreame Vacuum (`hacs.json` and `manifest.json`) |
+| Name in HACS and Home Assistant | Xiaomi Vacuum (`hacs.json` and `manifest.json`). The domain stays `dreame_vacuum`. |
 
 `matteocelani/dreame-vacuum` redirects to `matteocelani/xiaomi-vacuum`. [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum) is the upstream project and stays at that address.
 
-## Install
+## Install via HACS
 
-In HACS, add `https://github.com/matteocelani/xiaomi-vacuum` as a custom repository (category: Integration), then download it. HACS lists that download as Dreame Vacuum, the name in `hacs.json`. The [HACS default listing](https://github.com/hacs/default) for this kind of vacuum is the upstream repository [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum), a different install. After Xiaomi Vacuum is installed, Home Assistant still registers the domain `dreame_vacuum`.
+Until `v2.1.0` is published and the default catalog lists this repository, install it as a custom repository:
+
+1. In HACS, open **Integrations**.
+2. Open the menu and choose **Custom repositories**.
+3. Repository: `https://github.com/matteocelani/xiaomi-vacuum`
+4. Category: **Integration**.
+5. Add it, then download **Xiaomi Vacuum**.
+
+Home Assistant still registers the domain `dreame_vacuum`. Do not install this fork next to [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum). Both use that domain and the folder `custom_components/dreame_vacuum`.
 
 Minimum Home Assistant version is 2024.2.0.
+
+The default HACS catalog, which Home Assistant 2026.11 shows as the Marketplace, comes after the first GitHub Release. The settings, the `hacs/default` edit, and the pull-request checklist are in [docs/marketplace-submission.md](docs/marketplace-submission.md). Do not open that pull request before the `v2.1.0` release exists.
+
+### Repository settings
+
+A pull request cannot change GitHub repository settings. Before the catalog pull request, set:
+
+| Setting | Value |
+| --- | --- |
+| Description | Home Assistant integration for Xiaomi, Dreame, MOVA, Mijia, and TROUVER robot vacuums. |
+| Topics | `home-assistant`, `hacs`, `homeassistant`, `xiaomi`, `dreame`, `vacuum`, `mijia`, `custom-integration` |
+| Issues | Enabled. The manifest issue tracker is this repository. |
+| Homepage | Optional. `https://github.com/matteocelani/xiaomi-vacuum#readme` |
+
+### Brand icon
+
+`custom_components/dreame_vacuum/brand/icon.png` is a generic top-down robot vacuum drawn for this repository. It is not a Xiaomi, Dreame, or Home Assistant logo. The tree had no logo file to adapt. The images at the top of this page are upstream artwork from [@Tasshack](https://github.com/Tasshack); they are credited and they are not an official Xiaomi mark. Home Assistant 2026.3 and newer use the local icon. Older releases still show whatever the brands site publishes for the domain `dreame_vacuum`.
 
 ### Dreame, MOVA, Mijia, and TROUVER
 

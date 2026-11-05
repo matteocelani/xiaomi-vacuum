@@ -82,7 +82,7 @@
         "data": {
           "devices": "Supported Devices"
         },
-        "description": "Please select the Dreame Vacuum device you want to setup."
+        "description": "Please select the device you want to set up."
       },
       "dvc": {
         "data": {
@@ -102,7 +102,7 @@
         }
       },
       "reauth_confirm": {
-        "description": "Dreame Vacuum integration needs to re-authenticate your account in order to update the tokens or add missing cloud credentials.",
+        "description": "Xiaomi Vacuum needs to re-authenticate your account in order to update the tokens or add missing cloud credentials.",
         "title": "Reauthenticate Integration"
       }
     }

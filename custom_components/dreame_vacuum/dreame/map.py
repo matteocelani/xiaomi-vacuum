@@ -4268,7 +4268,7 @@ class DreameVacuumMapDecoder:
                 raw_map = decryptor.update(raw_map) + decryptor.finalize()
             except Exception as ex:
                 _LOGGER.error(
-                    f"Map data decryption failed: {ex}. Private key might be missing, please report this issue with your device model https://github.com/Tasshack/dreame-vacuum/issues/new?assignees=Tasshack&labels=bug&template=bug_report.md&title=Map%20data%20decryption%20failed"
+                    f"Map data decryption failed: {ex}. Private key might be missing, please report this issue with your device model https://github.com/matteocelani/xiaomi-vacuum/issues/new?labels=bug&template=bug_report.md&title=Map%20data%20decryption%20failed"
                 )
                 return None
 
