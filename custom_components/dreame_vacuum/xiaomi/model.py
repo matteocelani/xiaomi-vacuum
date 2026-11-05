@@ -245,6 +245,15 @@ class XiaomiModel:
             raise XiaomiValueException(property_name)
         return wire
 
+    def has_published_cleaning_mode(self, stored: int) -> bool:
+        """Return whether this spec publishes the stored cleaning mode."""
+        # Dreame hides vacuum-only when a mop is fitted unless the pad lifts.
+        # A published Sweep value is already vacuum-only, so the list must keep it.
+        if not self.is_simple_cleaning_mode:
+            return False
+        wire = stored + index_offset(self.model, "CLEANING_MODE")
+        return wire_allowed(self.model, "CLEANING_MODE", wire)
+
     def task_status_code(self, state: object, charging: object) -> int:
         """Derive task status from state, because sweep-type stays set while docked."""
         charging_code = _as_int(charging)

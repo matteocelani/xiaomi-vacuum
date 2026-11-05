@@ -1193,7 +1193,12 @@ class DreameVacuumDevice:
                                     pass
                     elif not self.capability.mop_pad_lifting:
                         ## Older Mijia devices allows setting cleaning mode to Sweeping while water tank is installed
-                        if not self.capability.sweep_with_mop:
+                        if (
+                            not self.capability.sweep_with_mop
+                            and not self._has_published_cleaning_mode(
+                                DreameVacuumCleaningMode.SWEEPING.value
+                            )
+                        ):
                             new_list.pop(DreameVacuumCleaningMode.SWEEPING)
                             if DreameVacuumCleaningMode.MOPPING_AFTER_SWEEPING in new_list:
                                 new_list.pop(DreameVacuumCleaningMode.MOPPING_AFTER_SWEEPING)
@@ -4314,6 +4319,14 @@ class DreameVacuumDevice:
             raise UnavailableException(key="unavailable_with_customized_cleaning")
         return self._update_suction_level(suction_level)
 
+    def _has_published_cleaning_mode(self, cleaning_mode: int) -> bool:
+        """Return whether the installed codec publishes this stored mode."""
+        codec = self._property_codec
+        published = getattr(codec, "has_published_cleaning_mode", None)
+        if not callable(published):
+            return False
+        return bool(published(cleaning_mode))
+
     def set_cleaning_mode(self, cleaning_mode: int) -> bool:
         """Set cleaning mode."""
         if self.status.cleaning_mode is None:
@@ -4351,6 +4364,9 @@ class DreameVacuumDevice:
                     self.status.water_tank_or_mop_installed
                     and not self.capability.mop_pad_lifting
                     and not self.capability.sweep_with_mop
+                    and not self._has_published_cleaning_mode(
+                        DreameVacuumCleaningMode.SWEEPING.value
+                    )
                 ):
                     if self.capability.self_wash_base:
                         raise UnavailableException(action="sweeping")
