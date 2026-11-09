@@ -16,8 +16,7 @@
       "no_devices": "לא נמצאו מכשירים נתמכים בחשבון זה במדינה שנבחרה.{devices}",
       "2fa_send_failed": "שליחת קוד האימות נכשלה. נא לנות שנית.",
       "2fa_limit_reached": "הגעת למגבלה היומית לשליחת קודי אימות. אנא נסה שoub מחר.",
-      "2fa_cooldown_active": "יותר מדי בקשות רצופות. אנ아 המתן מספר דקות לפני שתנסה שוב.",
-      "invalid_key": "מפתח לא תקין."
+      "2fa_cooldown_active": "יותר מדי בקשות רצופות. אנ아 המתן מספר דקות לפני שתנסה שוב."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "אנא בחרו את שואב האבק מבית Dreame שברצונכם להגדיר."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "מפתח Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### ממשק Dreame Vacuum{text}\r\n\r\nהזן את מפתח הרישיון שלך כדי להפעיל את Dreame Vacuum Card. אם אין לך אחד, תוכל להשיג אותו **[כאן]({url})**.\r\n\r\n*הערה: כל מפתח תקף עבור מכשיר אחד בלבד.*"
-      },
       "options": {
         "data": {
           "name": "שם",
@@ -118,14 +111,12 @@
           "low_resolution": "מפה ברזולוציה נמוכה",
           "square": "מפה מרובעת",
           "configuration_type": "סוג תצורה",
-          "prefer_cloud": "העדף חיבור לענן",
-          "dvc_key": "מפתח Dreame Vacuum Card"
+          "prefer_cloud": "העדף חיבור לענן"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "אישורי ענן חסרים, אנא מלאו שם משתמש, סיסמה ומדינה",
-      "invalid_key": "מפתח לא תקין."
+      "cloud_credentials_incomplete": "אישורי ענן חסרים, אנא מלאו שם משתמש, סיסמה ומדינה"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "עריכת שטיח",
         "empty": "ריקון",
         "enable": "הפעלה",
-        "enter_dvc_key": "הזן מפתח קיים",
         "fast_mapping": "מיפוי מהיר",
-        "get_dvc_key": "קבל מפתח DVC",
         "ignore": "התעלם",
         "ignore_obstacle": "התעלם ממכשול",
         "impassable_threshold": "סף עביר בלתי אפשרי",
@@ -2300,8 +2289,6 @@
         "copy": "העתקה",
         "copy_all": "העתקת הכל",
         "disable_haptic": "השבתת משוב רטט (Haptic)",
-        "dvc_key": "מפתח DVC",
-        "dvc_key_title": "הזן מפתח DVC",
         "editable_objects": "אובייקטים הניתנים לעריכה",
         "font_size": "גודל גופן",
         "full_height": "גובה מלא",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "תחנת הטעינה ממוקמת בתוך אזור אסור לכניסה. אם תמשיכו ותשמרו את המפה, הרובוט עלול לא להצליח לחזור ולהיטען.",
         "drying_will_stopped": "ייבוש משטח המגב ייעצר!",
         "dust_collection_not_performed": "משימת ריקון האבק (Auto-Empty) לא התבצעה!\nהרובוט לא יבצע ריקון אוטומטי במהלך תקופת ה-DND.",
-        "dvc_key_description": "מפתח תקף עבור מכשיר אחד בלבד. אם זו הפעם הראשונה שבה אתה משתמש במפתח זה, הוא יופעל עבור מכשיר זה כעת.",
         "enable_auto_mount_mop": "להפעיל הרכבת מגב אוטומטית?",
         "enable_carpet_recognition": "זיהוי השטיחים יופעל!",
         "enable_customized_cleaning": "האם ברצונכם להפעיל ניקוי מותאם אישית?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "טעינת הכרטיס נכשלה",
         "ignore_obstacle": "להתעלם מהמכשול?",
         "invalid_entity": "ישות בלתי חוקית",
-        "invalid_key": "מפתח לא תקין.",
         "map_backup": "גיבוי מפה בביצוע",
         "map_backup_failed": "גיבוי מפה נכשל!",
         "map_backup_success": "גיבוי מפה הושלם",
@@ -2502,7 +2487,6 @@
         "not_supported": "עדיין לא נתמך!",
         "obstacle_will_ignored": "הרובוט יתעלם מהמכשול!",
         "override_changes": "לדרוס שינויים?",
-        "preview": "זוהי תצוגה מקדימה של כרטיס Dreame Vacuum",
         "recommended_areas": "אזורים מומלצים",
         "relocating": "מבצע התמקמות (Positioning). אנא המתינו.",
         "relocating_completed": "ההתמקמות הצליחה. הרובוט ממשיך למשימתו.",

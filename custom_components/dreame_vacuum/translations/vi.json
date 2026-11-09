@@ -16,8 +16,7 @@
       "no_devices": "Không tìm thấy thiết bị được hỗ trợ trong tài khoản này tại quốc gia đã chọn.{devices}",
       "2fa_send_failed": "Gửi mã xác minh thất bại. Vui lòng thử lại.",
       "2fa_limit_reached": "Đã đạt giới hạn gửi mã xác minh hàng ngày. Vui lòng thử lại vào ngày mai.",
-      "2fa_cooldown_active": "Quá nhiều yêu cầu liên tiếp. Vui lòng đợi vài phút trước khi thử lại.",
-      "invalid_key": "Khóa không hợp lệ."
+      "2fa_cooldown_active": "Quá nhiều yêu cầu liên tiếp. Vui lòng đợi vài phút trước khi thử lại."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Vui lòng chọn thiết bị Dreame Vacuum bạn muốn thiết lập."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Khóa Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Giao diện Dreame Vacuum{text}\r\n\r\nNhập khóa cấp phép của bạn để kích hoạt Dreame Vacuum Card. Nếu bạn chưa có, bạn có thể lấy khóa **[tại đây]({url})**.\r\n\r\n*Lưu ý: mỗi khóa chỉ có hiệu lực cho một thiết bị.*"
-      },
       "options": {
         "data": {
           "name": "Tên",
@@ -118,14 +111,12 @@
           "low_resolution": "Bản đồ độ phân giải thấp",
           "square": "Bản đồ hình vuông",
           "configuration_type": "Loại cấu hình",
-          "prefer_cloud": "Ưu tiên kết nối đám mây",
-          "dvc_key": "Khóa Dreame Vacuum Card"
+          "prefer_cloud": "Ưu tiên kết nối đám mây"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Thông tin đám mây không đầy đủ, vui lòng điền tên đăng nhập, mật khẩu và quốc gia",
-      "invalid_key": "Khóa không hợp lệ."
+      "cloud_credentials_incomplete": "Thông tin đám mây không đầy đủ, vui lòng điền tên đăng nhập, mật khẩu và quốc gia"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Chỉnh sửa thảm",
         "empty": "Đổ rác",
         "enable": "Bật",
-        "enter_dvc_key": "Nhập Khóa Hiện Có",
         "fast_mapping": "Lập bản đồ nhanh",
-        "get_dvc_key": "Nhận Khóa DVC",
         "ignore": "Bỏ qua",
         "ignore_obstacle": "Bỏ qua vật cản",
         "impassable_threshold": "Ngưỡng không thể vượt",
@@ -2300,8 +2289,6 @@
         "copy": "Sao chép",
         "copy_all": "Sao chép tất cả",
         "disable_haptic": "Tắt phản hồi xúc giác",
-        "dvc_key": "Khóa DVC",
-        "dvc_key_title": "Nhập khóa DVC",
         "editable_objects": "Đối tượng có thể chỉnh sửa",
         "font_size": "Kích thước phông chữ",
         "full_height": "Chiều cao đầy đủ",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Đế sạc nằm trong vùng hạn chế. Nếu bạn tiếp tục lưu bản đồ, robot có thể không sạc lại được.",
         "drying_will_stopped": "Việc sấy khô giẻ lau sẽ bị dừng!",
         "dust_collection_not_performed": "Nhiệm vụ thu gom bụi (Tự động đổ rác) không được thực hiện\nRobot sẽ không thực hiện các nhiệm vụ tự động đổ rác trong giai đoạn DnD.",
-        "dvc_key_description": "Khóa chỉ có hiệu lực cho một thiết bị. Nếu đây là lần đầu tiên bạn sử dụng khóa này, nó sẽ được kích hoạt cho thiết bị này ngay bây giờ.",
         "enable_auto_mount_mop": "Bật tự động lắp giẻ lau?",
         "enable_carpet_recognition": "Nhận dạng thảm sẽ được bật!",
         "enable_customized_cleaning": "Bạn có muốn bật làm sạch tùy chỉnh không?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Không tải được thẻ",
         "ignore_obstacle": "Bỏ qua vật cản?",
         "invalid_entity": "Thực thể không hợp lệ",
-        "invalid_key": "Khóa không hợp lệ.",
         "map_backup": "Đang sao lưu bản đồ",
         "map_backup_failed": "Sao lưu bản đồ thất bại!",
         "map_backup_success": "Sao lưu bản đồ hoàn tất",
@@ -2502,7 +2487,6 @@
         "not_supported": "Chưa được hỗ trợ!",
         "obstacle_will_ignored": "Vật cản sẽ bị bỏ qua!",
         "override_changes": "Ghi đè thay đổi?",
-        "preview": "Đây là bản xem trước của Thẻ Dreame Vacuum",
         "recommended_areas": "Khu vực được đề xuất",
         "relocating": "Đang tự định vị. Vui lòng chờ.",
         "relocating_completed": "Tự định vị thành công. Robot đang thực hiện công việc.",

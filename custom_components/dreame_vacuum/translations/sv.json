@@ -16,8 +16,7 @@
       "no_devices": "Hittade inga enheter som stöds på detta Xiaomi Miio Cloud konto under valt land.{devices}",
       "2fa_send_failed": "Det gick inte att skicka verifieringskoden. Försök igen.",
       "2fa_limit_reached": "Den dagliga gränsen för att skicka verifieringskoder har uppnåtts. Försök igen i morgon.",
-      "2fa_cooldown_active": "För många på varandra följande begäranden. Vänta några minuter innan du försöker igen.",
-      "invalid_key": "Ogiltig nyckel."
+      "2fa_cooldown_active": "För många på varandra följande begäranden. Vänta några minuter innan du försöker igen."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Välj vilken Dreame-dammsugare du vill konfigurera."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card-nyckel"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum-gränssnitt{text}\r\n\r\nAnge din licensnyckel för att aktivera Dreame Vacuum Card. Om du inte har någon kan du skaffa en **[här]({url})**.\r\n\r\n*Obs: varje nyckel gäller endast för en enhet.*"
-      },
       "options": {
         "data": {
           "name": "Namn",
@@ -118,14 +111,12 @@
           "low_resolution": "Lågupplöst karta",
           "square": "Fyrkantig karta",
           "configuration_type": "Konfigurationstyp",
-          "prefer_cloud": "Föredra molnanslutning",
-          "dvc_key": "Dreame Vacuum Card-nyckel"
+          "prefer_cloud": "Föredra molnanslutning"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Uppgifter för molnanslutning är Inkompletta, fyll i användarnamn, lösenord och land",
-      "invalid_key": "Ogiltig nyckel."
+      "cloud_credentials_incomplete": "Uppgifter för molnanslutning är Inkompletta, fyll i användarnamn, lösenord och land"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Redigera matta",
         "empty": "Töm",
         "enable": "Aktivera",
-        "enter_dvc_key": "Ange befintlig nyckel",
         "fast_mapping": "Snabba på kartläggn.",
-        "get_dvc_key": "Skaffa DVC-nyckel",
         "ignore": "Ignorera",
         "ignore_obstacle": "Ignorera hinder",
         "impassable_threshold": "Opasserbar tröskel",
@@ -2300,8 +2289,6 @@
         "copy": "Kopiera",
         "copy_all": "Kopiera alla",
         "disable_haptic": "Inaktivera haptik",
-        "dvc_key": "DVC-nyckel",
-        "dvc_key_title": "Ange DVC-nyckel",
         "editable_objects": "Redigerbara objekt",
         "font_size": "Teckenstorlek",
         "full_height": "Full höjd",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Dockan är i en begränsad zon. Roboten kanske inte kan ladda.",
         "drying_will_stopped": "Mopptorkning avbruten!",
         "dust_collection_not_performed": "Damminsamling (auto-tömning) utfördes inte\nRobot kommer inte utföra auto-tömning under Stör Ej-perioden.",
-        "dvc_key_description": "En nyckel gäller för en enda enhet. Om det är första gången du använder den här nyckeln aktiveras den nu för den här enheten.",
         "enable_auto_mount_mop": "Aktivera aut. moppmontering?",
         "enable_carpet_recognition": "Mattigenkänning aktiveras!",
         "enable_customized_cleaning": "Aktivera anpassad städning?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kunde inte ladda kort",
         "ignore_obstacle": "Ignorera hinder?",
         "invalid_entity": "Ogiltig entitet",
-        "invalid_key": "Ogiltig nyckel.",
         "map_backup": "Säkerhetskopiering av karta pågår",
         "map_backup_failed": "Säkerhetskopiering av karta misslyckades!",
         "map_backup_success": "Säkerhetskopiering av karta klar",
@@ -2502,7 +2487,6 @@
         "not_supported": "Stöds inte!",
         "obstacle_will_ignored": "Hindret kommer ignoreras!",
         "override_changes": "Åsidosätt ändringar?",
-        "preview": "Detta är en förhandsgranskning av Dreame Vacuum-kortet",
         "recommended_areas": "Rekommenderade områden",
         "relocating": "Självpositionering. Vänligen vänta.",
         "relocating_completed": "Självpositionering lyckades. Robot fortsätter arbetet.",

@@ -15,11 +15,8 @@ Maintained by [@matteocelani](https://github.com/matteocelani). Fork of [@Tassha
 
 <hr>
 <a href="https://github.com/Tasshack/dreame-vacuum"><img alt="Logo of the upstream Dreame Vacuum project" src="https://dreame-vacuum.tasshack.com/logo.svg" width=400></a>
-<hr>
 
-<a href="https://github.com/Tasshack/dreame-vacuum"><img alt="Map card from the upstream Dreame Vacuum project" src="https://dreame-vacuum.tasshack.com/dvc.png" width=480 /></a>
-
-Images and the map card are from the upstream project by [@Tasshack](https://github.com/Tasshack).
+The logo is from the upstream project by [@Tasshack](https://github.com/Tasshack).
 
 </div>
 </center>
@@ -160,7 +157,6 @@ What the integration does today for Dreame, MOVA, Mijia, and TROUVER vacuums inh
 - Persistent notifications and events for automations
 - Cleaning and cruising history, obstacle photos, map backup and recovery, and saved Wi-Fi maps
 - Backend translations for 40 languages
-- Interactive map editor via the embedded [Dreame Vacuum Card](https://dreame-vacuum-card.tasshack.com/)
 
 ## Documentation
 
@@ -169,7 +165,7 @@ These pages are the upstream documentation for Dreame, MOVA, Mijia, and TROUVER 
 - [Documentation](https://dreame-vacuum.tasshack.com/)
 - [Supported devices](https://dreame-vacuum.tasshack.com/guide/more/supported-devices) for [Dreame](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#dreame), [MOVA](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#mova), [Mijia](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#mijia), and [TROUVER](https://dreame-vacuum.tasshack.com/guide/more/supported-devices#trouver)
 - [How to use](https://dreame-vacuum.tasshack.com/guide)
-- [Dashboard](https://dreame-vacuum.tasshack.com/guide/dashboard), including the [Dreame Vacuum Card](https://dvc.tasshack.com/)
+- [Dashboard](https://dreame-vacuum.tasshack.com/guide/dashboard)
 - [Entities](https://dreame-vacuum.tasshack.com/guide/entities), with [map](https://dreame-vacuum.tasshack.com/guide/entities/map-entities), [room](https://dreame-vacuum.tasshack.com/guide/entities/room-entities), and [consumable](https://dreame-vacuum.tasshack.com/guide/entities/consumable-entities) entities
 - [Map support](https://dreame-vacuum.tasshack.com/guide/map-support), including [history](https://dreame-vacuum.tasshack.com/guide/map-support/history), [recovery](https://dreame-vacuum.tasshack.com/guide/map-support/recovery), [obstacle photos](https://dreame-vacuum.tasshack.com/guide/map-support/obstacles), and [Wi-Fi maps](https://dreame-vacuum.tasshack.com/guide/map-support/wifi-map)
 - [Services](https://dreame-vacuum.tasshack.com/guide/services) for [device](https://dreame-vacuum.tasshack.com/guide/services/vacuum-services) and [map](https://dreame-vacuum.tasshack.com/guide/services/map-services) control

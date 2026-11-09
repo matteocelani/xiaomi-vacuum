@@ -16,8 +16,7 @@
       "no_devices": "V tomto účte vo vybranej krajine sa nenašli žiadne podporované zariadenia.{devices}",
       "2fa_send_failed": "Odoslanie overovacieho kódu zlyhalo. Skúste to prosím znova.",
       "2fa_limit_reached": "Bol dosiahnutý denný limit na odosielanie overovacích kódov. Skúste to znova zajtra.",
-      "2fa_cooldown_active": "Príliš veľa po sebe nasledujúcich požiadaviek. Pred opätovným pokusom počkajte niekoľko minút.",
-      "invalid_key": "Neplatný kľúč."
+      "2fa_cooldown_active": "Príliš veľa po sebe nasledujúcich požiadaviek. Pred opätovným pokusom počkajte niekoľko minút."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Vyberte prosím zariadenie Dreame Vacuum, ktoré chcete nastaviť."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Kľúč Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Rozhranie Dreame Vacuum{text}\r\n\r\nZadajte svoj licenčný kľúč pre aktiváciu Dreame Vacuum Card. Ak ho nemáte, môžete si ho zaobstarať **[tu]({url})**.\r\n\r\n*Poznámka: každý kľúč je platný len pre jedno zariadenie.*"
-      },
       "options": {
         "data": {
           "name": "Meno",
@@ -118,14 +111,12 @@
           "low_resolution": "Mapa s nízkym rozlíšením",
           "square": "Štvorcová mapa",
           "configuration_type": "Typ konfigurácie",
-          "prefer_cloud": "Preferovať cloudové pripojenie",
-          "dvc_key": "Kľúč Dreame Vacuum Card"
+          "prefer_cloud": "Preferovať cloudové pripojenie"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Cloudové prihlasovacie údaje sú neúplné, vyplňte prosím užívateľské meno, heslo a krajinu",
-      "invalid_key": "Neplatný kľúč."
+      "cloud_credentials_incomplete": "Cloudové prihlasovacie údaje sú neúplné, vyplňte prosím užívateľské meno, heslo a krajinu"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Upraviť koberec",
         "empty": "Vyprázdniť",
         "enable": "Povoliť",
-        "enter_dvc_key": "Zadať existujúci kľúč",
         "fast_mapping": "Rýchle mapovanie",
-        "get_dvc_key": "Získať kľúč DVC",
         "ignore": "Ignorovať",
         "ignore_obstacle": "Ignorovať prekážku",
         "impassable_threshold": "Neprekonateľný prah",
@@ -2300,8 +2289,6 @@
         "copy": "Kopírovať",
         "copy_all": "Kopírovať všetko",
         "disable_haptic": "Zakázať haptickú odozvu",
-        "dvc_key": "Kľúč DVC",
-        "dvc_key_title": "Zadajte kľúč DVC",
         "editable_objects": "Upraviteľné objekty",
         "font_size": "Veľkosť písma",
         "full_height": "Plná výška",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Nabíjacia základňa sa nachádza v zakázanej zóne. Ak budete pokračovať v ukladaní mapy, robot sa nemusí byť schopný nabiť.",
         "drying_will_stopped": "Sušenie podložky mopu bude zastavené!",
         "dust_collection_not_performed": "Úloha zberu prachu (automatické vyprázdnenie) nebola vykonaná\nRobot nebude vykonávať automatické vyprázdňovanie počas obdobia Nerušiť.",
-        "dvc_key_description": "Kľúč je platný pre jedno zariadenie. Ak tento kľúč používate prvýkrát, teraz sa aktivuje pre toto zariadenie.",
         "enable_auto_mount_mop": "Povoliť automatickú montáž mopu?",
         "enable_carpet_recognition": "Rozpoznávanie kobercov bude povolené!",
         "enable_customized_cleaning": "Chcete povoliť prispôsobené čistenie?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Nepodarilo sa načítať kartu",
         "ignore_obstacle": "Ignorovať prekážku?",
         "invalid_entity": "Neplatná entita",
-        "invalid_key": "Neplatný kľúč.",
         "map_backup": "Prebieha zálohovanie mapy",
         "map_backup_failed": "Zálohovanie mapy zlyhalo!",
         "map_backup_success": "Zálohovanie mapy dokončené",
@@ -2502,7 +2487,6 @@
         "not_supported": "Zatiaľ nie je podporované!",
         "obstacle_will_ignored": "Prekážka bude ignorovaná!",
         "override_changes": "Prepísať zmeny?",
-        "preview": "Toto je náhľad karty Dreame Vacuum",
         "recommended_areas": "Odporúčané oblasti",
         "relocating": "Samopolohovanie. Prosím čakajte.",
         "relocating_completed": "Samopolohovanie úspešné. Robot pokračuje v úlohe.",

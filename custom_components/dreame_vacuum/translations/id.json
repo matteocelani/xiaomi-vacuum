@@ -16,8 +16,7 @@
       "no_devices": "Tidak ada perangkat yang didukung ditemukan pada akun ini di negara yang dipilih.{devices}",
       "2fa_send_failed": "Gagal mengirim kode verifikasi. Silakan coba lagi.",
       "2fa_limit_reached": "Batas harian untuk mengirim kode verifikasi telah tercapai. Silakan coba lagi besok.",
-      "2fa_cooldown_active": "Terlalu banyak permintaan berturut-turut. Silakan tunggu beberapa menit sebelum mencoba lagi.",
-      "invalid_key": "Kunci tidak valid."
+      "2fa_cooldown_active": "Terlalu banyak permintaan berturut-turut. Silakan tunggu beberapa menit sebelum mencoba lagi."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Silakan pilih perangkat Dreame Vacuum yang ingin Anda siapkan."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Kunci Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Antarmuka Dreame Vacuum{text}\r\n\r\nMasukkan kunci lisensi Anda untuk mengaktifkan Dreame Vacuum Card. Jika Anda belum memilikinya, Anda bisa mendapatkannya **[di sini]({url})**.\r\n\r\n*Catatan: setiap kunci hanya berlaku untuk satu perangkat.*"
-      },
       "options": {
         "data": {
           "name": "Nama",
@@ -118,14 +111,12 @@
           "low_resolution": "Peta resolusi rendah",
           "square": "Peta kotak",
           "configuration_type": "Tipe konfigurasi",
-          "prefer_cloud": "Pilih koneksi cloud",
-          "dvc_key": "Kunci Dreame Vacuum Card"
+          "prefer_cloud": "Pilih koneksi cloud"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Kredensial cloud tidak lengkap, silakan isi nama pengguna, kata sandi, dan negara",
-      "invalid_key": "Kunci tidak valid."
+      "cloud_credentials_incomplete": "Kredensial cloud tidak lengkap, silakan isi nama pengguna, kata sandi, dan negara"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Edit karpet",
         "empty": "Kosongkan",
         "enable": "Aktifkan",
-        "enter_dvc_key": "Masukkan Kunci yang Ada",
         "fast_mapping": "Pemetaan Cepat",
-        "get_dvc_key": "Dapatkan Kunci DVC",
         "ignore": "Abaikan",
         "ignore_obstacle": "Abaikan Rintangan",
         "impassable_threshold": "Ambang batas tidak dapat dilewati",
@@ -2300,8 +2289,6 @@
         "copy": "Salin",
         "copy_all": "Salin Semua",
         "disable_haptic": "Nonaktifkan getaran sentuhan",
-        "dvc_key": "Kunci DVC",
-        "dvc_key_title": "Masukkan kunci DVC",
         "editable_objects": "Objek yang Dapat Diedit",
         "font_size": "Ukuran Huruf",
         "full_height": "Tinggi Penuh",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Dok pengisian daya berada di area terlarang. Jika Anda lanjut menyimpan, robot mungkin tidak dapat mengisi daya.",
         "drying_will_stopped": "Pengeringan bantalan pel akan dihentikan!",
         "dust_collection_not_performed": "Pengosongan otomatis tidak dilakukan\nRobot tidak akan mengosongkan debu selama periode DnD.",
-        "dvc_key_description": "Kunci hanya berlaku untuk satu perangkat. Jika ini pertama kalinya Anda menggunakan kunci ini, kunci akan diaktifkan untuk perangkat ini sekarang.",
         "enable_auto_mount_mop": "Aktifkan pemasangan pel otomatis?",
         "enable_carpet_recognition": "Pengenalan karpet akan diaktifkan!",
         "enable_customized_cleaning": "Aktifkan pembersihan kustom?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Gagal memuat kartu",
         "ignore_obstacle": "Abaikan rintangan?",
         "invalid_entity": "Entitas tidak valid",
-        "invalid_key": "Kunci tidak valid.",
         "map_backup": "Pencadangan peta sedang berlangsung",
         "map_backup_failed": "Pencadangan peta gagal!",
         "map_backup_success": "Pencadangan peta selesai",
@@ -2502,7 +2487,6 @@
         "not_supported": "Belum didukung!",
         "obstacle_will_ignored": "Rintangan akan diabaikan!",
         "override_changes": "Abaikan perubahan?",
-        "preview": "Ini adalah pratinjau Kartu Dreame Vacuum",
         "recommended_areas": "Area yang direkomendasikan",
         "relocating": "Sedang merelokasi posisi. Harap tunggu.",
         "relocating_completed": "Relokasi berhasil. Robot melanjutkan tugas.",

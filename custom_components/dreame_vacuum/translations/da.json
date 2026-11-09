@@ -16,8 +16,7 @@
       "no_devices": "Ingen understøttede enheder fundet på denne konto i det valgte land.{devices}",
       "2fa_send_failed": "Det lykkedes ikke at sende bekræftelseskoden. Prøv venligst igen.",
       "2fa_limit_reached": "Den daglige grænse for afsendelse af bekræftelseskoder er nået. Prøv venligst igen i morgen.",
-      "2fa_cooldown_active": "For mange på hinanden følgende anmodninger. Vent venligst et par minutter, før du prøver igen.",
-      "invalid_key": "Ugyldig nøgle."
+      "2fa_cooldown_active": "For mange på hinanden følgende anmodninger. Vent venligst et par minutter, før du prøver igen."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Vælg den Dreame Vacuum enhed, du vil konfigurere."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card-nøgle"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum-grænseflade{text}\r\n\r\nIndtast din licensnøgle for at aktivere Dreame Vacuum Card. Hvis du ikke har en, kan du få den **[her]({url})**.\r\n\r\n*Bemærk: hver nøgle er kun gyldig til én enhed.*"
-      },
       "options": {
         "data": {
           "name": "Navn",
@@ -118,14 +111,12 @@
           "low_resolution": "Kort med lav opløsning",
           "square": "Firkantet kort",
           "configuration_type": "Konfigurationstype",
-          "prefer_cloud": "Foretrukken cloudforbindelse",
-          "dvc_key": "Dreame Vacuum Card-nøgle"
+          "prefer_cloud": "Foretrukken cloudforbindelse"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Ufuldstændige cloud-legitimationsoplysninger. Udfyld brugernavn, adgangskode og land.",
-      "invalid_key": "Ugyldig nøgle."
+      "cloud_credentials_incomplete": "Ufuldstændige cloud-legitimationsoplysninger. Udfyld brugernavn, adgangskode og land."
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Rediger tæppe",
         "empty": "Tøm",
         "enable": "Aktiver",
-        "enter_dvc_key": "Indtast eksisterende nøgle",
         "fast_mapping": "Hurtig kortlægning",
-        "get_dvc_key": "Få DVC-nøgle",
         "ignore": "Ignorér",
         "ignore_obstacle": "Ignorér forhindring",
         "impassable_threshold": "Upasserbart dørtrin",
@@ -2300,8 +2289,6 @@
         "copy": "Kopier",
         "copy_all": "Kopier alt",
         "disable_haptic": "Deaktiver haptisk feedback",
-        "dvc_key": "DVC-nøgle",
-        "dvc_key_title": "Indtast DVC-nøgle",
         "editable_objects": "Redigerbare objekter",
         "font_size": "Skriftstørrelse",
         "full_height": "Fuld højde",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Opladningsdocken er placeret i et begrænset område. Hvis du fortsætter med at gemme kortet, kan robotten muligvis ikke vende tilbage for at lade op.",
         "drying_will_stopped": "Tørring af moppe vil blive stoppet!",
         "dust_collection_not_performed": "Støvtømning (Auto-tømning) udføres ikke\nRobotten vil ikke udføre auto-tømning under 'Forstyr ikke'-perioden.",
-        "dvc_key_description": "En nøgle er gyldig til én enhed. Hvis dette er første gang, du bruger denne nøgle, vil den nu blive aktiveret til denne enhed.",
         "enable_auto_mount_mop": "Aktiver automatisk montering af moppe?",
         "enable_carpet_recognition": "Tæppegenkendelse vil blive aktiveret!",
         "enable_customized_cleaning": "Ønsker du at aktivere brugerdefineret rengøring?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kunne ikke indlæse kort",
         "ignore_obstacle": "Ignorér forhindring?",
         "invalid_entity": "Ugyldig enhed",
-        "invalid_key": "Ugyldig nøgle.",
         "map_backup": "Sikkerhedskopiering af kort i gang",
         "map_backup_failed": "Sikkerhedskopiering af kort fejlede!",
         "map_backup_success": "Sikkerhedskopiering af kort fuldført",
@@ -2502,7 +2487,6 @@
         "not_supported": "Ikke understøttet endnu!",
         "obstacle_will_ignored": "Forhindring vil blive ignoreret!",
         "override_changes": "Overskriv ændringer?",
-        "preview": "Dette er en forhåndsvisning af Dreame Vacuum kortet",
         "recommended_areas": "Anbefalede områder",
         "relocating": "Selv-positionering. Vent venligst.",
         "relocating_completed": "Selv-positionering lykkedes. Robotten fortsætter med opgaven.",

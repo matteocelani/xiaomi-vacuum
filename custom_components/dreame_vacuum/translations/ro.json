@@ -16,8 +16,7 @@
       "no_devices": "Nu au fost găsite dispozitive suportate în acest cont pentru țara selectată.{devices}",
       "2fa_send_failed": "Eroare la trimiterea codului de verificare. Vă rugăm să încercați din nou.",
       "2fa_limit_reached": "Limita zilnică pentru trimiterea codurilor de verificare a fost atinsă. Vă rugăm să încercați din nou mâine.",
-      "2fa_cooldown_active": "Prea multe solicitări consecutive. Vă rugăm să așteptați câteva minute înainte de a încerca din nou.",
-      "invalid_key": "Cheie invalidă."
+      "2fa_cooldown_active": "Prea multe solicitări consecutive. Vă rugăm să așteptați câteva minute înainte de a încerca din nou."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Vă rugăm să selectați dispozitivul Dreame Vacuum pe care doriți să-l configurați."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Cheie Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Interfața Dreame Vacuum{text}\r\n\r\nIntroduceți cheia de licență pentru a activa Dreame Vacuum Card. Dacă nu aveți una, o puteți obține **[aici]({url})**.\r\n\r\n*Notă: fiecare cheie este valabilă pentru un singur dispozitiv.*"
-      },
       "options": {
         "data": {
           "name": "Nume",
@@ -118,14 +111,12 @@
           "low_resolution": "Hartă cu rezoluție scăzută",
           "square": "Hartă pătrată",
           "configuration_type": "Tip de configurare",
-          "prefer_cloud": "Preferă conexiunea cloud",
-          "dvc_key": "Cheie Dreame Vacuum Card"
+          "prefer_cloud": "Preferă conexiunea cloud"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Credențiale cloud incomplete, vă rugăm să completați numele de utilizator, parola și țara",
-      "invalid_key": "Cheie invalidă."
+      "cloud_credentials_incomplete": "Credențiale cloud incomplete, vă rugăm să completați numele de utilizator, parola și țara"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Editează covor",
         "empty": "Golește",
         "enable": "Activează",
-        "enter_dvc_key": "Introduceți cheia existentă",
         "fast_mapping": "Cartografiere rapidă",
-        "get_dvc_key": "Obțineți cheia DVC",
         "ignore": "Ignoră",
         "ignore_obstacle": "Ignoră obstacol",
         "impassable_threshold": "Prag de netrecut",
@@ -2300,8 +2289,6 @@
         "copy": "Copiază",
         "copy_all": "Copiază tot",
         "disable_haptic": "Dezact. feedback haptic",
-        "dvc_key": "Cheie DVC",
-        "dvc_key_title": "Introduceți cheia DVC",
         "editable_objects": "Obiecte editabile",
         "font_size": "Mărime font",
         "full_height": "Înălțime completă",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Baza este în zonă cu restricții. Robotul s-ar putea să nu se încarce.",
         "drying_will_stopped": "Uscare mop oprită!",
         "dust_collection_not_performed": "Sarcina de colectare a prafului (Golire automată) nu a fost efectuată\nRobotul nu va efectua golirea automată în perioada Nu Deranjați.",
-        "dvc_key_description": "O cheie este valabilă pentru un singur dispozitiv. Dacă este prima dată când folosiți această cheie, aceasta va fi activată acum pentru acest dispozitiv.",
         "enable_auto_mount_mop": "Activați montarea mopului auto?",
         "enable_carpet_recognition": "Detecția covoarelor va fi activată!",
         "enable_customized_cleaning": "Activați curățarea personalizată?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Eșec la încărcarea cardului",
         "ignore_obstacle": "Ignorați obstacolul?",
         "invalid_entity": "Entitate invalidă",
-        "invalid_key": "Cheie invalidă.",
         "map_backup": "Copie de rezervă a hărții în curs",
         "map_backup_failed": "Copia de rezervă a hărții a eșuat!",
         "map_backup_success": "Copie de rezervă a hărții finalizată",
@@ -2502,7 +2487,6 @@
         "not_supported": "Nu este suportat!",
         "obstacle_will_ignored": "Obstacolul va fi ignorat!",
         "override_changes": "Suprascrieți modificările?",
-        "preview": "Aceasta este previzualizarea cardului Dreame Vacuum",
         "recommended_areas": "Zone recomandate",
         "relocating": "Autopoziționare. Vă rugăm așteptați.",
         "relocating_completed": "Autopoziționare reușită. Robotul continuă sarcina.",

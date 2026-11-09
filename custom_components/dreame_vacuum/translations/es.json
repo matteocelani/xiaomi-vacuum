@@ -16,8 +16,7 @@
       "no_devices": "No se encontraron dispositivos compatibles en esta cuenta para el país seleccionado.{devices}",
       "2fa_send_failed": "Error al enviar el código de verificación. Por favor, inténtelo de nuevo.",
       "2fa_limit_reached": "Se ha alcanzado el límite diario para enviar códigos de verificación. Por favor, inténtelo de nuevo mañana.",
-      "2fa_cooldown_active": "Demasiadas solicitudes consecutivas. Por favor, espere unos minutos antes de intentarlo de nuevo.",
-      "invalid_key": "Clave no válida."
+      "2fa_cooldown_active": "Demasiadas solicitudes consecutivas. Por favor, espere unos minutos antes de intentarlo de nuevo."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Por favor seleccione el dispositivo Dreame Vacuum que desea configurar."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Clave de Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Interfaz de Dreame Vacuum{text}\r\n\r\nIntroduce tu clave de licencia para activar la Dreame Vacuum Card. Si no tienes una, puedes conseguirla **[aquí]({url})**.\r\n\r\n*Nota: cada clave es válida para un solo dispositivo.*"
-      },
       "options": {
         "data": {
           "name": "Nombre",
@@ -118,14 +111,12 @@
           "low_resolution": "Mapa de baja resolución",
           "square": "Mapa cuadrado",
           "configuration_type": "Tipo de configuración",
-          "prefer_cloud": "Priorizar conexión a la nube",
-          "dvc_key": "Clave de Dreame Vacuum Card"
+          "prefer_cloud": "Priorizar conexión a la nube"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Credenciales incompletas, por favor introduzca el usuario, la contraseña y el país",
-      "invalid_key": "Clave no válida."
+      "cloud_credentials_incomplete": "Credenciales incompletas, por favor introduzca el usuario, la contraseña y el país"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Editar alfombra",
         "empty": "Vaciar",
         "enable": "Activar",
-        "enter_dvc_key": "Introducir clave existente",
         "fast_mapping": "Mapeo rápido",
-        "get_dvc_key": "Obtener clave DVC",
         "ignore": "Ignorar",
         "ignore_obstacle": "Ignorar obstáculo",
         "impassable_threshold": "Umbral infranqueable",
@@ -2300,8 +2289,6 @@
         "copy": "Copiar",
         "copy_all": "Copiar todo",
         "disable_haptic": "Desact. vibración",
-        "dvc_key": "Clave DVC",
-        "dvc_key_title": "Introduce la clave DVC",
         "editable_objects": "Objetos editables",
         "font_size": "Tamaño fuente",
         "full_height": "Altura completa",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Cuidado, la base está en zona restringida. El robot podría no cargar.",
         "drying_will_stopped": "¡Secado mopa detenido!",
         "dust_collection_not_performed": "Tarea de recolección de polvo (Vaciado auto) no realizada\nEl robot no realizará tareas de vaciado automático durante el período No Molestar.",
-        "dvc_key_description": "Una clave es válida para un único dispositivo. Si es la primera vez que usas esta clave, se activará ahora para este dispositivo.",
         "enable_auto_mount_mop": "¿Activar montaje mopa?",
         "enable_carpet_recognition": "¡Detec. alfombra se activará!",
         "enable_customized_cleaning": "¿Activar limpieza perso.?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Error al cargar la tarjeta",
         "ignore_obstacle": "¿Ignorar obstáculo?",
         "invalid_entity": "Entidad no válida",
-        "invalid_key": "Clave no válida.",
         "map_backup": "Copia de seguridad del mapa en curso",
         "map_backup_failed": "¡Fallo en la copia de seguridad del mapa!",
         "map_backup_success": "Copia de seguridad del mapa completada",
@@ -2502,7 +2487,6 @@
         "not_supported": "¡No soportado!",
         "obstacle_will_ignored": "¡Obstáculo ignorado!",
         "override_changes": "¿Anular cambios?",
-        "preview": "Esta es una vista previa de la tarjeta Dreame Vacuum",
         "recommended_areas": "Áreas recomendadas",
         "relocating": "Autoposicionamiento. Por favor, espere.",
         "relocating_completed": "Autoposicionamiento exitoso. El robot continúa la tarea.",

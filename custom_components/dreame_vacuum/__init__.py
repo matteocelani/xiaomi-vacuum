@@ -1,22 +1,18 @@
 """The Dreame Vacuum component."""
 
 from __future__ import annotations
+
+from collections.abc import Mapping
+import inspect
+import warnings
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
-import warnings
-from importlib import import_module
-from .const import DOMAIN
 
-## Dynamically load frontend.py so that it can be easily stripped
-try:
-    frontend = import_module(f"{__package__}.frontend")
-except ModuleNotFoundError as ex:
-    if ex.name != f"{__package__}.frontend":
-        raise
-    frontend = None
+from .const import CONF_DVC_KEY, DOMAIN
 
 # Suppress python-miio FutureWarning on Python 3.13
 warnings.filterwarnings(
@@ -46,10 +42,8 @@ PLATFORMS = (
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+async def async_setup(_hass: HomeAssistant, _config: ConfigType) -> bool:
     """Set up the Dreame Vacuum integration."""
-    if frontend is not None and hass.config_entries.async_entries(DOMAIN):
-        await frontend.setup(hass)
     return True
 
 
@@ -88,12 +82,38 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unload_ok
 
 
-async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Handle removal of a Dreame Vacuum config entry."""
-    if frontend is not None:
-        await frontend.remove(hass, entry)
-
-
 async def update_listener(hass: HomeAssistant, config_entry: ConfigEntry) -> None:
     """Handle options update."""
     await hass.config_entries.async_reload(config_entry.entry_id)
+
+
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+    """Drop the removed card license key from version 1 entries."""
+    if config_entry.version != 1:
+        return True
+    _persist_migrated_entry(
+        hass,
+        config_entry,
+        _without_card_license(config_entry.data),
+        _without_card_license(config_entry.options),
+    )
+    return True
+
+
+def _persist_migrated_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    data: dict[str, object],
+    options: dict[str, object],
+) -> None:
+    """Store version 2. Home Assistant 2024.2 cannot pass version=."""
+    update = hass.config_entries.async_update_entry
+    if "version" in inspect.signature(update).parameters:
+        update(config_entry, data=data, options=options, version=2)
+        return
+    config_entry.version = 2
+    update(config_entry, data=data, options=options)
+
+
+def _without_card_license(stored: Mapping[str, object]) -> dict[str, object]:
+    return {key: value for key, value in stored.items() if key != CONF_DVC_KEY}

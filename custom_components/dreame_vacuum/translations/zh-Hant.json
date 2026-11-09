@@ -16,8 +16,7 @@
       "no_devices": "此帳號所選國家或地區中未找到支援的裝置{devices}",
       "2fa_send_failed": "驗證碼傳送失敗。請重試。",
       "2fa_limit_reached": "已達到每日驗證碼傳送限制。請明天再試。",
-      "2fa_cooldown_active": "連續要求過多。請等待幾分鐘後再試。",
-      "invalid_key": "金鑰無效。"
+      "2fa_cooldown_active": "連續要求過多。請等待幾分鐘後再試。"
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "請選擇要設定的追覓掃地機器人裝置"
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card 金鑰"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum 介面{text}\r\n\r\n輸入您的授權金鑰以啟用 Dreame Vacuum Card。如果沒有，您可以**[點擊此處]({url})**取得。\r\n\r\n*注意：每組金鑰僅適用於一台裝置。*"
-      },
       "options": {
         "data": {
           "name": "名稱",
@@ -118,14 +111,12 @@
           "low_resolution": "低解析度地圖",
           "square": "方形地圖",
           "configuration_type": "設定方式",
-          "prefer_cloud": "使用雲端連線",
-          "dvc_key": "Dreame Vacuum Card 金鑰"
+          "prefer_cloud": "使用雲端連線"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "雲端服務憑證不完整，請填寫使用者名稱、密碼及國家或地區",
-      "invalid_key": "金鑰無效。"
+      "cloud_credentials_incomplete": "雲端服務憑證不完整，請填寫使用者名稱、密碼及國家或地區"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "編輯地毯",
         "empty": "集塵",
         "enable": "啟用",
-        "enter_dvc_key": "輸入現有金鑰",
         "fast_mapping": "快速建圖",
-        "get_dvc_key": "取得 DVC 金鑰",
         "ignore": "忽略",
         "ignore_obstacle": "忽略障礙物",
         "impassable_threshold": "不可越門檻",
@@ -2300,8 +2289,6 @@
         "copy": "複製",
         "copy_all": "複製全部",
         "disable_haptic": "停用觸感回饋",
-        "dvc_key": "DVC 金鑰",
-        "dvc_key_title": "輸入 DVC 金鑰",
         "editable_objects": "可編輯對象",
         "font_size": "字體大小",
         "full_height": "全高",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "充電基座位於禁區。如果儲存地圖，主機可能無法正常回充。",
         "drying_will_stopped": "拖布烘乾將停止！",
         "dust_collection_not_performed": "集塵（自動集塵）任務未執行\n主機在勿擾期間不會執行自動集塵任務。",
-        "dvc_key_description": "金鑰僅對一台裝置有效。如果這是您第一次使用此金鑰，它現在將為此裝置啟用。",
         "enable_auto_mount_mop": "是否啟用自動掛載拖布？",
         "enable_carpet_recognition": "確認開啟地毯識別？",
         "enable_customized_cleaning": "是否啟用客製化清掃？",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "無法載入卡片",
         "ignore_obstacle": "忽略該障礙物？",
         "invalid_entity": "無效實體",
-        "invalid_key": "金鑰無效。",
         "map_backup": "地圖備份中",
         "map_backup_failed": "地圖備份失敗！",
         "map_backup_success": "地圖備份已完成",
@@ -2502,7 +2487,6 @@
         "not_supported": "暫不支援！",
         "obstacle_will_ignored": "障礙物將被忽略！",
         "override_changes": "覆蓋更改？",
-        "preview": "這是 Dreame Vacuum 卡片的預覽",
         "recommended_areas": "推薦區域",
         "relocating": "定位中，請稍候。",
         "relocating_completed": "定位成功，主機繼續執行原任務。",

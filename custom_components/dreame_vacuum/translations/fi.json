@@ -16,8 +16,7 @@
       "no_devices": "Tältä tililtä ei löytynyt tuettuja laitteita valitussa maassa.{devices}",
       "2fa_send_failed": "Vahvistuskoodin lähettäminen epäonnistui. Yritä uudelleen.",
       "2fa_limit_reached": "Vahvistuskoodien lähetyksen päivittäinen raja on saavutettu. Yritä uudelleen huomenna.",
-      "2fa_cooldown_active": "Liian monta peräkkäistä pyyntöä. Odota muutama minuutti ennen kuin yrität uudelleen.",
-      "invalid_key": "Virheellinen avain."
+      "2fa_cooldown_active": "Liian monta peräkkäistä pyyntöä. Odota muutama minuutti ennen kuin yrität uudelleen."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Valitse Dreame-robottipölynimuri, jonka haluat määrittää."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card -avain"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuumin käyttöliittymä{text}\r\n\r\nSyötä lisenssiavaimesi aktivoidaksesi Dreame Vacuum Cardin. Jos sinulla ei ole sellaista, voit hankkia sen **[täältä]({url})**.\r\n\r\n*Huom: jokainen avain on voimassa vain yhdelle laitteelle.*"
-      },
       "options": {
         "data": {
           "name": "Nimi",
@@ -118,14 +111,12 @@
           "low_resolution": "Matalan resoluution kartta",
           "square": "Neliömäinen kartta",
           "configuration_type": "Määritystyyppi",
-          "prefer_cloud": "Suosi pilviyhteyttä",
-          "dvc_key": "Dreame Vacuum Card -avain"
+          "prefer_cloud": "Suosi pilviyhteyttä"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Pilven tunnistetiedot puutteelliset, täytä käyttäjänimi, salasana ja maa",
-      "invalid_key": "Virheellinen avain."
+      "cloud_credentials_incomplete": "Pilven tunnistetiedot puutteelliset, täytä käyttäjänimi, salasana ja maa"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Muokkaa mattoa",
         "empty": "Tyhjennä",
         "enable": "Ota käyttöön",
-        "enter_dvc_key": "Syötä olemassa oleva avain",
         "fast_mapping": "Nopea kartoitus",
-        "get_dvc_key": "Hanki DVC-avain",
         "ignore": "Ohita",
         "ignore_obstacle": "Ohita Este",
         "impassable_threshold": "Läpipääsemätön kynnys",
@@ -2300,8 +2289,6 @@
         "copy": "Kopioi",
         "copy_all": "Kopioi Kaikki",
         "disable_haptic": "Poista haptinen palaute käytöstä",
-        "dvc_key": "DVC-avain",
-        "dvc_key_title": "Anna DVC-avain",
         "editable_objects": "Muokattavat objektit",
         "font_size": "Fonttikoko",
         "full_height": "Täysi korkeus",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Lataustelakka sijaitsee kielletyllä alueella. Jos jatkat kartan tallentamista, robotti ei ehkä pysty lataamaan itseään.",
         "drying_will_stopped": "Mopin kuivaus keskeytetään!",
         "dust_collection_not_performed": "Pölynkeräystä (Auto-empty) ei suoriteta\nRobotti ei suorita automaattisia tyhjennystehtäviä DnD-jakson (älä häiritse -tilan) aikana.",
-        "dvc_key_description": "Avain on voimassa yhdelle laitteelle. Jos käytät tätä avainta ensimmäistä kertaa, se aktivoidaan nyt tälle laitteelle.",
         "enable_auto_mount_mop": "Ota käyttöön automaattinen mopin asennus?",
         "enable_carpet_recognition": "Matontunnistus otetaan käyttöön!",
         "enable_customized_cleaning": "Haluatko ottaa mukautetun siivouksen käyttöön?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kortin lataaminen epäonnistui",
         "ignore_obstacle": "Sivuuta Este?",
         "invalid_entity": "Virheellinen entiteetti",
-        "invalid_key": "Virheellinen avain.",
         "map_backup": "Kartan varmuuskopiointi käynnissä",
         "map_backup_failed": "Kartan varmuuskopiointi epäonnistui!",
         "map_backup_success": "Kartan varmuuskopiointi valmistui",
@@ -2502,7 +2487,6 @@
         "not_supported": "Ei vielä tuettu!",
         "obstacle_will_ignored": "Este sivuutetaan!",
         "override_changes": "Ylitä muutokset?",
-        "preview": "Tämä on Dreame Vacuum -kortin esikatselu",
         "recommended_areas": "Suositellut alueet",
         "relocating": "Määrittää sijaintia. Odota.",
         "relocating_completed": "Itsepaikannus onnistui. Robotti jatkaa työtä.",

@@ -1,6 +1,6 @@
 ---
 name: "Integration · Feature Request"
-about: "Suggest a new feature or improvement for the integration (entities, services, device features, map data). For dashboard ideas, use the Dreame Vacuum Card feature request."
+about: "Suggest a new feature or improvement for the integration (entities, services, device features, map data)."
 title: ""
 labels: enhancement, integration
 assignees: matteocelani
@@ -26,5 +26,5 @@ Screenshots, or examples from other apps such as the official Dreame app, that s
 ## Checklist
 - [ ] I am using the latest release of the integration, this feature might already exist.
 - [ ] I searched the open and closed issues and could not find the same request.
-- [ ] This request is about the integration. Dreame Vacuum Card ideas belong in the Dreame Vacuum Card feature request.
+- [ ] This request is about the integration.
 - [ ] I filled out all the environment fields.

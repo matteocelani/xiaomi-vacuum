@@ -136,8 +136,8 @@ Fixed in the packaging change:
 Left for a later change, or for artwork only Matteo can supply:
 
 - Other locales still say Dreame Vacuum in the device picker and the reauthentication step. `strings.json` is updated. Those catalogs were not mass-edited.
-- The Dreame Vacuum Card step, its license field, its preview string, and the persistent notification still name that upstream card and link to `dreame-vacuum-card.tasshack.com`. That card is a separate product. The link resolves. It is not an official Xiaomi interface.
+- The closed-source Dreame Vacuum Card, its license field, and the upgrade notification are not part of this integration.
 - Map color schemes and icon sets named Dreame, Dreamehome, and Dreame old stay. They are the real Dreame map themes.
 - README hero images are upstream files. They redirect to `dv.tasshack.com` and return HTTP 200. Alt text credits Tasshack. A fork-specific hero image would replace them if the upstream art should not lead the page.
 - Entity icons are Material Design Icons already in the integration (`mdi` room and vacuum icons). None were missing files.
-- `new_model_support.md` no longer says the request is only for a Dreame device. Card issue templates still describe the Dreame Vacuum Card, which is accurate.
+- `new_model_support.md` no longer says the request is only for a Dreame device.

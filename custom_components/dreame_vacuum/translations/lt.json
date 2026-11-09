@@ -16,8 +16,7 @@
       "no_devices": "Šioje paskyroje pasirinktoje šalyje nerasta palaikomų įrenginių.{devices}",
       "2fa_send_failed": "Nepavyko išsiûsti patvirtinimo kodo. Bandykite dar kartą.",
       "2fa_limit_reached": "Viršytas dienos patvirtinimo kodų siuntimo limitas. Bandykite dar kartą rytoj.",
-      "2fa_cooldown_active": "Per daug iš eilės einančių užklausų. Prieš bandydami dar kartą, palaukite kelias minutes.",
-      "invalid_key": "Neteisingas raktas."
+      "2fa_cooldown_active": "Per daug iš eilės einančių užklausų. Prieš bandydami dar kartą, palaukite kelias minutes."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Pasirinkite „Dreame Vacuum“ įrenginį, kurį norite nustatyti."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card raktas"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum sąsaja{text}\r\n\r\nĮveskite savo licencijos raktą, kad suaktyvintumėte Dreame Vacuum Card. Jei jo neturite, galite jį gauti **[čia]({url})**.\r\n\r\n*Pastaba: kiekvienas raktas galioja tik vienam įrenginiui.*"
-      },
       "options": {
         "data": {
           "name": "Pavadinimas",
@@ -118,14 +111,12 @@
           "low_resolution": "Mažos raiškos žemėlapis",
           "square": "Kvadratinis žemėlapis",
           "configuration_type": "Konfigūracijos tipas",
-          "prefer_cloud": "Mėgti debesies ryšį",
-          "dvc_key": "Dreame Vacuum Card raktas"
+          "prefer_cloud": "Mėgti debesies ryšį"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Debesies kredencialai neišsamūs, prašome įvesti naudotojo vardą, slaptažodį ir šalį",
-      "invalid_key": "Neteisingas raktas."
+      "cloud_credentials_incomplete": "Debesies kredencialai neišsamūs, prašome įvesti naudotojo vardą, slaptažodį ir šalį"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Redaguoti kilimą",
         "empty": "Ištuštinti",
         "enable": "Įjungti",
-        "enter_dvc_key": "Įvesti esamą raktą",
         "fast_mapping": "Greitas žemėlapio sudarymas",
-        "get_dvc_key": "Gauti DVC raktą",
         "ignore": "Ignoruoti",
         "ignore_obstacle": "Ignoruoti kliūtį",
         "impassable_threshold": "Nepervažiuojamas slenkstis",
@@ -2300,8 +2289,6 @@
         "copy": "Kopijuoti",
         "copy_all": "Kopijuoti viską",
         "disable_haptic": "Išjungti haptinį atsaką",
-        "dvc_key": "DVC raktas",
-        "dvc_key_title": "Įveskite DVC raktą",
         "editable_objects": "Redaguojami objektai",
         "font_size": "Šrifto dydis",
         "full_height": "Visas aukštis",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Įkrovimo stotelė yra draudžiamoje zonoje. Jei toliau išsaugosite žemėlapį, robotas gali nepajėgti įsikrauti.",
         "drying_will_stopped": "Šluostės džiovinimas bus sustabdytas!",
         "dust_collection_not_performed": "Dulkių rinkimo (automatinio ištuštinimo) užduotis neatlikta\nRobotas netrukdymo periodu neatliks automatinio ištuštinimo užduočių.",
-        "dvc_key_description": "Raktas galioja vienam įrenginiui. Jei šį raktą naudojate pirmą kartą, jis dabar bus aktyvuotas šiam įrenginiui.",
         "enable_auto_mount_mop": "Įjungti automatinį šluostės uždėjimą?",
         "enable_carpet_recognition": "Kilimų atpažinimas bus įjungtas!",
         "enable_customized_cleaning": "Ar norite įjungti pasirinktinį valymą?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Nepavyko įkelti kortelės",
         "ignore_obstacle": "Ignoruoti kliūtį?",
         "invalid_entity": "Neteisingas subjektas",
-        "invalid_key": "Neteisingas raktas.",
         "map_backup": "Vyksta žemėlapio atsarginė kopija",
         "map_backup_failed": "Žemėlapio atsarginė kopija nepavyko!",
         "map_backup_success": "Žemėlapio atsarginė kopija baigta",
@@ -2502,7 +2487,6 @@
         "not_supported": "Dar nepalaikoma!",
         "obstacle_will_ignored": "Kliūtis bus ignoruojama!",
         "override_changes": "Perrašyti pakeitimus?",
-        "preview": "Tai yra „Dreame Vacuum“ kortelės peržiūra",
         "recommended_areas": "Rekomenduojamos zonos",
         "relocating": "Pozicionuojasi. Prašome palaukti.",
         "relocating_completed": "Pozicionavimas sėkmingas. Robotas tęsia darbą.",

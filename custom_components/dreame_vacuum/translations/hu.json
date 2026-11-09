@@ -16,8 +16,7 @@
       "no_devices": "Nincs támogatott eszköz ezen a fiókon a választott szerver régióban.{devices}",
       "2fa_send_failed": "Nem sikerült elküldeni a biztonsági kódot. Kérjük, próbálja újra.",
       "2fa_limit_reached": "Elérte a megerősítő kódok küldésének napi limitjét. Kérjük, próbálja meg újra holnap.",
-      "2fa_cooldown_active": "Túl sok egymást követő kérés. Kérjük, várjon néhány percet, mielőtt újra megpróbálná.",
-      "invalid_key": "Érvénytelen kulcs."
+      "2fa_cooldown_active": "Túl sok egymást követő kérés. Kérjük, várjon néhány percet, mielőtt újra megpróbálná."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Válassza ki a beállítani kívánt Dreame Vacuum eszközt."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card kulcs"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### A Dreame Vacuum felülete{text}\r\n\r\nAdja meg licenckulcsát a Dreame Vacuum Card aktiválásához. Ha még nincs, itt beszerezhet egyet: **[itt]({url})**.\r\n\r\n*Megjegyzés: minden kulcs csak egy eszközhöz érvényes.*"
-      },
       "options": {
         "data": {
           "name": "Név",
@@ -118,14 +111,12 @@
           "low_resolution": "Alacsony felbontású térkép",
           "square": "Négyzet alakú térkép",
           "configuration_type": "Konfigurációs típus",
-          "prefer_cloud": "Felhőkapcsolatot részesítse előnyben",
-          "dvc_key": "Dreame Vacuum Card kulcs"
+          "prefer_cloud": "Felhőkapcsolatot részesítse előnyben"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "A felhő hitelesítési adatok hiányosak, kérjük, töltse ki a felhasználónevet, jelszót és a régiót",
-      "invalid_key": "Érvénytelen kulcs."
+      "cloud_credentials_incomplete": "A felhő hitelesítési adatok hiányosak, kérjük, töltse ki a felhasználónevet, jelszót és a régiót"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Szőnyeg szerkesztése",
         "empty": "Ürítés",
         "enable": "Engedélyezés",
-        "enter_dvc_key": "Meglévő kulcs megadása",
         "fast_mapping": "Gyors feltérképezés",
-        "get_dvc_key": "DVC kulcs beszerzése",
         "ignore": "Mellőzés",
         "ignore_obstacle": "Akadály mellőzése",
         "impassable_threshold": "Átjárhatatlan küszöb",
@@ -2300,8 +2289,6 @@
         "copy": "Másolás",
         "copy_all": "Összes másolása",
         "disable_haptic": "Érintési visszajelzés ki",
-        "dvc_key": "DVC kulcs",
-        "dvc_key_title": "Adja meg a DVC kulcsot",
         "editable_objects": "Szerkeszthető objektumok",
         "font_size": "Betűméret",
         "full_height": "Teljes magasság",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "A dokkoló korlátozott területen van. A robot esetleg nem töltődik.",
         "drying_will_stopped": "Felmosó szárítása leállítva!",
         "dust_collection_not_performed": "A porgyűjtés (automata ürítés) nem történt meg\nA robot nem végez automata ürítést a Ne zavarjanak időszak alatt.",
-        "dvc_key_description": "A kulcs egyetlen eszközre érvényes. Ha most használja először ezt a kulcsot, akkor most aktiválódik ehhez az eszközhöz.",
         "enable_auto_mount_mop": "Engedélyezi az auto felmosó felhelyezést?",
         "enable_carpet_recognition": "Szőnyegfelismerés be lesz kapcsolva!",
         "enable_customized_cleaning": "Engedélyezi az egyéni takarítást?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "A kártya betöltése sikertelen",
         "ignore_obstacle": "Mellőzi az akadályt?",
         "invalid_entity": "Érvénytelen entitás",
-        "invalid_key": "Érvénytelen kulcs.",
         "map_backup": "Térkép mentése folyamatban",
         "map_backup_failed": "Térkép mentése sikertelen!",
         "map_backup_success": "Térkép mentése kész",
@@ -2502,7 +2487,6 @@
         "not_supported": "Nem támogatott!",
         "obstacle_will_ignored": "Az akadály mellőzve lesz!",
         "override_changes": "Módosítások felülbírálása?",
-        "preview": "Ez a Dreame Vacuum kártya előnézete",
         "recommended_areas": "Ajánlott területek",
         "relocating": "Önpozicionálás. Kérjük, várjon.",
         "relocating_completed": "Az önpozicionálás sikeres. A robot folytatja a munkát.",

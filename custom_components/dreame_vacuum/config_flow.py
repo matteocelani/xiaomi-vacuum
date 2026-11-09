@@ -23,7 +23,6 @@ from homeassistant.config_entries import (
     OptionsFlow,
 )
 
-from . import frontend
 from .dreame import (
     DEVICE_INFO,
     MAP_COLOR_SCHEME_LIST,
@@ -88,24 +87,19 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Manage Dreame Vacuum options."""
-        errors = {}
-        dvc = frontend is not None or bool(self._config_entry.options.get(CONF_DVC_KEY))
         if user_input is not None:
-            if dvc:
-                key = (user_input.get(CONF_DVC_KEY) or "").strip().lower()
-                user_input[CONF_DVC_KEY] = key
-                if key and not re.fullmatch(
-                    r"[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}", key
-                ):
-                    errors["base"] = "invalid_key"
-
+            user_input.pop(CONF_DVC_KEY, None)
             if CONF_COLOR_SCHEME in user_input:
                 user_input[CONF_COLOR_SCHEME] = COLOR_SCHEME_KEYS[user_input[CONF_COLOR_SCHEME]]
             if CONF_ICON_SET in user_input:
                 user_input[CONF_ICON_SET] = ICON_SET_KEYS[user_input[CONF_ICON_SET]]
 
-            if not errors:
-                return self.async_create_entry(title="", data={**self._config_entry.options, **user_input})
+            stored = {
+                key: value
+                for key, value in self._config_entry.options.items()
+                if key != CONF_DVC_KEY
+            }
+            return self.async_create_entry(title="", data={**stored, **user_input})
 
         notify = self._config_entry.options[CONF_NOTIFY]
         if isinstance(notify, bool):
@@ -119,19 +113,6 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
                 vol.Required(CONF_NOTIFY, default=notify): SelectSelector(SelectSelectorConfig(options=NOTIFICATION, multiple=True, translation_key='notifications')),
             }
         )
-        if dvc:
-            data_schema = data_schema.extend(
-                {
-                    vol.Optional(
-                        CONF_DVC_KEY,
-                        default=(
-                            user_input.get(CONF_DVC_KEY, "")
-                            if user_input
-                            else self._config_entry.options.get(CONF_DVC_KEY, "")
-                        ),
-                    ): str,
-                }
-            )
         if self._config_entry.data[CONF_USERNAME]:
             data_schema = data_schema.extend(
                 {
@@ -171,14 +152,14 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
         return self.async_show_form(
             step_id="init",
             data_schema=data_schema,
-            errors=errors,
+            errors={},
         )
 
 
 class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
     """Handle config flow for an Dreame Vacuum device."""
 
-    VERSION = 1
+    VERSION = 2
 
     def __init__(self) -> None:
         """Initialize."""
@@ -650,11 +631,26 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
                 CONF_SQUARE: user_input.get(CONF_SQUARE),
                 CONF_LOW_RESOLUTION: user_input.get(CONF_LOW_RESOLUTION),
                 CONF_PREFER_CLOUD: self.prefer_cloud,
+                CONF_VERSION: VERSION,
             }
 
-            if frontend is None:
-                return await self.async_step_dvc({})
-            return await self.async_step_dvc()
+            return self.async_create_entry(
+                title=self.name,
+                data={
+                    CONF_NAME: self.name,
+                    CONF_HOST: self.host,
+                    CONF_TOKEN: self.token,
+                    CONF_USERNAME: self.username,
+                    CONF_PASSWORD: self.password,
+                    CONF_COUNTRY: self.country,
+                    CONF_MAC: self.mac,
+                    CONF_DID: self.device_id,
+                    CONF_AUTH_KEY: self.protocol.cloud.auth_key if self.protocol and self.protocol.cloud else None,
+                    CONF_ACCOUNT_TYPE: self.account_type,
+                    **({CONF_MODEL: self.model} if self.model else {}),
+                },
+                options=self.options,
+            )
 
         data_schema = vol.Schema(
             {
@@ -694,53 +690,6 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
             )
 
         return self.async_show_form(step_id="options", data_schema=data_schema, errors={})
-
-    async def async_step_dvc(self, user_input: dict[str, Any] | None = None) -> FlowResult:
-        if user_input is not None:
-            key = (user_input.get(CONF_DVC_KEY) or "").strip().lower()
-            errors = {}
-
-            if key and not re.fullmatch(r"[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}", key):
-                errors["base"] = "invalid_key"
-
-            if errors:
-                return self.async_show_form(
-                    step_id="dvc",
-                    data_schema=vol.Schema({vol.Optional(CONF_DVC_KEY, default=key): str}),
-                    errors=errors,
-                )
-
-            self.options = self.options | {CONF_DVC_KEY: key, CONF_VERSION: VERSION}
-
-            return self.async_create_entry(
-                title=self.name,
-                data={
-                    CONF_NAME: self.name,
-                    CONF_HOST: self.host,
-                    CONF_TOKEN: self.token,
-                    CONF_USERNAME: self.username,
-                    CONF_PASSWORD: self.password,
-                    CONF_COUNTRY: self.country,
-                    CONF_MAC: self.mac,
-                    CONF_DID: self.device_id,
-                    CONF_AUTH_KEY: self.protocol.cloud.auth_key if self.protocol and self.protocol.cloud else None,
-                    CONF_ACCOUNT_TYPE: self.account_type,
-                    **({CONF_MODEL: self.model} if self.model else {}),
-                },
-                options=self.options,
-            )
-
-        from .const import DVC
-
-        return self.async_show_form(
-            step_id="dvc",
-            data_schema=vol.Schema({vol.Optional(CONF_DVC_KEY): str}),
-            description_placeholders={
-                "text": f'<center><a href="https://dvc.tasshack.com"><img src="data:image/png;base64,{DVC}"/></a></center>',
-                "url": "https://dvc.tasshack.com/get-dvc#get",
-            },
-            errors={},
-        )
 
     def extract_info(self, device_info: dict[str, Any]) -> None:
         """Extract the device info."""

@@ -16,8 +16,7 @@
       "no_devices": "Ingen støttede enheter funnet på denne kontoen i det valgte landet.{devices}",
       "2fa_send_failed": "Kunne ikke sende verifiseringskode. Vennligst prøv igjen.",
       "2fa_limit_reached": "Den daglige grensen for sending av verifiseringskoder er nådd. Vennligst prøv igjen i morgen.",
-      "2fa_cooldown_active": "For mange forespørsler etter hverandre. Vennligst vent noen minutter før du prøver igjen.",
-      "invalid_key": "Ugyldig nøkkel."
+      "2fa_cooldown_active": "For mange forespørsler etter hverandre. Vennligst vent noen minutter før du prøver igjen."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Vennligst velg Dreame-støvsugeren du vil sette opp."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card-nøkkel"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum-grensesnitt{text}\r\n\r\nSkriv inn lisensnøkkelen din for å aktivere Dreame Vacuum Card. Hvis du ikke har en, kan du skaffe den **[her]({url})**.\r\n\r\n*Merk: hver nøkkel er kun gyldig for én enhet.*"
-      },
       "options": {
         "data": {
           "name": "Navn",
@@ -118,14 +111,12 @@
           "low_resolution": "Lavoppløselig kart",
           "square": "Kvadratisk kart",
           "configuration_type": "Konfigurasjonstype",
-          "prefer_cloud": "Foretrekk skyforbindelse",
-          "dvc_key": "Dreame Vacuum Card-nøkkel"
+          "prefer_cloud": "Foretrekk skyforbindelse"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Sky-legitimasjon ufullstendig, vennligst fyll ut brukernavn, passord og land",
-      "invalid_key": "Ugyldig nøkkel."
+      "cloud_credentials_incomplete": "Sky-legitimasjon ufullstendig, vennligst fyll ut brukernavn, passord og land"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Rediger teppe",
         "empty": "Tøm",
         "enable": "Aktiver",
-        "enter_dvc_key": "Angi eksisterende nøkkel",
         "fast_mapping": "Hurtigkartlegging",
-        "get_dvc_key": "Få DVC-nøkkel",
         "ignore": "Ignorer",
         "ignore_obstacle": "Ignorer hindring",
         "impassable_threshold": "Upasserbar terskel",
@@ -2300,8 +2289,6 @@
         "copy": "Kopier",
         "copy_all": "Kopier alle",
         "disable_haptic": "Deaktiver haptisk tilbakemelding",
-        "dvc_key": "DVC-nøkkel",
-        "dvc_key_title": "Angi DVC-nøkkel",
         "editable_objects": "Redigerbare objekter",
         "font_size": "Skriftstørrelse",
         "full_height": "Full høyde",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Ladestasjonen er i et begrenset område. Hvis du fortsetter å lagre, kan det hende roboten ikke kan lade.",
         "drying_will_stopped": "Tørking av moppepute vil bli stoppet!",
         "dust_collection_not_performed": "Auto-tømming ble ikke utført\nRoboten vil ikke tømme støv i DnD-perioden.",
-        "dvc_key_description": "En nøkkel er gyldig for én enhet. Hvis dette er første gang du bruker denne nøkkelen, vil den nå bli aktivert for denne enheten.",
         "enable_auto_mount_mop": "Aktivere automatisk montering av mopp?",
         "enable_carpet_recognition": "Teppegjenkjenning vil bli aktivert!",
         "enable_customized_cleaning": "Aktivere tilpasset rengjøring?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kunne ikke laste inn kort",
         "ignore_obstacle": "Ignorer hindring?",
         "invalid_entity": "Ugyldig entitet",
-        "invalid_key": "Ugyldig nøkkel.",
         "map_backup": "Sikkerhetskopiering av kart pågår",
         "map_backup_failed": "Sikkerhetskopiering av kart feilet!",
         "map_backup_success": "Sikkerhetskopiering av kart fullført",
@@ -2502,7 +2487,6 @@
         "not_supported": "Ikke støttet!",
         "obstacle_will_ignored": "Hindring vil bli ignorert!",
         "override_changes": "Forkaste endringer?",
-        "preview": "Dette er en forhåndsvisning av Dreame Vacuum-kortet",
         "recommended_areas": "Anbefalte områder",
         "relocating": "Relokaliserer posisjon. Vennligst vent.",
         "relocating_completed": "Relokalisering vellykket. Roboten fortsetter oppgaven.",
