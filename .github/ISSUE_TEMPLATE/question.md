@@ -1,6 +1,6 @@
 ---
-name: "Question · Integration or Dreame Vacuum Card"
-about: "Ask for help or clarification about the dreame_vacuum integration or the Dreame Vacuum Card. Bugs and feature ideas have their own templates."
+name: "Question · Integration"
+about: "Ask for help or clarification about the dreame_vacuum integration. Bugs and feature ideas have their own templates."
 title: ""
 labels: question
 assignees: matteocelani
@@ -8,7 +8,7 @@ assignees: matteocelani
 ---
 
 ## Question
-Ask your question in detail. Say whether it is about the integration or the Dreame Vacuum Card.
+Ask your question in detail.
 
 ## What You Tried
 Steps, settings or documentation pages you already went through.

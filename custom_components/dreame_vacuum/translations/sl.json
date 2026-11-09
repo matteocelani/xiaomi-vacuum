@@ -16,8 +16,7 @@
       "no_devices": "V tem računu v izbrani državi ni bilo najdenih podprtih naprav.{devices}",
       "2fa_send_failed": "Pošiljanje potrditvene kode ni uspelo. Poskusite znova.",
       "2fa_limit_reached": "Dosežena je dnevna omejitev za pošiljanje potrditvenih kod. Prosimo, poskusite znova jutri.",
-      "2fa_cooldown_active": "Preveč zaporednih zahtev. Prosimo, počakajte na nekaj minut, preden poskusite znova.",
-      "invalid_key": "Neveljaven ključ."
+      "2fa_cooldown_active": "Preveč zaporednih zahtev. Prosimo, počakajte na nekaj minut, preden poskusite znova."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Prosimo, izberite napravo Dreame Vacuum, ki jo želite nastaviti."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Ključ Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Vmesnik Dreame Vacuum{text}\r\n\r\nVnesite svoj licenčni ključ za aktivacijo Dreame Vacuum Card. Če ga nimate, ga lahko pridobite **[tukaj]({url})**.\r\n\r\n*Opomba: vsak ključ velja samo za eno napravo.*"
-      },
       "options": {
         "data": {
           "name": "Ime",
@@ -118,14 +111,12 @@
           "low_resolution": "Zemljevid nizke ločljivosti",
           "square": "Kvadratni zemljevid",
           "configuration_type": "Vrsta konfiguracije",
-          "prefer_cloud": "Raje uporabljajte povezavo v oblak",
-          "dvc_key": "Ključ Dreame Vacuum Card"
+          "prefer_cloud": "Raje uporabljajte povezavo v oblak"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Nepravilni podatki za oblak, prosimo izpolnite uporabniško ime, geslo in državo",
-      "invalid_key": "Neveljaven ključ."
+      "cloud_credentials_incomplete": "Nepravilni podatki za oblak, prosimo izpolnite uporabniško ime, geslo in državo"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Uredi preprogo",
         "empty": "Izprazni",
         "enable": "Omogoči",
-        "enter_dvc_key": "Vnesi obstoječi ključ",
         "fast_mapping": "Hitro kartiranje",
-        "get_dvc_key": "Pridobi ključ DVC",
         "ignore": "Prezri",
         "ignore_obstacle": "Prezri oviro",
         "impassable_threshold": "Neprehoden prag",
@@ -2300,8 +2289,6 @@
         "copy": "Kopiraj",
         "copy_all": "Kopiraj vse",
         "disable_haptic": "Onemogoči haptiko",
-        "dvc_key": "Ključ DVC",
-        "dvc_key_title": "Vnesite ključ DVC",
         "editable_objects": "Uredljivi objekti",
         "font_size": "Velikost pisave",
         "full_height": "Polna višina",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Postaja je v območju z omejitvami. Robot se morda ne bo polnil.",
         "drying_will_stopped": "Sušenje mopa ustavljeno!",
         "dust_collection_not_performed": "Zbiranje prahu (samodejno praznjenje) ni bilo izvedeno\nRobot ne bo izvajal samodejnega praznjenja v obdobju Ne moti.",
-        "dvc_key_description": "Ključ velja za eno napravo. Če ta ključ uporabljate prvič, bo zdaj aktiviran za to napravo.",
         "enable_auto_mount_mop": "Omogoči sam. namestitev mopa?",
         "enable_carpet_recognition": "Zaznavanje preprog bo aktivirano!",
         "enable_customized_cleaning": "Omogoči prilagojeno čiščenje?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Nalaganje kartice ni uspelo",
         "ignore_obstacle": "Prezri oviro?",
         "invalid_entity": "Neveljavna entiteta",
-        "invalid_key": "Neveljaven ključ.",
         "map_backup": "Varnostno kopiranje zemljevida v teku",
         "map_backup_failed": "Varnostno kopiranje zemljevida ni uspelo!",
         "map_backup_success": "Varnostno kopiranje zemljevida dokončano",
@@ -2502,7 +2487,6 @@
         "not_supported": "Ni podprto!",
         "obstacle_will_ignored": "Ovira bo prezrta!",
         "override_changes": "Preglasi spremembe?",
-        "preview": "To je predogled kartice Dreame Vacuum",
         "recommended_areas": "Priporočena območja",
         "relocating": "Samopozicioniranje. Prosimo, počakajte.",
         "relocating_completed": "Samopozicioniranje uspelo. Robot nadaljuje z delom.",

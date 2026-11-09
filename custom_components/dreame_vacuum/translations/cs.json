@@ -16,8 +16,7 @@
       "no_devices": "Na tomto účtu v zvolené zemi nebyla nalezena žádná podporovaná zařízení.{devices}",
       "2fa_send_failed": "Zaslání ověřovacího kódu selhalo. Zkuste to prosím znovu.",
       "2fa_limit_reached": "Byl dosažen denní limit pro zasílání ověřovacích kódů. Zkuste to prosím znovu zítra.",
-      "2fa_cooldown_active": "Příliš mnoho po sobě jdoucích požadavků. Před dalším pokusem počkejte několik minut.",
-      "invalid_key": "Neplatný klíč."
+      "2fa_cooldown_active": "Příliš mnoho po sobě jdoucích požadavků. Před dalším pokusem počkejte několik minut."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Vyberte prosím zařízení Dreame Vacuum, které chcete nastavit."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Klíč Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Rozhraní Dreame Vacuum{text}\r\n\r\nZadejte svůj licenční klíč k aktivaci Dreame Vacuum Card. Pokud žádný nemáte, můžete jej získat **[zde]({url})**.\r\n\r\n*Poznámka: každý klíč platí pouze pro jedno zařízení.*"
-      },
       "options": {
         "data": {
           "name": "Název",
@@ -118,14 +111,12 @@
           "low_resolution": "Mapa v nízkém rozlišení",
           "square": "Čtvercová mapa",
           "configuration_type": "Typ konfigurace",
-          "prefer_cloud": "Preferovat připojení přes cloud",
-          "dvc_key": "Klíč Dreame Vacuum Card"
+          "prefer_cloud": "Preferovat připojení přes cloud"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Přihlašovací údaje do cloudu jsou neúplné, vyplňte prosím uživatelské jméno, heslo a zemi",
-      "invalid_key": "Neplatný klíč."
+      "cloud_credentials_incomplete": "Přihlašovací údaje do cloudu jsou neúplné, vyplňte prosím uživatelské jméno, heslo a zemi"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Upravit koberec",
         "empty": "Vyprázdnit",
         "enable": "Povolit",
-        "enter_dvc_key": "Zadat existující klíč",
         "fast_mapping": "Rychlé mapování",
-        "get_dvc_key": "Získat klíč DVC",
         "ignore": "Ignorovat",
         "ignore_obstacle": "Ignorovat překážku",
         "impassable_threshold": "Neprůchodný práh",
@@ -2300,8 +2289,6 @@
         "copy": "Kopírovat",
         "copy_all": "Kopírovat vše",
         "disable_haptic": "Vypnout haptiku",
-        "dvc_key": "Klíč DVC",
-        "dvc_key_title": "Zadejte klíč DVC",
         "editable_objects": "Editovatelné objekty",
         "font_size": "Velikost písma",
         "full_height": "Plná výška",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Základna v omezené zóně. Robot se nemusí nabíjet.",
         "drying_will_stopped": "Sušení mopu zastaveno!",
         "dust_collection_not_performed": "Sběr prachu (auto-vyprázdnění) nebyl proveden\nRobot nebude provádět auto-vyprázdnění během období Nerušit.",
-        "dvc_key_description": "Klíč je platný pro jedno zařízení. Pokud tento klíč používáte poprvé, bude nyní aktivován pro toto zařízení.",
         "enable_auto_mount_mop": "Povolit auto. nasazení mopu?",
         "enable_carpet_recognition": "Rozpoznání koberce bude povoleno!",
         "enable_customized_cleaning": "Povolit vlastní úklid?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kartu se nepodařilo načíst",
         "ignore_obstacle": "Ignorovat překážku?",
         "invalid_entity": "Neplatná entita",
-        "invalid_key": "Neplatný klíč.",
         "map_backup": "Probíhá zálohování mapy",
         "map_backup_failed": "Zálohování mapy selhalo!",
         "map_backup_success": "Zálohování mapy bylo dokončeno",
@@ -2502,7 +2487,6 @@
         "not_supported": "Není podporováno!",
         "obstacle_will_ignored": "Překážka bude ignorována!",
         "override_changes": "Nahradit změny?",
-        "preview": "Toto je náhled karty Dreame Vacuum",
         "recommended_areas": "Doporučené oblasti",
         "relocating": "Zjišťování polohy. Čekejte prosím.",
         "relocating_completed": "Zjišťování polohy úspěšné. Robot pokračuje v práci.",

@@ -16,8 +16,7 @@
       "no_devices": "Geen ondersteunde apparaten gevonden op dit account in het geselecteerde land.{devices}",
       "2fa_send_failed": "Verzenden van verificatiecode mislukt. Probeer het opnieuw.",
       "2fa_limit_reached": "De dagelijkse limiet voor het verzenden van verificatiecodes is bereikt. Probeer het morgen opnieuw.",
-      "2fa_cooldown_active": "Te veel opeenvolgende verzoeken. Wacht een paar minuten voordat u het opnieuw probeert.",
-      "invalid_key": "Ongeldige sleutel."
+      "2fa_cooldown_active": "Te veel opeenvolgende verzoeken. Wacht een paar minuten voordat u het opnieuw probeert."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Selecteer alstublieft het Dreame Vacuum apparaat dat u wilt instellen."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card-sleutel"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Interface van Dreame Vacuum{text}\r\n\r\nVoer uw licentiesleutel in om de Dreame Vacuum Card te activeren. Als u er nog geen heeft, kunt u deze **[hier]({url})** verkrijgen.\r\n\r\n*Opmerking: elke sleutel is geldig voor slechts één apparaat.*"
-      },
       "options": {
         "data": {
           "name": "Naam",
@@ -118,14 +111,12 @@
           "low_resolution": "Kaart met lage resolutie",
           "square": "Vierkante kaart",
           "configuration_type": "Configuratie Type",
-          "prefer_cloud": "Voorkeur voor cloudverbinding",
-          "dvc_key": "Dreame Vacuum Card-sleutel"
+          "prefer_cloud": "Voorkeur voor cloudverbinding"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Cloudgegevens onvolledig, vul alstublieft gebruikersnaam, wachtwoord en land in",
-      "invalid_key": "Ongeldige sleutel."
+      "cloud_credentials_incomplete": "Cloudgegevens onvolledig, vul alstublieft gebruikersnaam, wachtwoord en land in"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Tapijt bewerken",
         "empty": "Legen",
         "enable": "Inschakelen",
-        "enter_dvc_key": "Bestaande sleutel invoeren",
         "fast_mapping": "Snel in kaart br.",
-        "get_dvc_key": "DVC-sleutel verkrijgen",
         "ignore": "Negeren",
         "ignore_obstacle": "Obstakel negeren",
         "impassable_threshold": "Onbegaanbare drempel",
@@ -2300,8 +2289,6 @@
         "copy": "Kopiëren",
         "copy_all": "Alles kopiëren",
         "disable_haptic": "Hapt. feedback uit",
-        "dvc_key": "DVC-sleutel",
-        "dvc_key_title": "Voer DVC-sleutel in",
         "editable_objects": "Bewerkbare obj.",
         "font_size": "Lettergrootte",
         "full_height": "Volledige hoogte",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Dock ligt in een zone met beperkingen. De robot kan mogelijk niet opladen.",
         "drying_will_stopped": "Dweil drogen gestopt!",
         "dust_collection_not_performed": "Stof verzamelen (Autom. legen) niet uitgevoerd\nDe robot voert tijdens de Niet-storen-periode geen automatische legingen uit.",
-        "dvc_key_description": "Een sleutel is geldig voor één apparaat. Als dit de eerste keer is dat u deze sleutel gebruikt, wordt deze nu geactiveerd voor dit apparaat.",
         "enable_auto_mount_mop": "Dweil-bev. inschakelen?",
         "enable_carpet_recognition": "Tapijtherkenning wordt actief!",
         "enable_customized_cleaning": "Schoonm. op maat inschakelen?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Laden van kaart mislukt",
         "ignore_obstacle": "Obstakel negeren?",
         "invalid_entity": "Ongeldige entiteit",
-        "invalid_key": "Ongeldige sleutel.",
         "map_backup": "Kaartback-up wordt gemaakt",
         "map_backup_failed": "Kaartback-up mislukt!",
         "map_backup_success": "Kaartback-up voltooid",
@@ -2502,7 +2487,6 @@
         "not_supported": "Niet ondersteund!",
         "obstacle_will_ignored": "Obstakel wordt genegeerd!",
         "override_changes": "Veranderingen overschrijven?",
-        "preview": "Dit is een voorbeeld van de Dreame Vacuum Kaart",
         "recommended_areas": "Aanbevolen gebieden",
         "relocating": "Zelfpositionering. Even geduld a.u.b.",
         "relocating_completed": "Zelfpositionering geslaagd. Robot hervat de taak.",

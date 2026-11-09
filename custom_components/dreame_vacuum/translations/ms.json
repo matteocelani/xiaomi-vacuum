@@ -16,8 +16,7 @@
       "no_devices": "Tiada peranti yang disokong ditemui dalam akaun ini pada negara yang dipilih.{devices}",
       "2fa_send_failed": "Gagal menghantar kod pengesahan. Sila cuba lagi.",
       "2fa_limit_reached": "Had harian untuk menghantar kod pengesahan telah dicapai. Sila cuba lagi esok.",
-      "2fa_cooldown_active": "Terlalu banyak permintaan berturut-turut. Sila tunggu beberapa minit sebelum mencuba lagi.",
-      "invalid_key": "Kunci tidak sah."
+      "2fa_cooldown_active": "Terlalu banyak permintaan berturut-turut. Sila tunggu beberapa minit sebelum mencuba lagi."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Sila pilih peranti Vakum Dreame yang anda ingin tetapkan."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Kunci Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Antara muka Dreame Vacuum{text}\r\n\r\nMasukkan kunci lesen anda untuk mengaktifkan Dreame Vacuum Card. Jika anda belum mempunyainya, anda boleh mendapatkannya **[di sini]({url})**.\r\n\r\n*Nota: setiap kunci hanya sah untuk satu peranti.*"
-      },
       "options": {
         "data": {
           "name": "Nama",
@@ -118,14 +111,12 @@
           "low_resolution": "Peta resolusi rendah",
           "square": "Peta segi empat",
           "configuration_type": "Jenis konfigurasi",
-          "prefer_cloud": "Pilih sambungan awan",
-          "dvc_key": "Kunci Dreame Vacuum Card"
+          "prefer_cloud": "Pilih sambungan awan"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Kelayakan awan tidak lengkap, sila isikan nama pengguna, kata laluan dan negara",
-      "invalid_key": "Kunci tidak sah."
+      "cloud_credentials_incomplete": "Kelayakan awan tidak lengkap, sila isikan nama pengguna, kata laluan dan negara"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Edit karpet",
         "empty": "Kosongkan",
         "enable": "Dayakan",
-        "enter_dvc_key": "Masukkan Kunci Sedia Ada",
         "fast_mapping": "Pemetaan Pantas",
-        "get_dvc_key": "Dapatkan Kunci DVC",
         "ignore": "Abaikan",
         "ignore_obstacle": "Abaikan Halangan",
         "impassable_threshold": "Ambang tidak boleh dilalui",
@@ -2300,8 +2289,6 @@
         "copy": "Salin",
         "copy_all": "Salin Semua",
         "disable_haptic": "Lumpuhkan maklum balas haptik",
-        "dvc_key": "Kunci DVC",
-        "dvc_key_title": "Masukkan kunci DVC",
         "editable_objects": "Objek Boleh Diedit",
         "font_size": "Saiz Fon",
         "full_height": "Ketinggian Penuh",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Dok pengecasan terletak di kawasan terhad. Jika anda terus menyimpan peta, robot mungkin tidak dapat mengecas semula.",
         "drying_will_stopped": "Pengeringan pad mop akan dihentikan!",
         "dust_collection_not_performed": "Tugas pengumpulan habuk (Auto-kosong) tidak dilaksanakan\nRobot tidak akan melaksanakan tugas auto-kosong semasa tempoh DND.",
-        "dvc_key_description": "Kunci hanya sah untuk satu peranti. Jika ini kali pertama anda menggunakan kunci ini, ia akan diaktifkan untuk peranti ini sekarang.",
         "enable_auto_mount_mop": "Dayakan Pemasangan Mop Auto?",
         "enable_carpet_recognition": "Pengiktirafan karpet akan didayakan!",
         "enable_customized_cleaning": "Adakah anda mahu mendayakan pembersihan tersuai?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Gagal memuatkan kad",
         "ignore_obstacle": "Abaikan Halangan?",
         "invalid_entity": "Entiti tidak sah",
-        "invalid_key": "Kunci tidak sah.",
         "map_backup": "Sandaran peta sedang berjalan",
         "map_backup_failed": "Sandaran peta gagal!",
         "map_backup_success": "Sandaran peta selesai",
@@ -2502,7 +2487,6 @@
         "not_supported": "Belum disokong!",
         "obstacle_will_ignored": "Halangan akan diabaikan!",
         "override_changes": "Gantikan Perubahan?",
-        "preview": "Ini adalah pratonton Kad Dreame Vacuum",
         "recommended_areas": "Kawasan yang disyorkan",
         "relocating": "Menentukan kedudukan sendiri. Sila tunggu.",
         "relocating_completed": "Menentukan kedudukan sendiri berjaya. Robot meneruskan tugas.",

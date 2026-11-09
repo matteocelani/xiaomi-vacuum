@@ -16,8 +16,7 @@
       "no_devices": "Seçilen ülkede bu hesaba bağlı desteklenen cihaz bulunamadı.{devices}",
       "2fa_send_failed": "Doğrulama kodu gönderilemedi. Lütfen tekrar deneyin.",
       "2fa_limit_reached": "Günlük doğrulama kodu gönderme limitine ulaşıldı. Lütfen yarın tekrar deneyin.",
-      "2fa_cooldown_active": "Çok sık kod gönderme isteği yapıldı. Lütfen tekrar denemeden önce birkaç dakika bekleyin.",
-      "invalid_key": "Geçersiz anahtar."
+      "2fa_cooldown_active": "Çok sık kod gönderme isteği yapıldı. Lütfen tekrar denemeden önce birkaç dakika bekleyin."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Lütfen kurulumunu yapmak istediğiniz Dreame Vakum cihazını seçin."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card Anahtarı"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum arayüzü{text}\r\n\r\nDreame Vacuum Card ı aktive etmek için lisans anahtarınızı girin eğer yok ise **[buradan]({url})** edinebilirsiniz.\r\n\r\n*Not: her anahtar yalnızca tek bir cihaz için geçerlidir.*"
-      },
       "options": {
         "data": {
           "name": "İsim",
@@ -118,14 +111,12 @@
           "low_resolution": "Düşük çözünürlüklü harita",
           "square": "Kare harita",
           "configuration_type": "Yapılandırma türü",
-          "prefer_cloud": "Bulut bağlantısını tercih et",
-          "dvc_key": "Dreame Vacuum Card Anahtarı"
+          "prefer_cloud": "Bulut bağlantısını tercih et"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Bulut kimlik bilgileri eksik, lütfen kullanıcı adı, şifre ve ülke bilgilerini doldurun",
-      "invalid_key": "Geçersiz anahtar."
+      "cloud_credentials_incomplete": "Bulut kimlik bilgileri eksik, lütfen kullanıcı adı, şifre ve ülke bilgilerini doldurun"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Halıyı düzenle",
         "empty": "Boşalt",
         "enable": "Etkinleştir",
-        "enter_dvc_key": "Mevcut Anahtarı Gir",
         "fast_mapping": "Hızlı Haritalama",
-        "get_dvc_key": "DVC Anahtarı Al",
         "ignore": "Yoksay",
         "ignore_obstacle": "Engeli Yoksay",
         "impassable_threshold": "Geçilemez eşik",
@@ -2300,8 +2289,6 @@
         "copy": "Kopyala",
         "copy_all": "Tümünü kopyala",
         "disable_haptic": "Dokunsal geri bildirimi kapat",
-        "dvc_key": "DVC Anahtarı",
-        "dvc_key_title": "DVC anahtarını girin",
         "editable_objects": "Düzenlenebilir nesneler",
         "font_size": "Yazı Tipi Boyutu",
         "full_height": "Tam Yükseklik",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Şarj istasyonu yasaklı bir bölgede bulunuyor. Haritayı kaydetmeye devam ederseniz, robot şarj olamayabilir.",
         "drying_will_stopped": "Mop pedi kurutma işlemi durdurulacak!",
         "dust_collection_not_performed": "Toz toplama (Otomatik boşaltma) görevi gerçekleştirilmedi\nRobot, Rahatsız Etme süresi boyunca otomatik boşaltma işlemlerini gerçekleştirmeyecektir.",
-        "dvc_key_description": "Bir anahtar yalnızca tek bir cihaz için geçerlidir. Bu anahtarı ilk kez kullanıyorsanız, şimdi bu cihaz için etkinleştirilecektir.",
         "enable_auto_mount_mop": "Otomatik Mop Montajı Etkinleştirilsin mi?",
         "enable_carpet_recognition": "Halı tanıma etkinleştirilecek!",
         "enable_customized_cleaning": "Özelleştirilmiş temizliği etkinleştirmek istiyor musunuz?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kart yüklenemedi",
         "ignore_obstacle": "Engel Yoksayılsın mı?",
         "invalid_entity": "Geçersiz varlık",
-        "invalid_key": "Geçersiz anahtar.",
         "map_backup": "Harita yedekleme işlemi devam ediyor",
         "map_backup_failed": "Harita yedekleme başarısız oldu!",
         "map_backup_success": "Harita yedekleme tamamlandı",
@@ -2502,7 +2487,6 @@
         "not_supported": "Henüz desteklenmiyor!",
         "obstacle_will_ignored": "Engel yoksayılacak!",
         "override_changes": "Değişiklikler Geçersiz Kılınsın mı?",
-        "preview": "Bu Dreame Vacuum Kartının ön izlemesidir",
         "recommended_areas": "Önerilen alanlar",
         "relocating": "Kendini konumlandırıyor. Lütfen bekleyin.",
         "relocating_completed": "Konumlandırma başarılı. Robot göreve devam ediyor.",

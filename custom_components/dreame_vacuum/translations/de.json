@@ -16,8 +16,7 @@
       "no_devices": "In diesem Konto wurden für das ausgewählte Land keine unterstützten Geräte gefunden.{devices}",
       "2fa_send_failed": "Senden des Bestätigungscodes fehlgeschlagen. Bitte versuche es erneut.",
       "2fa_limit_reached": "Das tägliche Limit für den Versand von Bestätigungscodes wurde erreicht. Bitte versuchen Sie es morgen erneut.",
-      "2fa_cooldown_active": "Zu viele aufeinanderfolgende Anfragen. Bitte warten Sie einige Minuten, bevor Sie es erneut versuchen.",
-      "invalid_key": "Ungültiger Schlüssel."
+      "2fa_cooldown_active": "Zu viele aufeinanderfolgende Anfragen. Bitte warten Sie einige Minuten, bevor Sie es erneut versuchen."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Bitte den Dreame Wischroboter auswählen, den du einrichten möchtest."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card Schlüssel"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Oberfläche von Dreame Vacuum{text}\r\n\r\nGeben Sie Ihren Lizenzschlüssel ein, um die Dreame Vacuum Card zu aktivieren. Wenn Sie keinen haben, können Sie ihn **[hier]({url})** erhalten.\r\n\r\n*Hinweis: Jeder Schlüssel ist nur für ein Gerät gültig.*"
-      },
       "options": {
         "data": {
           "name": "Bezeichnung",
@@ -118,14 +111,12 @@
           "low_resolution": "Karte mit niedriger Auflösung",
           "square": "Quadratische Karte",
           "configuration_type": "Konfigurationstyp",
-          "prefer_cloud": "Cloudverbindung bevorzugen",
-          "dvc_key": "Dreame Vacuum Card Schlüssel"
+          "prefer_cloud": "Cloudverbindung bevorzugen"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Anmeldedaten unvollständig, bitte Benutzername, Passwort und das Land eingeben",
-      "invalid_key": "Ungültiger Schlüssel."
+      "cloud_credentials_incomplete": "Anmeldedaten unvollständig, bitte Benutzername, Passwort und das Land eingeben"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Teppich bearbeiten",
         "empty": "Leeren",
         "enable": "Aktivieren",
-        "enter_dvc_key": "Vorhandenen Schlüssel eingeben",
         "fast_mapping": "Schnelle Kartierung",
-        "get_dvc_key": "DVC-Schlüssel holen",
         "ignore": "Ignorieren",
         "ignore_obstacle": "Hindernis ignorieren",
         "impassable_threshold": "Unpassierbare Schwelle",
@@ -2300,8 +2289,6 @@
         "copy": "Kopieren",
         "copy_all": "Alle kopieren",
         "disable_haptic": "Hapt. Feedback aus",
-        "dvc_key": "DVC-Schlüssel",
-        "dvc_key_title": "DVC-Schlüssel eingeben",
         "editable_objects": "Bearbeitbare Objekte",
         "font_size": "Schriftgröße",
         "full_height": "Volle Höhe",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Roboter kann evtl. nicht laden, wenn in Sperrzone gespeichert wird.",
         "drying_will_stopped": "Wischertrocknung wird gestoppt!",
         "dust_collection_not_performed": "Staubabsaugung (Autom. Leeren) nicht durchgeführt\nDer Roboter führt während der Nicht-stören-Zeit keine automatische Entleerung durch.",
-        "dvc_key_description": "Ein Schlüssel ist nur für ein einzelnes Gerät gültig. Wenn Sie diesen Schlüssel zum ersten Mal verwenden, wird er jetzt für dieses Gerät aktiviert.",
         "enable_auto_mount_mop": "Aut. Wischermontage aktivieren?",
         "enable_carpet_recognition": "Teppicherkennung wird aktiv!",
         "enable_customized_cleaning": "Indiv. Reinigung aktivieren?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Laden der Karte fehlgeschlagen",
         "ignore_obstacle": "Hindernis ignorieren?",
         "invalid_entity": "Ungültige Entität",
-        "invalid_key": "Ungültiger Schlüssel.",
         "map_backup": "Kartensicherung läuft",
         "map_backup_failed": "Kartensicherung fehlgeschlagen!",
         "map_backup_success": "Kartensicherung abgeschlossen",
@@ -2502,7 +2487,6 @@
         "not_supported": "Nicht unterstützt!",
         "obstacle_will_ignored": "Hindernis wird ignoriert!",
         "override_changes": "Änderungen überschreiben?",
-        "preview": "Dies ist eine Vorschau der Dreame Vacuum Karte",
         "recommended_areas": "Empfohlene Bereiche",
         "relocating": "Selbstpositionierung. Bitte warten.",
         "relocating_completed": "Selbstpositionierung erfolgreich. Der Roboter setzt die Arbeit fort.",

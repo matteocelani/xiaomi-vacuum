@@ -16,8 +16,7 @@
       "no_devices": "No supported devices found in this account on selected country.{devices}",
       "2fa_send_failed": "Failed to send verification code. Please try again.",
       "2fa_limit_reached": "Daily limit for sending verification codes has been reached. Please try again tomorrow.",
-      "2fa_cooldown_active": "Too many consecutive requests. Please wait a few minutes before trying again.",
-      "invalid_key": "Invalid key."
+      "2fa_cooldown_active": "Too many consecutive requests. Please wait a few minutes before trying again."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Please select the device you want to set up."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card Key"
-        },
-        "description": "## Dreame Vacuum Card\n #### Interface of Dreame Vacuum{text}\n\nEnter your license key to activate the Dreame Vacuum Card. If you do not have one, you can get it **[here]({url})**.\n\n*Note: each key is valid for a single device only.*"
-      },
       "options": {
         "data": {
           "name": "Name",
@@ -118,14 +111,12 @@
           "low_resolution": "Low resolution map",
           "square": "Square map",
           "configuration_type": "Configuration type",
-          "prefer_cloud": "Prefer cloud connection",
-          "dvc_key": "Dreame Vacuum Card Key"
+          "prefer_cloud": "Prefer cloud connection"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Cloud credentials incomplete, please fill in username, password and country",
-      "invalid_key": "Invalid key."
+      "cloud_credentials_incomplete": "Cloud credentials incomplete, please fill in username, password and country"
     }
   },
   "selector": {
@@ -3208,9 +3199,7 @@
         "edit_carpet": "Edit carpet",
         "empty": "Empty",
         "enable": "Enable",
-        "enter_dvc_key": "Enter Existing Key",
         "fast_mapping": "Fast Mapping",
-        "get_dvc_key": "Get DVC Key",
         "ignore": "Ignore",
         "ignore_obstacle": "Ignore Obstacle",
         "impassable_threshold": "Impassable threshold",
@@ -3298,8 +3287,6 @@
         "copy": "Copy",
         "copy_all": "Copy All",
         "disable_haptic": "Disable haptic feedback",
-        "dvc_key": "DVC Key",
-        "dvc_key_title": "Enter DVC key",
         "editable_objects": "Editable Objects",
         "font_size": "Font Size",
         "full_height": "Full Height",
@@ -3470,7 +3457,6 @@
         "dock_in_restricted_area_detail": "The charging dock is located in the restricted area. If you continue to save map, robot may not be able to recharge.",
         "drying_will_stopped": "Mop pad drying will be stopped!",
         "dust_collection_not_performed": "Dust collecting (Auto-empty) task not performed\nThe robot will not perform auto-empty tasks during the DND period.",
-        "dvc_key_description": "A key is valid for a single device. If this is the first time you are using this key, it will be activated for this device now.",
         "enable_auto_mount_mop": "Enable Auto Mount Mopping?",
         "enable_carpet_recognition": "Carpet recognition will be enabled!",
         "enable_customized_cleaning": "Do you want to enable customized cleaning?",
@@ -3481,7 +3467,6 @@
         "failed_to_load_card": "Failed to load card",
         "ignore_obstacle": "Ignore Obstacle?",
         "invalid_entity": "Invalid entity",
-        "invalid_key": "Invalid key.",
         "map_backup": "Map backup in progress",
         "map_backup_failed": "Map backup failed!",
         "map_backup_success": "Map backup completed",
@@ -3500,7 +3485,6 @@
         "not_supported": "Not supported yet!",
         "obstacle_will_ignored": "Obstacle will be ignored!",
         "override_changes": "Override Changes?",
-        "preview": "This is preview of the Dreame Vacuum Card",
         "recommended_areas": "Recommended areas",
         "relocating": "Self-positioning. Please wait.",
         "relocating_completed": "Self-positioning succeeded. Robot proceeds to job.",

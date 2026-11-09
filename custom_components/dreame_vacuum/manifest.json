@@ -1,9 +1,6 @@
 {
   "domain": "dreame_vacuum",
   "name": "Xiaomi Vacuum",
-  "after_dependencies": [
-    "lovelace"
-  ],
   "categories": ["appliances_cleaning.cleaning"],
   "codeowners": [
     "@matteocelani",
@@ -23,5 +20,5 @@
     "mini-racer",
     "paho-mqtt"
   ],
-  "version": "v2.1.1"
+  "version": "v2.1.2"
 }

@@ -16,8 +16,7 @@
       "no_devices": "No s'ha trobat cap dispositiu compatible en aquest compte al país seleccionat.{devices}",
       "2fa_send_failed": "Error en enviar el codi de verificació. Torneu-ho a provar.",
       "2fa_limit_reached": "S'ha assolit el límit diari per enviar codis de verificació. Torneu-ho a provar demà.",
-      "2fa_cooldown_active": "Massa sol·licituds consecutives. Espereu uns minuts abans de tornar-ho a provar.",
-      "invalid_key": "Clau no vàlida."
+      "2fa_cooldown_active": "Massa sol·licituds consecutives. Espereu uns minuts abans de tornar-ho a provar."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Seleccioneu el dispositiu aspirador Dreame que voleu configurar."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Clau de Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Interfície de Dreame Vacuum{text}\r\n\r\nIntroduïu la vostra clau de llicència per activar la Dreame Vacuum Card. Si no en teniu cap, la podeu obtenir **[aquí]({url})**.\r\n\r\n*Nota: cada clau només és vàlida per a un dispositiu.*"
-      },
       "options": {
         "data": {
           "name": "Nom",
@@ -118,14 +111,12 @@
           "low_resolution": "Mapa de baixa resolució",
           "square": "Mapa quadrat",
           "configuration_type": "Tipus de configuració",
-          "prefer_cloud": "Es prefereix connexió al núvol",
-          "dvc_key": "Clau de Dreame Vacuum Card"
+          "prefer_cloud": "Es prefereix connexió al núvol"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Credencials del núvol incompletes, introdueix el nom d'usuari, la contrasenya i el país",
-      "invalid_key": "Clau no vàlida."
+      "cloud_credentials_incomplete": "Credencials del núvol incompletes, introdueix el nom d'usuari, la contrasenya i el país"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Editar catifa",
         "empty": "Buidar",
         "enable": "Activar",
-        "enter_dvc_key": "Introduir clau existent",
         "fast_mapping": "Mapeig ràpid",
-        "get_dvc_key": "Obtenir clau DVC",
         "ignore": "Ignorar",
         "ignore_obstacle": "Ignorar obstacle",
         "impassable_threshold": "Llindar infranquejable",
@@ -2300,8 +2289,6 @@
         "copy": "Copiar",
         "copy_all": "Copiar tot",
         "disable_haptic": "Desact. vibració",
-        "dvc_key": "Clau DVC",
-        "dvc_key_title": "Introduïu la clau DVC",
         "editable_objects": "Objectes editables",
         "font_size": "Mida font",
         "full_height": "Alçada completa",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Alerta, la base està en zona prohibida. El robot podria no carregar.",
         "drying_will_stopped": "¡Secat mopa aturat!",
         "dust_collection_not_performed": "Tasca de recollida de pols (buidat automàtic) no realitzada\nEl robot no realitzarà tasques de buidat automàtic durant el període No Molestar.",
-        "dvc_key_description": "Una clau és vàlida per a un sol dispositiu. Si és la primera vegada que utilitzeu aquesta clau, s'activarà per a aquest dispositiu ara.",
         "enable_auto_mount_mop": "¿Activar muntatge mopa?",
         "enable_carpet_recognition": "¡Detec. catifes s'activarà!",
         "enable_customized_cleaning": "¿Activar neteja perso.?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "No s'ha pogut carregar la targeta",
         "ignore_obstacle": "¿Ignorar obstacle?",
         "invalid_entity": "Entitat no vàlida",
-        "invalid_key": "Clau no vàlida.",
         "map_backup": "Còpia de seguretat de mapa en procés",
         "map_backup_failed": "Ha fallat la còpia de seguretat de mapa!",
         "map_backup_success": "Còpia de seguretat de mapa completada",
@@ -2502,7 +2487,6 @@
         "not_supported": "¡No suportat!",
         "obstacle_will_ignored": "¡Entrebanc ignorat!",
         "override_changes": "¿Anul·lar canvis?",
-        "preview": "Aquesta és la vista prèvia de la targeta Dreame Vacuum",
         "recommended_areas": "Àrees recomanades",
         "relocating": "Autoposicionament. Espereu, si us plau.",
         "relocating_completed": "Autoposicionament correcte. El robot continua la tasca.",

@@ -16,8 +16,7 @@
       "no_devices": "Sellel kontol pole valitud riigis toetatud seadmeid leitud.{devices}",
       "2fa_send_failed": "Kinnituskoodi saatmine ebaõnnestus. Palun proovi uuesti.",
       "2fa_limit_reached": "Kinnituskoodide saatmise päevalimiit on täis. Palun proovi homme uuesti.",
-      "2fa_cooldown_active": "Liiga palju järjestikuseid päringuid. Palun oota enne uuesti proovimist mõni minut.",
-      "invalid_key": "Kehtetu võti."
+      "2fa_cooldown_active": "Liiga palju järjestikuseid päringuid. Palun oota enne uuesti proovimist mõni minut."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Palun vali Dreame Vacuum seade, mida soovid seadistada."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card võti"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuumi liides{text}\r\n\r\nSisestage oma litsentsivõti Dreame Vacuum Cardi aktiveerimiseks. Kui teil seda pole, saate selle hankida **[siit]({url})**.\r\n\r\n*Märkus: iga võti kehtib ainult ühe seadme jaoks.*"
-      },
       "options": {
         "data": {
           "name": "Nimi",
@@ -118,14 +111,12 @@
           "low_resolution": "Madala resolutsiooniga kaart",
           "square": "Ruuduline kaart",
           "configuration_type": "Seadistuse tüüp",
-          "prefer_cloud": "Eelista pilveühendust",
-          "dvc_key": "Dreame Vacuum Card võti"
+          "prefer_cloud": "Eelista pilveühendust"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Pilve volitused puudulikud, palun sisesta kasutajanimi, parool ja riik",
-      "invalid_key": "Kehtetu võti."
+      "cloud_credentials_incomplete": "Pilve volitused puudulikud, palun sisesta kasutajanimi, parool ja riik"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Muuda vaipa",
         "empty": "Tühjenda",
         "enable": "Käivita",
-        "enter_dvc_key": "Sisesta olemasolev võti",
         "fast_mapping": "Kiire kaardistamine",
-        "get_dvc_key": "Hangi DVC võti",
         "ignore": "Eira",
         "ignore_obstacle": "Eira takistust",
         "impassable_threshold": "Läbimatu lävi",
@@ -2300,8 +2289,6 @@
         "copy": "Kopeeri",
         "copy_all": "Kopeeri kõik",
         "disable_haptic": "Lihasmälu tagasiside keelamine",
-        "dvc_key": "DVC võti",
-        "dvc_key_title": "Sisestage DVC võti",
         "editable_objects": "Muudetavad objektid",
         "font_size": "Fondi suurus",
         "full_height": "Täiskõrgus",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Laadimisjaam on paigutatud piiratud alale. Kui saätkad kaardi salvestamist, ei pruugi robot suuta ennast laadida.",
         "drying_will_stopped": "Mopi kuivatamine peatatakse!",
         "dust_collection_not_performed": "Tolmu kogumise (Auto-empty) ülesannet pole teostatud\nRobot ei tee automaatset tühjendamise ülesannet 'Mitte segada' (DND) perioodil.",
-        "dvc_key_description": "Võti kehtib ühe seadme jaoks. Kui kasutate seda võtit esimest korda, aktiveeritakse see nüüd sellele seadmele.",
         "enable_auto_mount_mop": "Lubada mopi automaatne paigaldamine?",
         "enable_carpet_recognition": "Vaiba tuvastamine lülitatakse sisse!",
         "enable_customized_cleaning": "Kas soovid lubada kohandatud puhastamise?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Kaardi laadimine ebaõnnestus",
         "ignore_obstacle": "Kuva takistust?",
         "invalid_entity": "Vale olem",
-        "invalid_key": "Kehtetu võti.",
         "map_backup": "Kaardi varundamine on pooleli",
         "map_backup_failed": "Kaardi varundamine ebaõnnestus!",
         "map_backup_success": "Kaardi varundamine on lõpetatud",
@@ -2502,7 +2487,6 @@
         "not_supported": "Ei toetata veel!",
         "obstacle_will_ignored": "Takistust eiratakse!",
         "override_changes": "Alista muudatused?",
-        "preview": "See on Dreame Vacuum kaardi eelvaade",
         "recommended_areas": "Sovitav piirkond",
         "relocating": "Ise positsioneerimine. Palun oota.",
         "relocating_completed": "Ise positsioneerimine õnnestus. Robot jätkab tööd.",

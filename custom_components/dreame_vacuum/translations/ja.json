@@ -16,8 +16,7 @@
       "no_devices": "選択した国のこのアカウントにサポートされているデバイスが見つかりません。{devices}",
       "2fa_send_failed": "認証コードの送信に失敗しました。もう一度お試しください。",
       "2fa_limit_reached": "認証コードの1日の送信制限に達しました。明日もう一度お試しください。",
-      "2fa_cooldown_active": "連続したリクエストが多すぎます。再試行する前に数分間お待ちください。",
-      "invalid_key": "無効なキーです。"
+      "2fa_cooldown_active": "連続したリクエストが多すぎます。再試行する前に数分間お待ちください。"
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "設定したいDreame Vacuumデバイスを選択してください。"
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card キー"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum のインターフェース{text}\r\n\r\nDreame Vacuum Cardをアクティベートするには、ライセンスキーを入力してください。お持ちでない場合は、**[こちら]({url})**から取得できます。\r\n\r\n*注: 各キーは1台のデバイスにのみ有効です。*"
-      },
       "options": {
         "data": {
           "name": "名前",
@@ -118,14 +111,12 @@
           "low_resolution": "低解像度マップ",
           "square": "正方形のマップ",
           "configuration_type": "設定タイプ",
-          "prefer_cloud": "クラウド接続を優先する",
-          "dvc_key": "Dreame Vacuum Card キー"
+          "prefer_cloud": "クラウド接続を優先する"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "クラウドの資格情報が不完全です。ユーザー名、パスワード、国を入力してください",
-      "invalid_key": "無効なキーです。"
+      "cloud_credentials_incomplete": "クラウドの資格情報が不完全です。ユーザー名、パスワード、国を入力してください"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "カーペットを編集",
         "empty": "空にする",
         "enable": "有効",
-        "enter_dvc_key": "既存のキーを入力",
         "fast_mapping": "高速マッピング",
-        "get_dvc_key": "DVCキーを取得",
         "ignore": "無視",
         "ignore_obstacle": "障害物を無視",
         "impassable_threshold": "通行不可の段差",
@@ -2300,8 +2289,6 @@
         "copy": "コピー",
         "copy_all": "すべてコピー",
         "disable_haptic": "触覚フィードバックを無効化",
-        "dvc_key": "DVCキー",
-        "dvc_key_title": "DVCキーを入力",
         "editable_objects": "編集可能なオブジェクト",
         "font_size": "フォントサイズ",
         "full_height": "全高",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "充電ドックが制限エリアにあります。マップの保存を続行すると、ロボットが充電できなくなる可能性があります。",
         "drying_will_stopped": "モップパッド乾燥が停止します！",
         "dust_collection_not_performed": "自動ゴミ収集タスクは実行されません\nロボットはDND期間中は自動ゴミ収集タスクを実行しません。",
-        "dvc_key_description": "キーは1台のデバイスに対して有効です。このキーを初めて使用する場合、今このデバイス用に有効化されます。",
         "enable_auto_mount_mop": "自動モップ装着を有効にしますか？",
         "enable_carpet_recognition": "カーペット認識が有効になります！",
         "enable_customized_cleaning": "カスタマイズ清掃を有効にしますか？",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "カードを読み込めませんでした",
         "ignore_obstacle": "障害物を無視しますか？",
         "invalid_entity": "無効なエンティティ",
-        "invalid_key": "無効なキーです。",
         "map_backup": "マップのバックアップが実行されています",
         "map_backup_failed": "マップのバックアップに失敗しました！",
         "map_backup_success": "マップのバックアップが完了しました",
@@ -2502,7 +2487,6 @@
         "not_supported": "まだサポートされていません！",
         "obstacle_will_ignored": "障害物は無視されます！",
         "override_changes": "変更を上書きしますか？",
-        "preview": "これはDreame Vacuumカードのプレビューです",
         "recommended_areas": "おすすめエリア",
         "relocating": "自己位置推定中。お待ちください。",
         "relocating_completed": "自己位置推定に成功しました。ロボットはタスクを続行します。",

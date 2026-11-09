@@ -16,8 +16,7 @@
       "no_devices": "Atlasītajā valstī šajā kontā netika atrasta neviena atbalstīta ierīce.{devices}",
       "2fa_send_failed": "Neizdevās nosûtît verifikâcijas kodu. Lûdzu, mçìiniet vçlreiz.",
       "2fa_limit_reached": "Ir sasniegts dienas limits verifikācijas kodu sūtīšanai. Lūdzu, mēģiniet vēlreiz rīt.",
-      "2fa_cooldown_active": "Pārāk daudz secīgu pieprasījumu. Lūdzu, uzgaidiet dažas minūtes pirms mēģināt vēlreiz.",
-      "invalid_key": "Nederīga atslēga."
+      "2fa_cooldown_active": "Pārāk daudz secīgu pieprasījumu. Lūdzu, uzgaidiet dažas minūtes pirms mēģināt vēlreiz."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Lūdzu, atlasiet Dreame Vacuum ierīci, kuru vēlaties iestatīt."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Dreame Vacuum Card atslēga"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Dreame Vacuum saskarne{text}\r\n\r\nIevadiet savu licences atslēgu, lai aktivizētu Dreame Vacuum Card. Ja jums tās nav, varat to iegūt **[šeit]({url})**.\r\n\r\n*Piezīme: katra atslēga ir derīga tikai vienai ierīcei.*"
-      },
       "options": {
         "data": {
           "name": "Nosaukums",
@@ -118,14 +111,12 @@
           "low_resolution": "Zemas izšķirtspējas karte",
           "square": "Kvadrātveida karte",
           "configuration_type": "Konfigurācijas veids",
-          "prefer_cloud": "Dot priekšroku mākoņa savienojumam",
-          "dvc_key": "Dreame Vacuum Card atslēga"
+          "prefer_cloud": "Dot priekšroku mākoņa savienojumam"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Mākoņa akreditācijas dati ir nepilnīgi, lūdzu, aizpildiet lietotājvārdu, paroli un valsti",
-      "invalid_key": "Nederīga atslēga."
+      "cloud_credentials_incomplete": "Mākoņa akreditācijas dati ir nepilnīgi, lūdzu, aizpildiet lietotājvārdu, paroli un valsti"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Rediģēt paklāju",
         "empty": "Iztukšot",
         "enable": "Iespējot",
-        "enter_dvc_key": "Ievadīt esošo atslēgu",
         "fast_mapping": "Ātrā kartēšana",
-        "get_dvc_key": "Iegūt DVC atslēgu",
         "ignore": "Ignorēt",
         "ignore_obstacle": "Ignorēt šķērsli",
         "impassable_threshold": "Nepārvarams slieksnis",
@@ -2300,8 +2289,6 @@
         "copy": "Kopēt",
         "copy_all": "Kopēt visu",
         "disable_haptic": "Atspējot haptisko atgriezenisko saiti",
-        "dvc_key": "DVC atslēga",
-        "dvc_key_title": "Ievadiet DVC atslēgu",
         "editable_objects": "Rediģējami objekti",
         "font_size": "Fonta izmērs",
         "full_height": "Pilns augstums",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Uzlādes bāze atrodas ierobežotā zonā. Ja turpināsiet kartes saglabāšanu, robots, iespējams, nevarēs uzlādēties.",
         "drying_will_stopped": "Mopa paliktņa žāvēšana tiks pārtraukta!",
         "dust_collection_not_performed": "Putekļu savākšanas (automātiskās iztukšošanas) uzdevums netika veikts\nRobots neveiks automātiskās iztukšošanas uzdevumus DnD periodā.",
-        "dvc_key_description": "Atslēga ir derīga vienai ierīcei. Ja šo atslēgu izmantojat pirmo reizi, tā tagad tiks aktivizēta šai ierīcei.",
         "enable_auto_mount_mop": "Iespējot automātisku mopa uzstādīšanu?",
         "enable_carpet_recognition": "Paklāju atpazīšana tiks iespējota!",
         "enable_customized_cleaning": "Vai vēlaties iespējot pielāgotu tīrīšanu?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Neizdevās ielādēt karti",
         "ignore_obstacle": "Ignorēt šķērsli?",
         "invalid_entity": "Nederīga entītija",
-        "invalid_key": "Nederīga atslēga.",
         "map_backup": "Notiek kartes dublēšana",
         "map_backup_failed": "Kartes dublēšana neizdevās!",
         "map_backup_success": "Kartes dublēšana pabeigta",
@@ -2502,7 +2487,6 @@
         "not_supported": "Vēl netiek atbalstīts!",
         "obstacle_will_ignored": "Šķērslis tiks ignorēts!",
         "override_changes": "Ignorēt izmaiņas?",
-        "preview": "Šis ir Dreame Vacuum kartes priekšskatījums",
         "recommended_areas": "Ieteicamās zonas",
         "relocating": "Pašpozicionēšanās. Lūdzu, uzgaidiet.",
         "relocating_completed": "Pašpozicionēšanās izdevās. Robots turpina uzdevumu.",

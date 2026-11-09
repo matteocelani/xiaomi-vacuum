@@ -16,8 +16,7 @@
       "no_devices": "Na ovom računu u odabranoj državi nisu pronađeni podržani uređaji.{devices}",
       "2fa_send_failed": "Slanje verifikacijskog koda nije uspjelo. Pokušajte ponovno.",
       "2fa_limit_reached": "Dosegnuto je dnevno ograničenje slanja verifikacijskih kodova. Pokušajte ponovno sutra.",
-      "2fa_cooldown_active": "Previše uzastopnih zahtjeva. Pričekajte nekoliko minuta prije ponovnog pokušaja.",
-      "invalid_key": "Nevažeći ključ."
+      "2fa_cooldown_active": "Previše uzastopnih zahtjeva. Pričekajte nekoliko minuta prije ponovnog pokušaja."
     },
     "step": {
       "user": {
@@ -84,12 +83,6 @@
         },
         "description": "Molimo odaberite Dreame uređaj (usisavač) koji želite postaviti."
       },
-      "dvc": {
-        "data": {
-          "dvc_key": "Ključ Dreame Vacuum Card"
-        },
-        "description": "## Dreame Vacuum Card\r\n #### Sučelje Dreame Vacuum{text}\r\n\r\nUnesite svoj licencni ključ za aktivaciju Dreame Vacuum Card. Ako ga nemate, možete ga nabaviti **[ovdje]({url})**.\r\n\r\n*Napomena: svaki ključ vrijedi samo za jedan uređaj.*"
-      },
       "options": {
         "data": {
           "name": "Ime",
@@ -118,14 +111,12 @@
           "low_resolution": "Karta niske razlučivosti",
           "square": "Kvadratna karta",
           "configuration_type": "Vrsta konfiguracije",
-          "prefer_cloud": "Preferiraj vezu s oblakom",
-          "dvc_key": "Ključ Dreame Vacuum Card"
+          "prefer_cloud": "Preferiraj vezu s oblakom"
         }
       }
     },
     "error": {
-      "cloud_credentials_incomplete": "Vjerodajnice za oblak su nepotpune, unesite korisničko ime, lozinku i državu",
-      "invalid_key": "Nevažeći ključ."
+      "cloud_credentials_incomplete": "Vjerodajnice za oblak su nepotpune, unesite korisničko ime, lozinku i državu"
     }
   },
   "selector": {
@@ -2210,9 +2201,7 @@
         "edit_carpet": "Uredi tepih",
         "empty": "Isprazni",
         "enable": "Omogući",
-        "enter_dvc_key": "Unesi postojeći ključ",
         "fast_mapping": "Brzo mapiranje",
-        "get_dvc_key": "Nabavi DVC ključ",
         "ignore": "Zanemari",
         "ignore_obstacle": "Zanemari prepreku",
         "impassable_threshold": "Neprijelazni prag",
@@ -2300,8 +2289,6 @@
         "copy": "Kopiraj",
         "copy_all": "Kopiraj sve",
         "disable_haptic": "Onemogući haptičku povratnu informaciju",
-        "dvc_key": "DVC ključ",
-        "dvc_key_title": "Unesite DVC ključ",
         "editable_objects": "Objekti koji se mogu uređivati",
         "font_size": "Veličina fonta",
         "full_height": "Puna visina",
@@ -2472,7 +2459,6 @@
         "dock_in_restricted_area_detail": "Postaja za punjenje nalazi se u zabranjenom području. Ako nastavite spremati kartu, robot se možda neće moći napuniti.",
         "drying_will_stopped": "Sušenje krpe bit će zaustavljeno!",
         "dust_collection_not_performed": "Zadatak prikupljanja prašine (Automatsko pražnjenje) nije obavljen\nRobot neće izvoditi zadatke automatskog pražnjenja tijekom razdoblja 'Ne ometaj'.",
-        "dvc_key_description": "Ključ vrijedi za jedan uređaj. Ako je ovo prvi put da koristite ovaj ključ, sada će biti aktiviran za ovaj uređaj.",
         "enable_auto_mount_mop": "Omogućiti automatsko postavljanje krpe?",
         "enable_carpet_recognition": "Prepoznavanje tepiha bit će omogućeno!",
         "enable_customized_cleaning": "Želite li omogućiti prilagođeno čišćenje?",
@@ -2483,7 +2469,6 @@
         "failed_to_load_card": "Učitavanje kartice nije uspjelo",
         "ignore_obstacle": "Zanemariti prepreku?",
         "invalid_entity": "Nevažeći entitet",
-        "invalid_key": "Nevažeći ključ.",
         "map_backup": "Sigurnosno kopiranje karte u tijeku",
         "map_backup_failed": "Sigurnosno kopiranje karte nije uspjelo!",
         "map_backup_success": "Sigurnosno kopiranje karte dovršeno",
@@ -2502,7 +2487,6 @@
         "not_supported": "Zasad nije podržano!",
         "obstacle_will_ignored": "Prepreka će biti zanemarena!",
         "override_changes": "Prebrisati promjene?",
-        "preview": "Ovo je pregled Dreame Vacuum kartice",
         "recommended_areas": "Preporučena područja",
         "relocating": "Samopozicioniranje. Molimo pričekajte.",
         "relocating_completed": "Samopozicioniranje je uspjelo. Robot nastavlja s radom.",
