@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumState,
     DreameVacuumTaskStatus,
 )
-from custom_components.dreame_vacuum.xiaomi import MODEL_MIJIA_SWEEP_MOP_2S
-from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_S20_PLUS
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_MIJIA_SWEEP_MOP_2S
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import MODEL_S20_PLUS
 import pytest
 from tests.xiaomi.spec_helpers import (
     MIJIA_B108_STATE_AFTER_READ,

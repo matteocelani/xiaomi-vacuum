@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_S40C
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import MODEL_S40C
 import pytest
 from tests.xiaomi.entity_contract import EntityCase, exercise_home_assistant_entities
 
@@ -54,7 +54,7 @@ _ENTITIES: Final[frozenset[tuple[str, str]]] = frozenset(
         ("switch", "child_lock"),
         ("switch", "dnd"),
         ("switch", "resume_cleaning"),
-        ("vacuum", "dreame_vacuum"),
+        ("vacuum", "xiaomi_robot_vacuum"),
     }
 )
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import importlib
 import json
 import logging
 from pathlib import Path
@@ -29,23 +30,36 @@ def main() -> None:
     # directory the harness itself lives in.
     sys.path = [str(root), *[entry for entry in sys.path if entry not in ("", ".")]]
     logging.disable(logging.CRITICAL)
+    _bind_legacy_package()
     payload = _snapshot()
     Path(args.output).write_text(json.dumps(payload), encoding="utf-8")
 
 
+def _bind_legacy_package() -> None:
+    """Let this script import the upstream checkout, whose folder is dreame_vacuum."""
+    components = Path(sys.path[0]) / "custom_components"
+    if (components / "xiaomi_robot_vacuum").is_dir():
+        return
+    legacy = components / "dreame_vacuum"
+    if not legacy.is_dir():
+        raise RuntimeError(f"integration package is missing under {components}")
+    package = importlib.import_module("custom_components.dreame_vacuum")
+    sys.modules["custom_components.xiaomi_robot_vacuum"] = package
+
+
 def _snapshot() -> dict[str, object]:
-    from custom_components.dreame_vacuum.dreame.const import (
+    from custom_components.xiaomi_robot_vacuum.dreame.const import (
         DEVICE_INFO,
         ERROR_CODE_TO_ERROR_NAME,
     )
-    from custom_components.dreame_vacuum.dreame.device import (
+    from custom_components.xiaomi_robot_vacuum.dreame.device import (
         DreameVacuumDevice,
         DreameVacuumDeviceStatus,
     )
-    from custom_components.dreame_vacuum.dreame.protocol import (
+    from custom_components.xiaomi_robot_vacuum.dreame.protocol import (
         DreameVacuumDeviceProtocol,
     )
-    from custom_components.dreame_vacuum.dreame.types import (
+    from custom_components.xiaomi_robot_vacuum.dreame.types import (
         DreameVacuumAction,
         DreameVacuumActionMapping,
         DreameVacuumProperty,
@@ -103,7 +117,7 @@ def _model_snapshot(
     ai_data: dict[str, object],
     catalog_model_id: str | None,
 ) -> dict[str, object]:
-    from custom_components.dreame_vacuum.dreame.types import (
+    from custom_components.xiaomi_robot_vacuum.dreame.types import (
         DreameVacuumDeviceCapability,
     )
 
@@ -253,17 +267,23 @@ class _Host:
         self.capability = None
 
     def get_property(self, prop: object) -> object:
-        from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
+        from custom_components.xiaomi_robot_vacuum.dreame.device import (
+            DreameVacuumDevice,
+        )
 
         return DreameVacuumDevice.get_property(self, prop)
 
     def get_auto_switch_property(self, prop: object) -> object:
-        from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
+        from custom_components.xiaomi_robot_vacuum.dreame.device import (
+            DreameVacuumDevice,
+        )
 
         return DreameVacuumDevice.get_auto_switch_property(self, prop)
 
     def get_ai_property(self, prop: object) -> object:
-        from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
+        from custom_components.xiaomi_robot_vacuum.dreame.device import (
+            DreameVacuumDevice,
+        )
 
         return DreameVacuumDevice.get_ai_property(self, prop)
 
@@ -310,7 +330,7 @@ class _EntityDevice:
         auto_switch: dict[str, int] | None,
         ai_data: dict[str, object] | None,
     ) -> None:
-        from custom_components.dreame_vacuum.dreame.types import (
+        from custom_components.xiaomi_robot_vacuum.dreame.types import (
             DreameVacuumActionMapping,
             DreameVacuumPropertyMapping,
         )
@@ -366,7 +386,7 @@ def _descriptions() -> list[tuple[str, object]]:
     )
     for module_name, attribute in modules:
         module = importlib.import_module(
-            f"custom_components.dreame_vacuum.{module_name}"
+            f"custom_components.xiaomi_robot_vacuum.{module_name}"
         )
         descriptions = getattr(module, attribute)
         for description in descriptions:
@@ -375,8 +395,8 @@ def _descriptions() -> list[tuple[str, object]]:
 
 
 def _family_touch(model_id: str) -> dict[str, object]:
-    from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
-    from custom_components.dreame_vacuum.dreame.types import (
+    from custom_components.xiaomi_robot_vacuum.dreame.device import DreameVacuumDevice
+    from custom_components.xiaomi_robot_vacuum.dreame.types import (
         DreameVacuumActionMapping,
         DreameVacuumPropertyMapping,
     )
@@ -404,7 +424,7 @@ def _family_touch(model_id: str) -> dict[str, object]:
 
 def _resolver() -> object:
     try:
-        from custom_components.dreame_vacuum.xiaomi import resolve_family
+        from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
     except ImportError:
         return lambda _model: None
     return resolve_family
@@ -413,7 +433,7 @@ def _resolver() -> object:
 def _fault_override(family: dict[str, object]) -> str | None:
     if family.get("applied") is not True:
         try:
-            from custom_components.dreame_vacuum.dreame.family_codec import (
+            from custom_components.xiaomi_robot_vacuum.dreame.family_codec import (
                 family_fault_name,
             )
         except ImportError:
@@ -426,7 +446,7 @@ def _xiaomi_control_count(family: dict[str, object]) -> int:
     if family.get("applied") is True:
         return -1
     try:
-        from custom_components.dreame_vacuum.xiaomi import controls_of
+        from custom_components.xiaomi_robot_vacuum.xiaomi import controls_of
     except ImportError:
         return 0
     return len(controls_of(SimpleNamespace(_property_codec=None)))
@@ -434,8 +454,10 @@ def _xiaomi_control_count(family: dict[str, object]) -> int:
 
 def _catalog_ids() -> dict[str, str]:
     try:
-        from custom_components.dreame_vacuum.dreame.catalog import load_model_catalog
-        from custom_components.dreame_vacuum.dreame.const import DEVICE_INFO
+        from custom_components.xiaomi_robot_vacuum.dreame.catalog import (
+            load_model_catalog,
+        )
+        from custom_components.xiaomi_robot_vacuum.dreame.const import DEVICE_INFO
     except ImportError:
         return {}
     return {
@@ -454,7 +476,7 @@ def _device_snapshot(
     action_mapping: dict[object, dict[str, int]],
     error_names: dict[object, str],
 ) -> dict[str, object]:
-    from custom_components.dreame_vacuum.dreame.types import DID
+    from custom_components.xiaomi_robot_vacuum.dreame.types import DID
 
     protocol = protocol_type("127.0.0.1", "00" * 16)
     return {
@@ -495,7 +517,7 @@ def _did_names(
 
 
 def _error_name_path(status_type: type) -> dict[str, str]:
-    from custom_components.dreame_vacuum.dreame.types import DreameVacuumErrorCode
+    from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumErrorCode
 
     status = object.__new__(status_type)
     status._device = SimpleNamespace(
@@ -540,7 +562,9 @@ def _cleaning_paused(status_type: type) -> dict[str, object]:
 
 def _positive_flags() -> dict[str, object]:
     try:
-        from custom_components.dreame_vacuum.dreame.device import _is_positive_value
+        from custom_components.xiaomi_robot_vacuum.dreame.device import (
+            _is_positive_value,
+        )
     except ImportError:
         _is_positive_value = None
     rendered: dict[str, object] = {}
@@ -589,7 +613,7 @@ def _parsers(device_type: type) -> dict[str, object]:
 def _run_parser(
     device_type: type, method_name: str, property_name: str, value: object
 ) -> object:
-    from custom_components.dreame_vacuum.dreame.types import DreameVacuumProperty
+    from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumProperty
 
     device = object.__new__(device_type)
     device.data = {getattr(DreameVacuumProperty, property_name).value: value}
@@ -613,8 +637,10 @@ def _run_parser(
 
 
 def _map_actions() -> dict[str, object]:
-    from custom_components.dreame_vacuum.dreame.map import DreameMapVacuumMapManager
-    from custom_components.dreame_vacuum.dreame.types import (
+    from custom_components.xiaomi_robot_vacuum.dreame.map import (
+        DreameMapVacuumMapManager,
+    )
+    from custom_components.xiaomi_robot_vacuum.dreame.types import (
         DreameVacuumAction,
         DreameVacuumActionMapping,
     )
@@ -633,7 +659,7 @@ def _map_actions() -> dict[str, object]:
 
 
 def _side_data() -> tuple[dict[str, int], dict[str, object]]:
-    from custom_components.dreame_vacuum.dreame.types import (
+    from custom_components.xiaomi_robot_vacuum.dreame.types import (
         DreameVacuumAIProperty,
         DreameVacuumAutoSwitchProperty,
         DreameVacuumStrAIProperty,

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumActionMapping,
     DreameVacuumProperty,
     DreameVacuumPropertyMapping,
@@ -17,8 +17,8 @@ def test_dreame_button_actions_stay_on_the_dreame_map(
 ) -> None:
     del integration_package
     pytest.importorskip("homeassistant")
-    from custom_components.dreame_vacuum.button import BUTTONS
-    from custom_components.dreame_vacuum.entity import description_exists
+    from custom_components.xiaomi_robot_vacuum.button import BUTTONS
+    from custom_components.xiaomi_robot_vacuum.entity import description_exists
 
     device = SimpleNamespace(
         action_mapping=DreameVacuumActionMapping,

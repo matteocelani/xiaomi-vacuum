@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
-from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_H40
-from custom_components.dreame_vacuum.xiaomi.profile import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumState
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import MODEL_H40
+from custom_components.xiaomi_robot_vacuum.xiaomi.profile import (
     EXTENDED_STATION_CONTROLS,
     S40_CLASS_OMITTED_CONTROLS,
 )

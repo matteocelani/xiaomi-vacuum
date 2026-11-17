@@ -2,19 +2,21 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.device import (
+from custom_components.xiaomi_robot_vacuum.dreame.device import (
     DreameVacuumDevice,
     DreameVacuumDeviceInfo,
 )
-from custom_components.dreame_vacuum.dreame.exceptions import InvalidActionException
-from custom_components.dreame_vacuum.dreame.map import DreameMapVacuumMapManager
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import (
+    InvalidActionException,
+)
+from custom_components.xiaomi_robot_vacuum.dreame.map import DreameMapVacuumMapManager
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumActionMapping,
     DreameVacuumProperty,
     DreameVacuumState,
 )
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_E5,
     MODEL_E10,
     MODEL_E10C,
@@ -39,7 +41,7 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_X20_PRO,
     resolve_family,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
     MODEL_H40,
     MODEL_ROBOT_VACUUM_5,
     MODEL_S20_PLUS,

@@ -33,7 +33,7 @@ The re-review at `36cfa56` is fixed in the follow-up commit on the same branch.
 | L-11 | Fixed. The voice-pack payload is built with `json.dumps`. | `08a4d5b` | No dedicated test; the payload shape for plain strings matches the previous JSON |
 | L-12 | Partially fixed. The Xiaomi workflow sets `permissions: contents: read`. Pinning actions and pip packages to SHAs is deferred: a wrong pin fails CI, and the current tags are the workflow's contract. | `08a4d5b` | — |
 
-`xiaomi/value_limits.py` is at 100% line coverage under `pytest --cov=custom_components.dreame_vacuum.xiaomi.value_limits`.
+`xiaomi/value_limits.py` is at 100% line coverage under `pytest --cov=custom_components.xiaomi_robot_vacuum.xiaomi.value_limits`.
 
 ## Re-review at 36cfa56
 

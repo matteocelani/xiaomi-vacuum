@@ -8,7 +8,7 @@ A Home Assistant integration for Xiaomi robot vacuums, and for every Dreame, MOV
 Maintained by [@matteocelani](https://github.com/matteocelani). Fork of [@Tasshack](https://github.com/Tasshack)'s upstream project. Not an official Dreame or Xiaomi product.
 
 [![Xiaomi Vacuum](https://img.shields.io/badge/Xiaomi%20Vacuum-matteocelani%2Fxiaomi--vacuum-18bcf2?style=for-the-badge&logo=HomeAssistant&logoColor=white)](https://github.com/matteocelani/xiaomi-vacuum)
-[![Version](https://img.shields.io/github/manifest-json/v/matteocelani/xiaomi-vacuum?filename=custom_components%2Fdreame_vacuum%2Fmanifest.json&color=18bcf2&label=Version&style=for-the-badge)](https://github.com/matteocelani/xiaomi-vacuum)
+[![Version](https://img.shields.io/github/manifest-json/v/matteocelani/xiaomi-vacuum?filename=custom_components%2Fxiaomi_robot_vacuum%2Fmanifest.json&color=18bcf2&label=Version&style=for-the-badge)](https://github.com/matteocelani/xiaomi-vacuum)
 [![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg?logo=HomeAssistantCommunityStore&color=18bcf2&logoColor=white&style=for-the-badge)](https://github.com/hacs/integration)
 [![Upstream](https://img.shields.io/badge/Upstream-Tasshack%2Fdreame--vacuum-18bcf2?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tasshack/dreame-vacuum)
 [![Community Forum](https://img.shields.io/static/v1.svg?label=Community&message=Forum&color=18bcf2&logo=HomeAssistant&logoColor=white&style=for-the-badge)](https://community.home-assistant.io/t/custom-component-dreame-vacuum/473026)
@@ -30,37 +30,41 @@ The logo is from the upstream project by [@Tasshack](https://github.com/Tasshack
 - Support for every Dreame, MOVA, Mijia, and TROUVER robot vacuum and mop from [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum), including the accounts and local control that project documents.
 - Xiaomi robot vacuums, added one model at a time. The models in this tree are listed under [Supported Xiaomi models](#supported-xiaomi-models).
 
-## Home Assistant still uses `dreame_vacuum`
+## Home Assistant domain
 
-The project name is **Xiaomi Vacuum**. The integration shows up in Home Assistant as `dreame_vacuum`, so installed config entries, entity ids, and automations keep working. Renaming the domain needs its own council decision, recorded in [0001](.agent/council/records/0001-xiaomi-wide-rename-and-expansion.md).
+The project name is **Xiaomi Vacuum**. From version 2.2.0 the Home Assistant domain is `xiaomi_robot_vacuum`. Council [0009](.agent/council/records/0009-hacs-domain-rename.md) records that choice. `xiaomi_vacuum` is already used by another integration in the HACS default catalog, so this one does not take that name.
 
 | | |
 | --- | --- |
 | Repository | [matteocelani/xiaomi-vacuum](https://github.com/matteocelani/xiaomi-vacuum) |
 | HACS repository | `https://github.com/matteocelani/xiaomi-vacuum` |
-| Home Assistant domain | `dreame_vacuum` |
-| Installed folder | `custom_components/dreame_vacuum` |
-| Entities and services | `dreame_vacuum.*` |
-| Config entries | stored on `dreame_vacuum` |
-| Name in HACS and Home Assistant | Xiaomi Vacuum (`hacs.json` and `manifest.json`). The domain stays `dreame_vacuum`. |
+| Home Assistant domain | `xiaomi_robot_vacuum` |
+| Installed folder | `custom_components/xiaomi_robot_vacuum` |
+| Entities and services | `xiaomi_robot_vacuum.*` |
+| Config entries | stored on `xiaomi_robot_vacuum` |
+| Name in HACS and Home Assistant | Xiaomi Vacuum (`hacs.json` and `manifest.json`) |
 
-`matteocelani/dreame-vacuum` redirects to `matteocelani/xiaomi-vacuum`. [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum) is the upstream project and stays at that address.
+`matteocelani/dreame-vacuum` redirects to `matteocelani/xiaomi-vacuum`. [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum) is the upstream project and stays on domain `dreame_vacuum`.
+
+This integration cannot replace an existing `dreame_vacuum` install automatically. Config entries, entities, history, and automations created by [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum), or by version 2.1.2 and earlier of this fork, stay on `dreame_vacuum`. Delete that config entry and add the vacuum again under Xiaomi Vacuum. Nothing is copied across.
 
 ## Install via HACS
 
-Until `v2.1.0` is published and the default catalog lists this repository, install it as a custom repository:
+1. In HACS, open **Integrations**.
+2. Search for **Xiaomi Vacuum**.
+3. Download it and restart Home Assistant.
+4. Go to **Settings → Devices & services → Add integration** and choose **Xiaomi Vacuum**.
+
+Minimum Home Assistant version is 2024.2.0.
+
+If the search does not list it yet, add a custom repository and then download **Xiaomi Vacuum**:
 
 1. In HACS, open **Integrations**.
 2. Open the menu and choose **Custom repositories**.
 3. Repository: `https://github.com/matteocelani/xiaomi-vacuum`
 4. Category: **Integration**.
-5. Add it, then download **Xiaomi Vacuum**.
 
-Home Assistant still registers the domain `dreame_vacuum`. Do not install this fork next to [Tasshack/dreame-vacuum](https://github.com/Tasshack/dreame-vacuum). Both use that domain and the folder `custom_components/dreame_vacuum`.
-
-Minimum Home Assistant version is 2024.2.0.
-
-The default HACS catalog, which Home Assistant 2026.11 shows as the Marketplace, comes after the first GitHub Release. The settings, the `hacs/default` edit, and the pull-request checklist are in [docs/marketplace-submission.md](docs/marketplace-submission.md). Do not open that pull request before the `v2.1.0` release exists.
+The folders differ, so this install does not overwrite `custom_components/dreame_vacuum`. You still add the device again, as described above.
 
 ### Repository settings
 
@@ -75,11 +79,11 @@ A pull request cannot change GitHub repository settings. Before the catalog pull
 
 ### Brand icon
 
-`custom_components/dreame_vacuum/brand/icon.png` is a generic top-down robot vacuum drawn for this repository. It is not a Xiaomi, Dreame, or Home Assistant logo. The tree had no logo file to adapt. The images at the top of this page are upstream artwork from [@Tasshack](https://github.com/Tasshack); they are credited and they are not an official Xiaomi mark. Home Assistant 2026.3 and newer use the local icon. Older releases still show whatever the brands site publishes for the domain `dreame_vacuum`.
+`custom_components/xiaomi_robot_vacuum/brand/icon.png` is a generic top-down robot vacuum drawn for this repository. It is not a Xiaomi, Dreame, or Home Assistant logo. The tree had no logo file to adapt. The images at the top of this page are upstream artwork from [@Tasshack](https://github.com/Tasshack); they are credited and they are not an official Xiaomi mark. Home Assistant 2026.3 and newer use the local icon. Older releases look up `https://brands.home-assistant.io/xiaomi_robot_vacuum/icon.png`, which is empty until a brands submission exists.
 
 ### Dreame, MOVA, Mijia, and TROUVER
 
-Configure a Dreame, MOVA, Mijia, or TROUVER vacuum with the upstream guides. Those guides match the domain `dreame_vacuum` and the behavior this fork tracks:
+Configure a Dreame, MOVA, Mijia, or TROUVER vacuum with the upstream guides. Those guides describe the accounts and the device behavior this fork tracks. In this integration the domain and the service prefix are `xiaomi_robot_vacuum`:
 
 - [Installation](https://dreame-vacuum.tasshack.com/installation), including [HACS](https://dreame-vacuum.tasshack.com/installation/hacs) and [manual](https://dreame-vacuum.tasshack.com/installation/manually) steps for the upstream project
 - [Dreamehome](https://dreame-vacuum.tasshack.com/configuration/dreamehome)
@@ -91,7 +95,7 @@ Configure a Dreame, MOVA, Mijia, or TROUVER vacuum with the upstream guides. Tho
 
 ### Supported Xiaomi models
 
-`resolve_family` in `custom_components/dreame_vacuum/xiaomi/` recognizes these models. Add a row when a model is registered there.
+`resolve_family` in `custom_components/xiaomi_robot_vacuum/xiaomi/` recognizes these models. Add a row when a model is registered there.
 
 | Marketing name | MIoT model |
 | --- | --- |

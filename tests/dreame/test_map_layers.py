@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.map import DreameVacuumMapRenderer
+from custom_components.xiaomi_robot_vacuum.dreame.map import DreameVacuumMapRenderer
 from PIL import Image
 
 

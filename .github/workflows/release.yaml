@@ -1,8 +1,8 @@
 name: Release
 
 # Builds the HACS zip_release asset and attaches it to a published GitHub Release.
-# Do not cut the tag from a pull request. Merge first, then publish tag v2.1.0.
-# The tag must match manifest.json "version" exactly (v2.1.0 for the first release).
+# Do not cut the tag from a pull request. Merge first, then publish the tag.
+# The tag must match manifest.json "version" exactly.
 
 on:
   release:
@@ -20,11 +20,11 @@ jobs:
         with:
           ref: ${{ github.event.release.tag_name }}
 
-      - name: Build dreame_vacuum.zip
+      - name: Build xiaomi_robot_vacuum.zip
         # HACS zip_release calls zipfile.ZipFile.extractall() into
-        # custom_components/dreame_vacuum/ and does not strip a leading
+        # custom_components/xiaomi_robot_vacuum/ and does not strip a leading
         # directory. Files must sit at the archive root (manifest.json,
-        # __init__.py, brand/icon.png). A nested dreame_vacuum/ or
+        # __init__.py, brand/icon.png). A nested xiaomi_robot_vacuum/ or
         # custom_components/ folder would install one level too deep.
         # The asset name must match hacs.json "filename" exactly.
         # hacs.json itself stays out of the zip. HACS reads it from the
@@ -40,33 +40,33 @@ jobs:
 
           hacs = json.loads(Path("hacs.json").read_text())
           manifest = json.loads(
-              Path("custom_components/dreame_vacuum/manifest.json").read_text()
+              Path("custom_components/xiaomi_robot_vacuum/manifest.json").read_text()
           )
           filename = hacs["filename"]
           tag = os.environ["RELEASE_TAG"]
-          if filename != "dreame_vacuum.zip":
+          if filename != "xiaomi_robot_vacuum.zip":
               raise SystemExit(
-                  f"hacs.json filename is {filename}, expected dreame_vacuum.zip"
+                  f"hacs.json filename is {filename}, expected xiaomi_robot_vacuum.zip"
               )
-          if manifest["domain"] != "dreame_vacuum":
+          if manifest["domain"] != "xiaomi_robot_vacuum":
               raise SystemExit(f"domain is {manifest['domain']}")
           if manifest["version"] != tag:
               raise SystemExit(
                   f"tag {tag} != manifest version {manifest['version']}"
               )
           PY
-          cd custom_components/dreame_vacuum
-          zip -r "${GITHUB_WORKSPACE}/dreame_vacuum.zip" . \
+          cd custom_components/xiaomi_robot_vacuum
+          zip -r "${GITHUB_WORKSPACE}/xiaomi_robot_vacuum.zip" . \
             -x '*__pycache__*' '*.pyc' '*.pyo' '.DS_Store'
 
       - name: Check archive root
         run: |
           set -euo pipefail
-          unzip -Z1 dreame_vacuum.zip > /tmp/zip-names.txt
+          unzip -Z1 xiaomi_robot_vacuum.zip > /tmp/zip-names.txt
           grep -qx 'manifest.json' /tmp/zip-names.txt
           grep -qx 'brand/icon.png' /tmp/zip-names.txt
-          if grep -q '^dreame_vacuum/' /tmp/zip-names.txt; then
-            echo "zip contains a nested dreame_vacuum/ directory" >&2
+          if grep -q '^xiaomi_robot_vacuum/' /tmp/zip-names.txt; then
+            echo "zip contains a nested xiaomi_robot_vacuum/ directory" >&2
             exit 1
           fi
           if grep -q '^custom_components/' /tmp/zip-names.txt; then
@@ -78,8 +78,8 @@ jobs:
             exit 1
           fi
 
-      - name: Attach dreame_vacuum.zip to the GitHub Release
+      - name: Attach xiaomi_robot_vacuum.zip to the GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: gh release upload "$RELEASE_TAG" dreame_vacuum.zip --clobber
+        run: gh release upload "$RELEASE_TAG" xiaomi_robot_vacuum.zip --clobber

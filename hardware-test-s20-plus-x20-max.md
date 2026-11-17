@@ -22,7 +22,7 @@ A host that is off the network pays one 5 second timeout on the first property c
 2. Note the current map list in the vendor app. This procedure must not delete a map, reset a consumable, or start dust collection except where a step says so.
 3. Export or screenshot the Home Assistant config entry so it can be restored. Disable automations that call vacuum services.
 4. Put the robot on the dock, charged enough to leave the dock and return. Clear the floor in front of the dock.
-5. Watch Home Assistant logs for `dreame_vacuum` at info. A line that includes the token or the raw datagram is a failure of the logging rules, even if the robot behaved.
+5. Watch Home Assistant logs for `xiaomi_robot_vacuum` at info. A line that includes the token or the raw datagram is a failure of the logging rules, even if the robot behaved.
 
 If anything in a later phase fails, stop and follow [Rollback](#rollback). Do not "try the map button" to recover.
 

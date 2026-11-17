@@ -1,13 +1,13 @@
 #!/bin/bash
 # Install latest version:
-# wget -O - https://raw.githubusercontent.com/Tasshack/dreame-vacuum/master/install | bash -
+# wget -O - https://raw.githubusercontent.com/matteocelani/xiaomi-vacuum/master/install | bash -
 # Install specific version:
-# wget -O - https://raw.githubusercontent.com/Tasshack/dreame-vacuum/master/install | bash -s -- v2.0.0
+# wget -O - https://raw.githubusercontent.com/matteocelani/xiaomi-vacuum/master/install | bash -s -- v2.2.0
 set -e
 
 if [ -z "$1" ]; then
     echo "Fetching latest version..."
-    VERSION=$(wget -qO- https://api.github.com/repos/Tasshack/dreame-vacuum/releases | grep -m 1 '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    VERSION=$(wget -qO- https://api.github.com/repos/matteocelani/xiaomi-vacuum/releases | grep -m 1 '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
     if [ -z "$VERSION" ]; then
         echo "Failed to fetch the latest version."
         exit 1
@@ -42,13 +42,13 @@ if [ -n "$path" ]; then
         mkdir "$path/custom_components"
     fi
     cd "$path/custom_components"
-    wget "https://github.com/Tasshack/dreame-vacuum/releases/download/$VERSION/dreame_vacuum.zip"
-    if [ -d "$path/custom_components/dreame_vacuum" ]; then
-        rm -R "$path/custom_components/dreame_vacuum"
+    wget "https://github.com/matteocelani/xiaomi-vacuum/releases/download/$VERSION/xiaomi_robot_vacuum.zip"
+    if [ -d "$path/custom_components/xiaomi_robot_vacuum" ]; then
+        rm -R "$path/custom_components/xiaomi_robot_vacuum"
     fi
-    mkdir "$path/custom_components/dreame_vacuum"
-    unzip "$path/custom_components/dreame_vacuum.zip" -d "$path/custom_components/dreame_vacuum" >/dev/null 2>&1
-    rm "$path/custom_components/dreame_vacuum.zip"
+    mkdir "$path/custom_components/xiaomi_robot_vacuum"
+    unzip "$path/custom_components/xiaomi_robot_vacuum.zip" -d "$path/custom_components/xiaomi_robot_vacuum" >/dev/null 2>&1
+    rm "$path/custom_components/xiaomi_robot_vacuum.zip"
     echo
     echo "Installation complete"
     echo "You need to restart Home Assistant before using the integration."

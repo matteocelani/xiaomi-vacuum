@@ -8,8 +8,10 @@ import logging
 import struct
 
 from Crypto.Cipher import AES
-from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiTransportException
-from custom_components.dreame_vacuum.xiaomi.transport import MiioPropertyTransport
+from custom_components.xiaomi_robot_vacuum.xiaomi.exceptions import (
+    XiaomiTransportException,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.transport import MiioPropertyTransport
 
 _TOKEN = "00" * 16
 _HOST = "127.0.0.1"

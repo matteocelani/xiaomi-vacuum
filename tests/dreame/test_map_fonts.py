@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.map import DreameVacuumMapRenderer
+from custom_components.xiaomi_robot_vacuum.dreame.map import DreameVacuumMapRenderer
 
 
 def test_loaded_fonts_are_shared_and_the_cache_stays_bounded() -> None:

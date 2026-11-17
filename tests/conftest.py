@@ -8,7 +8,7 @@ import types
 
 _ROOT = Path(__file__).resolve().parents[1]
 _COMPONENT = _ROOT / "custom_components"
-_PACKAGE = _COMPONENT / "dreame_vacuum"
+_PACKAGE = _COMPONENT / "xiaomi_robot_vacuum"
 
 
 def _install(name: str, path: Path) -> None:
@@ -21,5 +21,5 @@ def _install(name: str, path: Path) -> None:
 
 
 _install("custom_components", _COMPONENT)
-_install("custom_components.dreame_vacuum", _PACKAGE)
-_install("custom_components.dreame_vacuum.dreame", _PACKAGE / "dreame")
+_install("custom_components.xiaomi_robot_vacuum", _PACKAGE)
+_install("custom_components.xiaomi_robot_vacuum.dreame", _PACKAGE / "dreame")

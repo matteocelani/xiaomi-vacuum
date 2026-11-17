@@ -35,7 +35,7 @@ jobs:
             "pytest-homeassistant-custom-component==0.13.205"
       - name: Ruff on files this change owns
         run: |
-          ruff check tests custom_components/dreame_vacuum/xiaomi custom_components/dreame_vacuum/xiaomi_controls.py custom_components/dreame_vacuum/dreame/family_codec.py
-          ruff format --check tests custom_components/dreame_vacuum/xiaomi custom_components/dreame_vacuum/xiaomi_controls.py custom_components/dreame_vacuum/dreame/family_codec.py
+          ruff check tests custom_components/xiaomi_robot_vacuum/xiaomi custom_components/xiaomi_robot_vacuum/xiaomi_controls.py custom_components/xiaomi_robot_vacuum/dreame/family_codec.py
+          ruff format --check tests custom_components/xiaomi_robot_vacuum/xiaomi custom_components/xiaomi_robot_vacuum/xiaomi_controls.py custom_components/xiaomi_robot_vacuum/dreame/family_codec.py
       - name: Pytest
         run: python -m pytest

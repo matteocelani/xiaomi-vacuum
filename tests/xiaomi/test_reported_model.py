@@ -9,7 +9,7 @@ def test_reported_model_is_stored_only_for_a_xiaomi_family(
     integration_package: object,
 ) -> None:
     del integration_package
-    from custom_components.dreame_vacuum.coordinator import (
+    from custom_components.xiaomi_robot_vacuum.coordinator import (
         DreameVacuumDataUpdateCoordinator,
     )
 

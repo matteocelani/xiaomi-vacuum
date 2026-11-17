@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from custom_components.dreame_vacuum.dreame.protocol import (
+from custom_components.xiaomi_robot_vacuum.dreame.protocol import (
     DreameVacuumMiHomeCloudProtocol,
 )
 import pytest

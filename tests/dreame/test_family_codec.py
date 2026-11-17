@@ -2,14 +2,14 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.family_codec import apply_family
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.family_codec import apply_family
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DID,
     DreameVacuumAction,
     DreameVacuumProperty,
 )
-from custom_components.dreame_vacuum.xiaomi import resolve_family
-from custom_components.dreame_vacuum.xiaomi.mapping import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
     MODEL_ROBOT_VACUUM_5,
     MODEL_S20_PLUS,
     MODEL_X20_MAX,

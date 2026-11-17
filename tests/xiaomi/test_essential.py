@@ -5,22 +5,25 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from custom_components.dreame_vacuum.dreame.const import ERROR_CODE_TO_ERROR_NAME
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.const import ERROR_CODE_TO_ERROR_NAME
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumProperty,
     DreameVacuumState,
 )
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_E10,
     MODEL_MIJIA_ESSENTIAL,
     MODEL_MIJIA_ESSENTIAL_V3,
     MODEL_MIJIA_G1,
 )
-from custom_components.dreame_vacuum.xiaomi.profile import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.profile import (
     STATION_PROPERTIES,
     STATION_STATES,
 )
-from custom_components.dreame_vacuum.xiaomi.sweep import SWEEP_PROPERTIES, SWEEP_STATES
+from custom_components.xiaomi_robot_vacuum.xiaomi.sweep import (
+    SWEEP_PROPERTIES,
+    SWEEP_STATES,
+)
 import pytest
 from tests.xiaomi.helpers import FakeMiio, release_device
 from tests.xiaomi.spec_helpers import (
@@ -235,7 +238,7 @@ def test_the_three_records_share_the_essential_profile() -> None:
 
 
 _UNLISTED_FAULTS: tuple[int, ...] = (13, 99)
-_STRINGS = Path("custom_components/dreame_vacuum/strings.json")
+_STRINGS = Path("custom_components/xiaomi_robot_vacuum/strings.json")
 
 
 def test_every_fault_code_uses_the_spec_name_not_a_dreame_name(

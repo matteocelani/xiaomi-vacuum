@@ -2,17 +2,20 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumState
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_E10,
     MODEL_MIJIA_SWEEP_MOP_3,
     MODEL_S12,
     MODEL_S20,
 )
-from custom_components.dreame_vacuum.xiaomi.b106eu import S12
-from custom_components.dreame_vacuum.xiaomi.controls import ValueKind
-from custom_components.dreame_vacuum.xiaomi.profile import STATION_PROPERTIES
-from custom_components.dreame_vacuum.xiaomi.sweep import SWEEP_CONTROLS, SWEEP_STATES
+from custom_components.xiaomi_robot_vacuum.xiaomi.b106eu import S12
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import ValueKind
+from custom_components.xiaomi_robot_vacuum.xiaomi.profile import STATION_PROPERTIES
+from custom_components.xiaomi_robot_vacuum.xiaomi.sweep import (
+    SWEEP_CONTROLS,
+    SWEEP_STATES,
+)
 import pytest
 from tests.xiaomi.spec_helpers import (
     SWEEP_ACTION_REASONS,

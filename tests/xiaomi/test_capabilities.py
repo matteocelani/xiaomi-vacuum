@@ -8,13 +8,13 @@ import json
 from types import SimpleNamespace
 import zlib
 
-from custom_components.dreame_vacuum.dreame.const import DEVICE_INFO
-from custom_components.dreame_vacuum.dreame.family_codec import apply_family
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.const import DEVICE_INFO
+from custom_components.xiaomi_robot_vacuum.dreame.family_codec import apply_family
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumDeviceCapability,
     RobotType,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import resolve_family
 
 _CATALOG = json.loads(
     zlib.decompress(base64.b64decode(DEVICE_INFO), zlib.MAX_WBITS | 32)

@@ -2,5 +2,5 @@
   "name": "Xiaomi Vacuum",
   "homeassistant": "2024.2.0",
   "zip_release": true,
-  "filename": "dreame_vacuum.zip"
+  "filename": "xiaomi_robot_vacuum.zip"
 }

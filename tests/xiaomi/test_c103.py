@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
-from custom_components.dreame_vacuum.xiaomi import MODEL_MIJIA_3C, MODEL_S20
+from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumState
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_MIJIA_3C, MODEL_S20
 import pytest
 from tests.xiaomi.spec_helpers import (
     S20_ACTION_REASONS,

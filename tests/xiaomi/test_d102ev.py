@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.xiaomi import MODEL_MIJIA_M30, MODEL_X20_PRO
-from custom_components.dreame_vacuum.xiaomi.model import XiaomiModel
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_MIJIA_M30, MODEL_X20_PRO
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import XiaomiModel
 import pytest
 from tests.xiaomi.spec_helpers import (
     X20_PRO_ACTION_REASONS,

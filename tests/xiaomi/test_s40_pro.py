@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
-from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_S40_PRO
+from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumState
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import MODEL_S40_PRO
 import pytest
 from tests.xiaomi.spec_helpers import (
     SpecCase,

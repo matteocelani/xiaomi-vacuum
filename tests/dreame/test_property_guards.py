@@ -5,16 +5,16 @@ from __future__ import annotations
 import json
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.device import (
+from custom_components.xiaomi_robot_vacuum.dreame.device import (
     DreameVacuumDevice,
     DreameVacuumDeviceStatus,
     _is_positive_value,
 )
-from custom_components.dreame_vacuum.dreame.protocol import (
+from custom_components.xiaomi_robot_vacuum.dreame.protocol import (
     DreameVacuumDeviceProtocol,
     DreameVacuumDreameHomeCloudProtocol,
 )
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumProperty,
     DreameVacuumStreamStatus,
 )

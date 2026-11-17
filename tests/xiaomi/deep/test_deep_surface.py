@@ -6,10 +6,12 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.xiaomi.controls import write_control
-from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiControlException
-from custom_components.dreame_vacuum.xiaomi.mapping import resolve_family
-from custom_components.dreame_vacuum.xiaomi.schedule import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import write_control
+from custom_components.xiaomi_robot_vacuum.xiaomi.exceptions import (
+    XiaomiControlException,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.schedule import (
     SCHEDULE_MODELS,
     add_schedule,
 )

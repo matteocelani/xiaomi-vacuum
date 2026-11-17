@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
-from custom_components.dreame_vacuum.xiaomi import MODEL_H50
+from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumState
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_H50
 import pytest
 from tests.xiaomi.spec_helpers import (
     SpecCase,
