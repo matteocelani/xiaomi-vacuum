@@ -40,7 +40,8 @@ The project name is **Xiaomi Vacuum**. From version 2.2.0 the Home Assistant dom
 | HACS repository | `https://github.com/matteocelani/xiaomi-vacuum` |
 | Home Assistant domain | `xiaomi_robot_vacuum` |
 | Installed folder | `custom_components/xiaomi_robot_vacuum` |
-| Entities and services | `xiaomi_robot_vacuum.*` |
+| Services | `xiaomi_robot_vacuum.*` |
+| Entities | `vacuum`, `sensor`, `binary_sensor`, `switch`, `button`, `number`, `select`, `camera`, and `time` |
 | Config entries | stored on `xiaomi_robot_vacuum` |
 | Name in HACS and Home Assistant | Xiaomi Vacuum (`hacs.json` and `manifest.json`) |
 

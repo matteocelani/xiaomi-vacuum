@@ -14,11 +14,11 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/matteocelani/xiaomi-vacuum/issues",
   "requirements": [
-    "numpy",
-    "pycryptodome",
-    "python-miio",
-    "mini-racer",
-    "paho-mqtt"
+    "numpy>=1.26.4",
+    "pycryptodome>=3.20.0",
+    "python-miio>=0.5.12",
+    "mini-racer>=0.14.0",
+    "paho-mqtt>=1.6.1"
   ],
-  "version": "v2.2.0"
+  "version": "v2.2.1"
 }

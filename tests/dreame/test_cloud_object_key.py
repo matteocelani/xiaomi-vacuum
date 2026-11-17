@@ -41,3 +41,23 @@ def test_map_and_protocol_logger_lines_omit_file_urls() -> None:
         assert "Get interim file url result: %s = %s" not in text
         assert "Unable to get file at %s" not in text
         assert "Recovery map file url:" not in text
+
+
+def test_logger_lines_omit_response_bodies_and_map_payloads() -> None:
+    """Auth responses and decoded map bytes are not log arguments."""
+    protocol = (_DREAME / "protocol.py").read_text(encoding="utf-8")
+    for lineno, line in enumerate(protocol.splitlines(), start=1):
+        if "_LOGGER." not in line:
+            continue
+        assert "content.decode" not in line, f"protocol.py:{lineno}:{line}"
+        assert "response.text" not in line, f"protocol.py:{lineno}:{line}"
+        assert "content[:200]" not in line, f"protocol.py:{lineno}:{line}"
+    map_source = (_DREAME / "map.py").read_text(encoding="utf-8")
+    for lineno, line in enumerate(map_source.splitlines(), start=1):
+        if "_LOGGER." not in line:
+            continue
+        assert "raw_data" not in line, f"map.py:{lineno}:{line}"
+        if "data_json" in line:
+            assert "len(data_json)" in line, f"map.py:{lineno}:{line}"
+    assert "session.get(url)" not in protocol
+    assert "session.get(url, timeout=10)" in protocol

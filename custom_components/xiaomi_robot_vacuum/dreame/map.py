@@ -4242,7 +4242,6 @@ class DreameVacuumMapDecoder:
 
     @staticmethod
     def decode_map_partial(raw_data, version=1, iv=None, key=None) -> MapDataPartial | None:
-        # _LOGGER.debug("raw_map: %s", raw_data)
         raw_map = raw_data.replace("_", "/").replace("-", "+")
 
         if len(raw_map) < 3:
@@ -4278,7 +4277,7 @@ class DreameVacuumMapDecoder:
                 _LOGGER.error("Wrong header size for map")
                 return None
         except Exception as ex:
-            _LOGGER.error("Map data decompression failed: %s\n%s", ex, raw_data)
+            _LOGGER.error("Map data decompression failed: %s", ex)
             return None
 
         partial_map = MapDataPartial()
@@ -4365,7 +4364,7 @@ class DreameVacuumMapDecoder:
         if data_json is None:
             data_json = {}
 
-        _LOGGER.debug("Map Data Json: %s", data_json)
+        _LOGGER.debug("Map data json parsed (%s keys)", len(data_json))
 
         saved_map_data = None
         try:

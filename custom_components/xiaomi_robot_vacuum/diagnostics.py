@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import base64
-import gzip
-import traceback
 from datetime import date, datetime, timedelta
 from enum import Enum
+import traceback
 from typing import Any
 
+from homeassistant.components.diagnostics import REDACTED, async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import STATE_UNAVAILABLE, Platform
 from homeassistant.core import HomeAssistant
@@ -27,25 +27,96 @@ try:
 except ImportError:
     DeviceEntry = Any
 
-EXCLUDED_KEYS = [
+# Keys whose values are credentials, device identity, or floor-plan geometry.
+# async_redact_data matches these names on every nested dict.
+TO_REDACT = {
+    "FIRST_CONNECT_WIFI",
+    "MATTER_QR_CODE",
+    "SERIAL",
     "SERIAL_NUMBER",
+    "WIFI_INFO",
     "WIFI_MAP",
+    "access_token",
+    "account",
+    "active_areas",
+    "active_cruise_points",
+    "active_points",
     "ap",
     "auth_key",
+    "bind_key",
+    "ble_key",
+    "captchaUrl",
+    "captcha_url",
+    "carpets",
+    "center",
+    "charger_position",
+    "cookie",
+    "cookies",
+    "curtains",
+    "cUserId",
+    "deleted_carpets",
+    "detected_carpets",
     "did",
     "dvc_key",
+    "file_url",
+    "furnitures",
     "host",
-    "last_updated_time",
+    "identity_session",
+    "impassable_thresholds",
+    "ip",
+    "ip_address",
+    "lat",
+    "latitude",
+    "local_ip",
+    "localip",
+    "lon",
+    "longitude",
+    "low_lying_areas",
     "mac",
-    "MATTER_QR_CODE",
+    "mac_address",
+    "map_data",
+    "map_object_name",
+    "map_url",
     "matter_qr_code",
+    "no_go_areas",
+    "no_mopping_areas",
+    "notificationUrl",
     "object_name",
+    "obstacles",
+    "outline",
+    "pass_token",
+    "passToken",
+    "passable_thresholds",
     "password",
+    "path",
+    "predefined_points",
+    "ramps",
+    "recovery_map_list",
+    "refresh_token",
+    "robot_position",
+    "rooms",
+    "router_position",
+    "secondary_key",
+    "serial",
+    "serial_number",
+    "service_token",
+    "serviceToken",
+    "session",
+    "small_path",
+    "ssecurity",
     "token",
+    "uid",
+    "url",
+    "user_id",
+    "userId",
     "username",
-]
-
-EXCLUDED_MAP_KEYS = ["path", "small_path"]
+    "vacuum_position",
+    "verification_url",
+    "virtual_thresholds",
+    "virtual_walls",
+    "wifi_map",
+    "yetAnotherServiceToken",
+}
 
 
 def _get(target: Any, name: str, default: Any = None) -> Any:
@@ -76,9 +147,7 @@ def _sanitize(value: Any, seen: set[int] | None = None) -> Any:
     seen.add(marker)
     try:
         if isinstance(value, dict):
-            return {
-                str(k): _sanitize(v, seen) for k, v in value.items() if str(k) not in EXCLUDED_KEYS
-            }
+            return {str(k): _sanitize(v, seen) for k, v in value.items()}
         if isinstance(value, (list, tuple, set, frozenset)):
             return [_sanitize(v, seen) for v in value]
         as_dict = getattr(value, "as_dict", None)
@@ -91,7 +160,7 @@ def _sanitize(value: Any, seen: set[int] | None = None) -> Any:
             return {
                 k: _sanitize(v, seen)
                 for k, v in vars(value).items()
-                if not k.startswith("_") and k not in EXCLUDED_KEYS
+                if not k.startswith("_")
             }
     finally:
         seen.discard(marker)
@@ -193,10 +262,9 @@ def _capabilities(device: Any) -> list[str] | None:
 def _device_details(device: Any) -> dict[str, Any] | None:
     if device is None:
         return None
-    serial = _get(_get(device, "status"), "serial_number")
     return {
         "model": _get(_get(device, "info"), "model"),
-        "serial_number": serial[:7] + "*" * len(serial[7:]) if isinstance(serial, str) else serial,
+        "serial_number": _get(_get(device, "status"), "serial_number"),
     }
 
 
@@ -232,88 +300,6 @@ def _properties(device: Any) -> dict[str, Any] | None:
     return dict(sorted(properties.items()))
 
 
-def _map_payloads(device: Any) -> dict[str, Any] | None:
-    if device is None:
-        return None
-    manager = _get(device, "_map_manager")
-    if manager is None:
-        return None
-    from .dreame.map import DreameVacuumMapRenderer
-
-    status = _get(device, "status")
-    encoded_by_path: dict[str, str] = {}
-
-    def build(path: str, map_data: Any) -> Any:
-        if map_data is None:
-            return None
-        try:
-            render_data = device.get_map_for_render(map_data)
-            if render_data is None:
-                raise ValueError("get_map_for_render returned no data")
-            for attribute in EXCLUDED_MAP_KEYS:
-                setattr(render_data, attribute, None)
-            encoded = DreameVacuumMapRenderer.get_data(render_data, device.capability, 0, False)
-        except Exception as ex:
-            return _failure(ex)
-        encoded_by_path[path] = encoded
-        return base64.b64encode(gzip.compress(encoded.encode("utf-8"), 9)).decode("ascii")
-
-    groups: dict[str, Any] = {}
-    current = build("current", _get(manager, "_map_data"))
-    if current is not None:
-        groups["current"] = current
-
-    saved: dict[str, Any] = {}
-    recovery: dict[str, Any] = {}
-    for map_id, map_data in (_get(manager, "_saved_map_data") or {}).items():
-        path = f"saved/{map_id}"
-        entry = build(path, map_data)
-        if entry is None:
-            continue
-        saved[str(map_id)] = entry
-        items: list[Any] = []
-        for index, info in enumerate(_get(map_data, "recovery_map_list") or [], 1):
-            cached = build(f"{path}/recovery/{index}", _get(info, "map_data"))
-            if cached is not None:
-                items.append(cached)
-        if items:
-            recovery[str(map_id)] = items
-    if saved:
-        groups["saved"] = saved
-    if recovery:
-        groups["recovery"] = recovery
-
-    cache = _get(status, "_history_map_data")
-    if not isinstance(cache, dict):
-        cache = {}
-    for group, attribute in (("history", "_cleaning_history"), ("cruising", "_cruising_history")):
-        section: dict[str, Any] = {}
-        stored = 0
-        for index, item in enumerate(_get(status, attribute) or [], 1):
-            if stored >= 5:
-                break
-            object_name = _get(item, "object_name")
-            if not object_name or object_name not in cache:
-                continue
-            path = f"{group}/{index}"
-            entry = build(path, cache[object_name])
-            current_encoded = encoded_by_path.get("current")
-            if (
-                group == "history"
-                and index == 1
-                and current_encoded is not None
-                and encoded_by_path.get(path) == current_encoded
-            ):
-                entry = "current"
-            elif isinstance(entry, str):
-                stored += 1
-            section[_sanitize(_get(item, "date")) or str(index)] = entry
-        if section:
-            groups[group] = section
-
-    return groups
-
-
 def _entry_details(entry: ConfigEntry) -> dict[str, Any]:
     return {
         "data": dict(entry.data),
@@ -335,24 +321,48 @@ def _section(builder: Any, *args: Any) -> Any:
         return _failure(ex)
 
 
+def _is_sensitive_string(value: str) -> bool:
+    """A signed cloud URL carries the query that opens the file."""
+    return "://" in value and "?" in value
+
+
+def _scrub_sensitive_strings(value: object) -> object:
+    if isinstance(value, str):
+        if _is_sensitive_string(value):
+            return REDACTED
+        return value
+    if isinstance(value, dict):
+        return {key: _scrub_sensitive_strings(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_scrub_sensitive_strings(item) for item in value]
+    return value
+
+
+def redact_diagnostics(value: object) -> object:
+    """Mask secrets and floor-plan fields on a JSON-ready diagnostics payload."""
+    sanitized = _sanitize(value)
+    if not isinstance(sanitized, dict):
+        return _scrub_sensitive_strings(sanitized)
+    return _scrub_sensitive_strings(async_redact_data(sanitized, TO_REDACT))
+
+
 async def _async_diagnostics(
     hass: HomeAssistant, entry: ConfigEntry, device_id: str | None = None
-) -> dict[str, Any]:
+) -> dict[str, object]:
     coordinator = (hass.data.get(DOMAIN) or {}).get(entry.entry_id)
     device = _get(coordinator, "device")
-    try:
-        map_data = await hass.async_add_executor_job(_map_payloads, device)
-    except Exception as ex:
-        map_data = _failure(ex)
-    return {
+    payload = {
         "generated_at": dt_util.utcnow().isoformat(),
         "device": _section(_device_details, device),
         "entry": _section(_entry_details, entry),
         "capabilities": _section(_capabilities, device),
         "properties": _section(_properties, device),
         "entities": _section(_entities, hass, entry, device, device_id),
-        "map_data": map_data,
     }
+    redacted = redact_diagnostics(payload)
+    if isinstance(redacted, dict):
+        return redacted
+    return {"diagnostics_error": "redaction failed"}
 
 
 async def async_get_config_entry_diagnostics(hass: HomeAssistant, entry: ConfigEntry) -> dict[str, Any]:
