@@ -1391,11 +1391,11 @@ class DreameVacuumDreameHomeCloudProtocol:
                         pass
                 self._logged_in = False
                 self._auth_failed = True
-                _LOGGER.error("Login failed: %s", content.decode("utf-8", "replace"))
+                _LOGGER.error("Login failed with HTTP status %s", status)
             else:
                 # Server side or rate limit errors are not credential errors, retry on next update
                 self._logged_in = False
-                _LOGGER.warning("Login failed (%s): %s", status, content.decode("utf-8", "replace"))
+                _LOGGER.warning("Login failed with HTTP status %s", status)
         except TimeoutError:
             self._logged_in = False
             _LOGGER.warning("Login Failed: Read timed out. (read timeout=10)")
@@ -1600,11 +1600,11 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if self._auth_failure(content.decode("utf-8", "replace")) == 2:
                     self._logged_in = False
                     self._auth_failed = True
-                    _LOGGER.error("Get device file failed: Session invalid (%s)", content.decode("utf-8", "replace"))
+                    _LOGGER.error("Get device file failed: session invalid")
                     return None
                 if not retried and self.login():
                     return self.get_device_file(file_name, file_type, True)
-            _LOGGER.warning("Get device file failed! (%s)", content.decode("utf-8", "replace"))
+            _LOGGER.warning("Get device file failed with HTTP status %s", status)
 
         except TimeoutError:
             _LOGGER.warning("Error while executing request: Read timed out. (timeout=15)")
@@ -1763,7 +1763,7 @@ class DreameVacuumDreameHomeCloudProtocol:
                 try:
                     response = json.loads(content)
                 except ValueError:
-                    _LOGGER.warning("Execute api call failed with invalid response: %s", content[:200])
+                    _LOGGER.warning("Execute api call failed with an invalid response")
                 else:
                     self._fail_count = 0
                     self._connected = True
@@ -1772,11 +1772,11 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if self._auth_failure(content.decode("utf-8", "replace")) == 2:
                     self._logged_in = False
                     self._auth_failed = True
-                    _LOGGER.error("Execute api call failed: Session invalid (%s)", content.decode("utf-8", "replace"))
+                    _LOGGER.error("Execute api call failed: session invalid")
                 elif not retried and self.login():
                     return self.request(url, data, retry_count, timeout, True)
             else:
-                _LOGGER.warning("Execute api call failed with response: %s", content.decode("utf-8", "replace"))
+                _LOGGER.warning("Execute api call failed with HTTP status %s", status)
 
         if self._fail_count == 5:
             self._connected = False
@@ -2098,7 +2098,7 @@ class DreameVacuumMiHomeCloudProtocol:
                             if url[:4] != "http":
                                 url = f"https://account.xiaomi.com{url}"
 
-                            response = session.get(url)
+                            response = session.get(url, timeout=10)
                             if ick := self._cookie_value(response.cookies, "ick"):
                                 self._captcha_ick = ick
                                 self.captcha_img = base64.b64encode(response.content).decode()
@@ -2783,7 +2783,7 @@ class DreameVacuumMiHomeCloudProtocol:
                 self._connected = True
                 decoded = self.decrypt_rc4(self.signed_nonce(fields["_nonce"]), response.text)
                 return json.loads(decoded) if decoded else None
-            _LOGGER.warning("Execute api call failed with response: %s", response.text)
+            _LOGGER.warning("Execute api call failed with HTTP status %s", response.status_code)
 
         if self._fail_count == 5:
             self._connected = False

@@ -1,13 +1,13 @@
 # Marketplace submission
 
-The catalog review that follows the domain change needs a published GitHub Release **v2.2.0** whose asset is `xiaomi_robot_vacuum.zip`. v2.1.2 and earlier shipped `dreame_vacuum.zip`. Do not retag those releases.
+The catalog review that follows the domain change needs a published GitHub Release **v2.2.1** whose asset is `xiaomi_robot_vacuum.zip`. v2.2.0 shipped the domain rename. v2.1.2 and earlier shipped `dreame_vacuum.zip`. Do not retag those releases.
 
 The Home Assistant Marketplace (2026.11 and newer) uses this same catalog. Custom-repository installs work before that pull request. Default-catalog installs do not.
 
 ## What this repository already prepares
 
 - `hacs.json` name is `Xiaomi Vacuum`, `zip_release` is true, and `filename` is `xiaomi_robot_vacuum.zip`.
-- `manifest.json` domain is `xiaomi_robot_vacuum`. Name is `Xiaomi Vacuum`. Documentation is the README in this repository. Issue tracker is `https://github.com/matteocelani/xiaomi-vacuum/issues`. Code owners are `@matteocelani` and `@tasshack`. Version is `v2.2.0`. `categories` is `appliances_cleaning.cleaning` (robot vacuums and mops).
+- `manifest.json` domain is `xiaomi_robot_vacuum`. Name is `Xiaomi Vacuum`. Documentation is the README in this repository. Issue tracker is `https://github.com/matteocelani/xiaomi-vacuum/issues`. Code owners are `@matteocelani` and `@tasshack`. Version is `v2.2.1`. `categories` is `appliances_cleaning.cleaning` (robot vacuums and mops).
 - `.github/workflows/validate.yaml` runs the HACS action with no `ignore` key.
 - `.github/workflows/hassfest.yaml` runs hassfest.
 - `.github/workflows/release.yaml` builds the zip when a GitHub Release is published. Files are at the archive root because HACS calls `extractall()` into `custom_components/xiaomi_robot_vacuum/` and does not strip a leading folder.
@@ -27,14 +27,14 @@ GitHub repository settings are not changed from a pull request or from the API i
 
 Confirm the repository is public, not archived, and that GitHub detects the MIT license in `LICENSE`.
 
-## Publish v2.2.0
+## Publish v2.2.1
 
-Merge the domain change into `master` first. The release workflow is read from the default branch. The maintainer publishes the release after that merge. This pull request does not cut the tag.
+Merge the review fixes into `master` first. The release workflow is read from the default branch. The maintainer publishes the release after that merge. This pull request does not cut the tag. Leave the published `v2.2.0` tag where it is.
 
-1. On `master`, confirm `custom_components/xiaomi_robot_vacuum/manifest.json` says `"version": "v2.2.0"` and `custom_components/xiaomi_robot_vacuum/dreame/__init__.py` says `VERSION = "v2.2.0"`.
+1. On `master`, confirm `custom_components/xiaomi_robot_vacuum/manifest.json` says `"version": "v2.2.1"` and `custom_components/xiaomi_robot_vacuum/dreame/__init__.py` says `VERSION = "v2.2.1"`.
 2. Confirm Actions for hassfest, HACS validation, and Xiaomi tests are green on that commit, with no `ignore` input on the HACS action.
-3. Create a GitHub Release, not only a tag. Tag name and release title: `v2.2.0`. Target: the merge commit on `master`. This is a full release, not a pre-release and not a draft. Do not move `v2.1.2` or any earlier tag.
-4. Publishing the release runs `.github/workflows/release.yaml`. It checks out tag `v2.2.0`, zips `custom_components/xiaomi_robot_vacuum/` with paths at the archive root, and uploads `xiaomi_robot_vacuum.zip`.
+3. Create a GitHub Release, not only a tag. Tag name and release title: `v2.2.1`. Target: the merge commit on `master`. This is a full release, not a pre-release and not a draft. Do not move `v2.2.0` or any earlier tag.
+4. Publishing the release runs `.github/workflows/release.yaml`. It checks out tag `v2.2.1`, zips `custom_components/xiaomi_robot_vacuum/` with paths at the archive root, and uploads `xiaomi_robot_vacuum.zip`.
 5. Open the release and confirm the asset name is exactly `xiaomi_robot_vacuum.zip`. `unzip -Z1 xiaomi_robot_vacuum.zip` must list `manifest.json` and `brand/icon.png`, and must not list a leading `xiaomi_robot_vacuum/` or `custom_components/` directory.
 
 v2.1.2 and earlier attached `dreame_vacuum.zip` from `custom_components/dreame_vacuum`. Those assets stay as they were.
@@ -89,7 +89,7 @@ Ready-to-paste body:
 
 ## Links
 
-Link to current release: https://github.com/matteocelani/xiaomi-vacuum/releases/tag/v2.2.0
+Link to current release: https://github.com/matteocelani/xiaomi-vacuum/releases/tag/v2.2.1
 Link to successful HACS action (without the `ignore` key): <paste the green Validate run>
 Link to successful hassfest action (if integration): <paste the green hassfest run>
 
@@ -98,7 +98,7 @@ Link to successful hassfest action (if integration): <paste the green hassfest r
 `matteocelani/xiaomi-vacuum` is a maintained fork of `Tasshack/dreame-vacuum`. The Home Assistant domain is `xiaomi_robot_vacuum` and the folder is `custom_components/xiaomi_robot_vacuum`. It does not replace an existing `dreame_vacuum` install. Users add the device again. It is not an override of a core integration. `xiaomi_vacuum` is already used by `roquerodrigo/ha-xiaomi-vacuum`. Display name in `hacs.json` is Xiaomi Vacuum. Dreame, MOVA, Mijia, and TROUVER devices from the upstream project still configure through this integration.
 ```
 
-Fill the two action links from the `master` commit that the `v2.2.0` tag points at. Check every box only after it is true. A misrepresentation gets the pull request closed.
+Fill the two action links from the `master` commit that the `v2.2.1` tag points at. Check every box only after it is true. A misrepresentation gets the pull request closed.
 
 ## Brand icon
 
