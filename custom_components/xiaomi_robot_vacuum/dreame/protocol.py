@@ -72,6 +72,12 @@ _MI_HOME_2FA_TIMEOUT: Final = 10
 _LOGGER = logging.getLogger(__name__)
 
 
+def cloud_object_key(url: str) -> str:
+    """Object key from a cloud file URL, with the signed query removed."""
+    path = urlsplit(url).path.lstrip("/")
+    return path or "map-object"
+
+
 def _run_callback(callback, response) -> None:
     """Run an async request callback without letting it kill the worker thread."""
     if not callback:
@@ -1622,7 +1628,11 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if status == 200:
                     return content
             except Exception as ex:
-                _LOGGER.warning("Unable to get file at %s: %s", url, ex)
+                _LOGGER.warning(
+                    "Unable to get file %s: %s",
+                    cloud_object_key(url),
+                    type(ex).__name__,
+                )
             retries = retries + 1
         return None
 
@@ -2509,7 +2519,11 @@ class DreameVacuumMiHomeCloudProtocol:
                 response = self._get_session().get(url, timeout=6)
             except Exception as ex:
                 response = None
-                _LOGGER.warning("Unable to get file at %s: %s", url, ex)
+                _LOGGER.warning(
+                    "Unable to get file %s: %s",
+                    cloud_object_key(url),
+                    type(ex).__name__,
+                )
             if response is not None and response.status_code == 200:
                 return response.content
             retries = retries + 1
@@ -2517,7 +2531,11 @@ class DreameVacuumMiHomeCloudProtocol:
 
     def get_file_url(self, object_name: str = "") -> Any:
         api_response = self._api_call(f'home/getfileurl{("_v3" if self._v3 else "")}', {"obj_name": object_name})
-        _LOGGER.debug("Get file url result: %s = %s", object_name, api_response)
+        _LOGGER.debug(
+            "Get file object result: %s code=%s",
+            object_name,
+            api_response.get("code") if isinstance(api_response, dict) else None,
+        )
         if api_response is None or not api_response.get("result") or "url" not in api_response["result"]:
             if api_response and api_response.get("code") == -8 and self._v3:
                 _LOGGER.info("get_file_url fallback to V2")
@@ -2532,7 +2550,11 @@ class DreameVacuumMiHomeCloudProtocol:
             f'v2/home/get_interim_file_url{("_pro" if self._v3 else "")}',
             {"obj_name": object_name},
         )
-        _LOGGER.debug("Get interim file url result: %s = %s", object_name, api_response)
+        _LOGGER.debug(
+            "Get interim file object result: %s code=%s",
+            object_name,
+            api_response.get("code") if isinstance(api_response, dict) else None,
+        )
         if api_response is None or not api_response.get("result") or "url" not in api_response["result"]:
             if api_response and api_response.get("code") == -8 and self._v3:
                 _LOGGER.info("get_interim_file_url fallback to V2")
@@ -2749,7 +2771,11 @@ class DreameVacuumMiHomeCloudProtocol:
                 retries = retries + 1
                 response = None
                 if self._connected:
-                    _LOGGER.warning("Error while executing request: %s %s", url, str(ex))
+                    _LOGGER.warning(
+                        "Error while executing request %s: %s",
+                        urlsplit(url).path or "api",
+                        type(ex).__name__,
+                    )
 
         if response is not None:
             if response.status_code == 200:

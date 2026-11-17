@@ -614,11 +614,11 @@ class DreameMapVacuumMapManager:
 
             url = self._get_file_url(object_name)
             if url:
-                _LOGGER.info("Request map data from cloud %s", url)
+                _LOGGER.info("Request map data from cloud %s", object_name)
                 response = self._protocol.cloud.get_file(url)
                 if response is not None:
                     return response
-                _LOGGER.warning("Request map data from cloud failed %s", url)
+                _LOGGER.warning("Request map data from cloud failed %s", object_name)
                 if self._file_urls.get(object_name):
                     del self._file_urls[object_name]
 
@@ -1439,7 +1439,7 @@ class DreameMapVacuumMapManager:
                         object_name,
                         not (object_name.endswith("mb.tbz2") and not self._protocol.dreame_cloud),
                     )
-                    _LOGGER.info("Recovery map file url: %s = %s", object_name, map_url)
+                    _LOGGER.info("Recovery map file: %s", object_name)
                     if map_url:
                         return (
                             self._protocol.cloud.get_file(map_url),
