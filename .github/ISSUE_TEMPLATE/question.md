@@ -1,6 +1,6 @@
 ---
 name: "Question · Integration"
-about: "Ask for help or clarification about the dreame_vacuum integration. Bugs and feature ideas have their own templates."
+about: "Ask for help or clarification about the xiaomi_robot_vacuum integration. Bugs and feature ideas have their own templates."
 title: ""
 labels: question
 assignees: matteocelani

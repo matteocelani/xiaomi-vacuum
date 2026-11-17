@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_MIJIA_ESSENTIAL,
     MODEL_MIJIA_ESSENTIAL_V3,
     MODEL_MIJIA_G1,
@@ -50,7 +50,7 @@ _ENTITIES: Final[frozenset[tuple[str, str]]] = frozenset(
         ("sensor", "xiaomi_total_clean_time"),
         ("switch", "dnd"),
         ("switch", "xiaomi_alarm_enabled"),
-        ("vacuum", "dreame_vacuum"),
+        ("vacuum", "xiaomi_robot_vacuum"),
     }
 )
 _COUNTER_SAMPLES: Final[dict[str, tuple[object, str]]] = {

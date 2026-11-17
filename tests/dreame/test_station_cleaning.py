@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.types import ACTION_AVAILABILITY
+from custom_components.xiaomi_robot_vacuum.dreame.types import ACTION_AVAILABILITY
 
 
 def _device(

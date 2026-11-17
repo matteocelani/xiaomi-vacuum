@@ -4,26 +4,30 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.catalog import (
+from custom_components.xiaomi_robot_vacuum.dreame.catalog import (
     catalog_supports_model,
     load_model_catalog,
 )
-from custom_components.dreame_vacuum.dreame.const import DEVICE_INFO
-from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
-from custom_components.dreame_vacuum.dreame.exceptions import InvalidActionException
-from custom_components.dreame_vacuum.dreame.protocol import DreameVacuumProtocol
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.const import DEVICE_INFO
+from custom_components.xiaomi_robot_vacuum.dreame.device import DreameVacuumDevice
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import (
+    InvalidActionException,
+)
+from custom_components.xiaomi_robot_vacuum.dreame.protocol import DreameVacuumProtocol
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumProperty,
     DreameVacuumStatus,
 )
-from custom_components.dreame_vacuum.xiaomi import resolve_family
-from custom_components.dreame_vacuum.xiaomi.controls import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import (
     boolean_switch,
     refresh_controls,
     write_control,
 )
-from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiControlException
-from custom_components.dreame_vacuum.xiaomi.model import StoredTask
+from custom_components.xiaomi_robot_vacuum.xiaomi.exceptions import (
+    XiaomiControlException,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredTask
 import pytest
 from tests.xiaomi.deep.cases import (
     ActionCase,

@@ -8,31 +8,31 @@ import json
 from pathlib import Path
 from typing import Final
 
-from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
-from custom_components.dreame_vacuum.dreame.exceptions import (
+from custom_components.xiaomi_robot_vacuum.dreame.device import DreameVacuumDevice
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import (
     DeviceException,
     InvalidActionException,
     UnavailableException,
 )
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumProperty,
     DreameVacuumState,
 )
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     XiaomiControlException,
     invoke_control,
     read_control,
     resolve_family,
     write_control,
 )
-from custom_components.dreame_vacuum.xiaomi.controls import XiaomiControl
-from custom_components.dreame_vacuum.xiaomi.mapping import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import XiaomiControl
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
     MODEL_ROBOT_VACUUM_5,
     MODEL_X20_MAX,
     XiaomiModel,
 )
-from custom_components.dreame_vacuum.xiaomi.model import StoredState
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredState
 import pytest
 from tests.xiaomi.helpers import (
     FakeMiio,
@@ -45,7 +45,7 @@ LOOPBACK_HOST: Final = "127.0.0.1"
 LOOPBACK_TOKEN: Final = "00" * 16
 LOOPBACK_MAC: Final = "00:00:00:00:00:00"
 _SPECS: Final = Path(__file__).parent / "specs"
-_STRINGS: Final = Path("custom_components/dreame_vacuum/strings.json")
+_STRINGS: Final = Path("custom_components/xiaomi_robot_vacuum/strings.json")
 _WRITE_SAMPLE_LIMIT: Final = 100
 _CONTROL_SAMPLE_LIMIT: Final = 255
 _EVENT_REASON: Final = (

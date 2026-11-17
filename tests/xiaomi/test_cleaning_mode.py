@@ -4,18 +4,18 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.const import (
+from custom_components.xiaomi_robot_vacuum.dreame.const import (
     CLEANING_MODE_MOPPING,
     CLEANING_MODE_SWEEPING,
     CLEANING_MODE_SWEEPING_AND_MOPPING,
     SUCTION_LEVEL_CODE_TO_NAME,
 )
-from custom_components.dreame_vacuum.dreame.device import (
+from custom_components.xiaomi_robot_vacuum.dreame.device import (
     DreameVacuumDevice,
     DreameVacuumDeviceStatus,
 )
-from custom_components.dreame_vacuum.dreame.exceptions import UnavailableException
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import UnavailableException
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     PROPERTY_AVAILABILITY,
     DreameVacuumCleaningMode,
     DreameVacuumDeviceCapability,
@@ -23,8 +23,8 @@ from custom_components.dreame_vacuum.dreame.types import (
     DreameVacuumSuctionLevel,
     DreameVacuumTaskStatus,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import resolve_family
-from custom_components.dreame_vacuum.xiaomi.model import StoredState
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredState
 import pytest
 
 _MOP_INSTALLED_MODES = [

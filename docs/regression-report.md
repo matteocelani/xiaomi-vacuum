@@ -4,7 +4,7 @@ The Xiaomi work on this fork does not change behavior for any Dreame, MOVA, TROU
 
 ## Method
 
-The baseline is the tree this fork inherited: the second parent of `0e763e6` (`Merge pull request #1 from Tasshack/master`), commit `f5b8472b8e2e4bb3dff7bc2a81a5fd594eca9585`. That is also `last_synced_sha` in `.agent/upstream-sync.json`. `git archive` of `custom_components/dreame_vacuum` at that commit is the upstream checkout. Tests do not clone the network and do not call a device.
+The baseline is the tree this fork inherited: the second parent of `0e763e6` (`Merge pull request #1 from Tasshack/master`), commit `f5b8472b8e2e4bb3dff7bc2a81a5fd594eca9585`. That is also `last_synced_sha` in `.agent/upstream-sync.json`. `git archive` of `custom_components/dreame_vacuum` at that commit is the upstream checkout. The fork package is now `custom_components/xiaomi_robot_vacuum`. Tests do not clone the network and do not call a device.
 
 Current Tasshack `master` is `fec086caf064f2681e8bcc7be20a0d0ef54f444d` (`v2.0.3`), 25 commits ahead of that baseline. Those commits are unsynced upstream work (map rendering, TLS, diagnostics redaction, and similar). They are not Xiaomi regressions, and this comparison does not treat them as failures to fix.
 
@@ -39,7 +39,7 @@ The 48 additions are 42 `xiaomi.vacuum` models and 6 `mijia.vacuum` models (`b10
 
 ## Shared files
 
-Product files that differ from `f5b8472`, outside `custom_components/dreame_vacuum/xiaomi/`:
+Product files that differ from `f5b8472`, outside the Xiaomi package `xiaomi/`. The integration folder on that baseline is `custom_components/dreame_vacuum`. In this tree it is `custom_components/xiaomi_robot_vacuum`:
 
 | File | Dreame path |
 | --- | --- |

@@ -29,7 +29,7 @@ What you expected to happen.
 What happened instead.
 
 ## Logs
-Enable debug logging for `dreame_vacuum`, reproduce the problem, then paste only the lines related to `dreame_vacuum`. Do not upload the full `homeassistant.log`, it can contain tokens and personal data from other integrations.
+Enable debug logging for `xiaomi_robot_vacuum`, reproduce the problem, then paste only the lines related to `xiaomi_robot_vacuum`. Do not upload the full `homeassistant.log`, it can contain tokens and personal data from other integrations.
 
 ```text
 [Paste logs here]

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import sys
 from typing import Final
 
-from custom_components.dreame_vacuum.const import (
+from custom_components.xiaomi_robot_vacuum.const import (
     CONF_ACCOUNT_TYPE,
     CONF_MAC,
     CONF_NOTIFY,
@@ -16,9 +16,9 @@ from custom_components.dreame_vacuum.const import (
     CONF_VERSION,
     DOMAIN,
 )
-from custom_components.dreame_vacuum.xiaomi.controls import XiaomiControl
-from custom_components.dreame_vacuum.xiaomi.mapping import XiaomiModel
-from custom_components.dreame_vacuum.xiaomi.model import StoredState
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import XiaomiControl
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import XiaomiModel
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredState
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from tests.xiaomi.helpers import FakeMiio, release_device, wire_for_state
 from tests.xiaomi.spec_helpers import (
@@ -101,7 +101,7 @@ _MIJIA_B108_ENTITIES: Final[frozenset[tuple[str, str]]] = frozenset(
         ("switch", "child_lock"),
         ("switch", "dnd"),
         ("switch", "resume_cleaning"),
-        ("vacuum", "dreame_vacuum"),
+        ("vacuum", "xiaomi_robot_vacuum"),
     }
 )
 _MIJIA_B108_COUNTERS: Final[dict[str, tuple[object, str]]] = {
@@ -149,7 +149,7 @@ async def exercise_home_assistant_entities(
     hass: HomeAssistant, case: EntityCase
 ) -> None:
     """Drive every entity this model creates and keep traffic on the map."""
-    version = sys.modules["custom_components.dreame_vacuum.dreame"].VERSION
+    version = sys.modules["custom_components.xiaomi_robot_vacuum.dreame"].VERSION
     family = require_family(case.model)
     with FakeMiio(case.model) as fake:
         entry = _entry(version, case.device_name)
@@ -175,7 +175,7 @@ async def exercise_home_assistant_entities(
 
 async def assert_entities_read_or_write(hass: HomeAssistant, case: EntityCase) -> None:
     """Assert each entity polls a mapped property or sends a mapped wire."""
-    version = sys.modules["custom_components.dreame_vacuum.dreame"].VERSION
+    version = sys.modules["custom_components.xiaomi_robot_vacuum.dreame"].VERSION
     family = require_family(case.model)
     with FakeMiio(case.model) as fake:
         entry = _entry(version, case.device_name + " Map")
@@ -580,7 +580,7 @@ async def _exercise_vacuum_states(
     state = family.property_overrides["STATE"]
     charging = family.property_overrides.get("CHARGING_STATUS", {})
     error = family.property_overrides["ERROR"]
-    vacuum_id = _entity_id(hass, entry_id, "vacuum", "dreame_vacuum")
+    vacuum_id = _entity_id(hass, entry_id, "vacuum", "xiaomi_robot_vacuum")
     if not case.station_vacuum:
         await _exercise_sweep_vacuum(
             hass, fake, entry_id, family, vacuum_id, state, error

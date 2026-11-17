@@ -10,8 +10,8 @@ import threading
 from typing import Final
 
 from Crypto.Cipher import AES
-from custom_components.dreame_vacuum.xiaomi import resolve_family
-from custom_components.dreame_vacuum.xiaomi.model import StoredState, XiaomiModel
+from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredState, XiaomiModel
 
 
 def traffic_outside_map(

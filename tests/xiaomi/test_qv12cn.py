@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_MIJIA_7_MAX,
     MODEL_ROBOT_VACUUM_6_MAX,
     resolve_family,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import _FAMILIES
-from custom_components.dreame_vacuum.xiaomi.model import StoredTask, regional_variant
-from custom_components.dreame_vacuum.xiaomi.pv11gl import ROBOT_VACUUM_6_MAX
-from custom_components.dreame_vacuum.xiaomi.qv12cn import MIJIA_7_MAX
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import _FAMILIES
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import (
+    StoredTask,
+    regional_variant,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.pv11gl import ROBOT_VACUUM_6_MAX
+from custom_components.xiaomi_robot_vacuum.xiaomi.qv12cn import MIJIA_7_MAX
 import pytest
 from tests.xiaomi.spec_helpers import (
     MIJIA_7_MAX_ACTION_REASONS,

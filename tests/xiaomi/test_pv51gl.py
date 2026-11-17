@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.xiaomi import MODEL_S60_PLUS
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_S60_PLUS
 import pytest
 from tests.xiaomi.spec_helpers import (
     S60_CLASS_ACTION_REASONS,

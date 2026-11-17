@@ -6,18 +6,18 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
-from custom_components.dreame_vacuum.dreame.exceptions import (
+from custom_components.xiaomi_robot_vacuum.dreame.device import DreameVacuumDevice
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import (
     InvalidActionException,
     InvalidValueException,
 )
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumProperty,
 )
-from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiValueException
-from custom_components.dreame_vacuum.xiaomi.mapping import _FAMILIES
-from custom_components.dreame_vacuum.xiaomi.value_limits import wire_kind
+from custom_components.xiaomi_robot_vacuum.xiaomi.exceptions import XiaomiValueException
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import _FAMILIES
+from custom_components.xiaomi_robot_vacuum.xiaomi.value_limits import wire_kind
 import pytest
 
 _SPECS = Path(__file__).parent / "specs"

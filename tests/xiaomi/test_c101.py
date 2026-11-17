@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.xiaomi import MODEL_MIJIA_SWEEP_MOP_2, MODEL_X20
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
+    MODEL_MIJIA_SWEEP_MOP_2,
+    MODEL_X20,
+)
 import pytest
 from tests.xiaomi.spec_helpers import (
     X20_ACTION_REASONS,

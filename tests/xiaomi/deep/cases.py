@@ -8,13 +8,13 @@ import json
 from pathlib import Path
 from typing import Final
 
-from custom_components.dreame_vacuum.xiaomi.controls import XiaomiControl
-from custom_components.dreame_vacuum.xiaomi.mapping import resolve_family
-from custom_components.dreame_vacuum.xiaomi.model import XiaomiModel
-from custom_components.dreame_vacuum.xiaomi.schedule import schedule_property_name
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import XiaomiControl
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import XiaomiModel
+from custom_components.xiaomi_robot_vacuum.xiaomi.schedule import schedule_property_name
 from tests.xiaomi.deep.corpus import SpecRecord, load_record, spec_token
 
-_STRINGS: Final = Path("custom_components/dreame_vacuum/strings.json")
+_STRINGS: Final = Path("custom_components/xiaomi_robot_vacuum/strings.json")
 _ONE_INDEX: Final = frozenset({"CLEANING_MODE", "SUCTION_LEVEL"})
 _REQUIRED_TOKENS: Final = frozenset(
     {"status", "fault", "battery-level", "charging-state"}

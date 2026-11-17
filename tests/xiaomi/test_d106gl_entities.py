@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
-from custom_components.dreame_vacuum.xiaomi import MODEL_S20
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_S20
 import pytest
 from tests.xiaomi.entity_contract import (
     EntityCase,
@@ -63,7 +63,7 @@ _ENTITIES: Final[frozenset[tuple[str, str]]] = frozenset(
         ("sensor", "xiaomi_dust_bin"),
         ("sensor", "xiaomi_mop_cloth"),
         ("switch", "xiaomi_alarm"),
-        ("vacuum", "dreame_vacuum"),
+        ("vacuum", "xiaomi_robot_vacuum"),
     }
 )
 _COUNTER_SAMPLES: Final[dict[str, tuple[object, str]]] = {

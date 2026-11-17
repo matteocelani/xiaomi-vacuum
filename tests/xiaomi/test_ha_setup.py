@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.const import (
+from custom_components.xiaomi_robot_vacuum.const import (
     CONF_ACCOUNT_TYPE,
     CONF_MAC,
     CONF_NOTIFY,
@@ -10,7 +10,7 @@ from custom_components.dreame_vacuum.const import (
     CONF_VERSION,
     DOMAIN,
 )
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_E5,
     MODEL_E10,
     MODEL_E10C,
@@ -49,7 +49,7 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_X20,
     MODEL_X20_PRO,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
     MODEL_H40,
     MODEL_MIJIA_M40_S,
     MODEL_ROBOT_VACUUM_5,
@@ -85,8 +85,8 @@ async def test_setup_creates_vacuum_and_safe_commands_for_both_models(
 ) -> None:
     """Set up each model, drive the dock cycle, and record every action."""
     del integration_package
-    from custom_components.dreame_vacuum.dreame import VERSION
-    from custom_components.dreame_vacuum.xiaomi import resolve_family
+    from custom_components.xiaomi_robot_vacuum.dreame import VERSION
+    from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
 
     for model, name in (
         (MODEL_S20_PLUS, "S20 Sim"),
@@ -199,8 +199,8 @@ async def test_sweep_family_setup_starts_and_returns_without_pause(
 ) -> None:
     """E10 docks, cleans, and returns. Pause is not a mapped action."""
     del integration_package
-    from custom_components.dreame_vacuum.dreame import VERSION
-    from custom_components.dreame_vacuum.xiaomi import resolve_family
+    from custom_components.xiaomi_robot_vacuum.dreame import VERSION
+    from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
 
     for model, name in (
         (MODEL_E10, "E10 Sim"),

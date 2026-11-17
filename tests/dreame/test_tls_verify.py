@@ -9,7 +9,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.hazmat.primitives.serialization import Encoding
-from custom_components.dreame_vacuum.dreame.protocol import (
+from custom_components.xiaomi_robot_vacuum.dreame.protocol import (
     DreameVacuumDreameHomeCloudProtocol,
 )
 import pytest

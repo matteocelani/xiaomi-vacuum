@@ -5,13 +5,13 @@ from __future__ import annotations
 from pathlib import Path
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumProperty,
     DreameVacuumState,
     DreameVacuumTaskStatus,
 )
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_H50,
     MODEL_H50_PRO,
     MODEL_H50_PRO_ROLLER,
@@ -48,12 +48,14 @@ from custom_components.dreame_vacuum.xiaomi import (
     controls_of,
     resolve_family,
 )
-from custom_components.dreame_vacuum.xiaomi.c101eu import X20 as X20_RECORD
-from custom_components.dreame_vacuum.xiaomi.d102ev import MIJIA_M30 as M30_RECORD
-from custom_components.dreame_vacuum.xiaomi.d102gl import X20_PRO as X20_PRO_RECORD
-from custom_components.dreame_vacuum.xiaomi.d106gl import S20 as S20_RECORD
-from custom_components.dreame_vacuum.xiaomi.exceptions import XiaomiValueException
-from custom_components.dreame_vacuum.xiaomi.mapping import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.c101eu import X20 as X20_RECORD
+from custom_components.xiaomi_robot_vacuum.xiaomi.d102ev import MIJIA_M30 as M30_RECORD
+from custom_components.xiaomi_robot_vacuum.xiaomi.d102gl import (
+    X20_PRO as X20_PRO_RECORD,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.d106gl import S20 as S20_RECORD
+from custom_components.xiaomi_robot_vacuum.xiaomi.exceptions import XiaomiValueException
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
     MODEL_H40,
     MODEL_ROBOT_VACUUM_5,
     MODEL_S20_PLUS,
@@ -62,14 +64,16 @@ from custom_components.dreame_vacuum.xiaomi.mapping import (
     MODEL_S40C,
     MODEL_X20_MAX,
 )
-from custom_components.dreame_vacuum.xiaomi.ov21gl import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.ov21gl import (
     ROBOT_VACUUM_5_PRO as VACUUM_5_PRO_RECORD,
 )
-from custom_components.dreame_vacuum.xiaomi.ov31gl import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.ov31gl import (
     ROBOT_VACUUM_5 as VACUUM_5_RECORD,
 )
-from custom_components.dreame_vacuum.xiaomi.ov42gl import H50_PRO as H50_PRO_RECORD
-from custom_components.dreame_vacuum.xiaomi.profile import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.ov42gl import (
+    H50_PRO as H50_PRO_RECORD,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.profile import (
     AI_CAMERA_CONTROLS,
     CAMERA_ROLLER_CONTROLS,
     CAMERA_ROLLER_OMITTED_CONTROLS,
@@ -114,17 +118,17 @@ from custom_components.dreame_vacuum.xiaomi.profile import (
     control_with_options,
     select_controls,
 )
-from custom_components.dreame_vacuum.xiaomi.pv11gl import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.pv11gl import (
     ROBOT_VACUUM_6_MAX as VACUUM_6_MAX_RECORD,
 )
-from custom_components.dreame_vacuum.xiaomi.pv21gl import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.pv21gl import (
     ROBOT_VACUUM_6_PRO as VACUUM_6_PRO_RECORD,
 )
-from custom_components.dreame_vacuum.xiaomi.pv32gl import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.pv32gl import (
     ROBOT_VACUUM_6 as VACUUM_6_RECORD,
 )
-from custom_components.dreame_vacuum.xiaomi.pv81gl import S60 as S60_RECORD
-from custom_components.dreame_vacuum.xiaomi.qv41gl import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.pv81gl import S60 as S60_RECORD
+from custom_components.xiaomi_robot_vacuum.xiaomi.qv41gl import (
     H50_PRO_ROLLER as H50_PRO_ROLLER_RECORD,
 )
 import pytest
@@ -1023,7 +1027,7 @@ def test_compose_rejects_an_omission_the_profile_does_not_define():
 
 def test_station_address_literals_are_declared_once():
     """Station address dicts are written only in the shared profile."""
-    root = Path("custom_components/dreame_vacuum/xiaomi")
+    root = Path("custom_components/xiaomi_robot_vacuum/xiaomi")
     profile = (root / "station_tables.py").read_text(encoding="utf-8")
     for name in (
         "d102gl.py",

@@ -7,12 +7,12 @@ from collections import Counter
 import gzip
 import json
 
-from custom_components.dreame_vacuum.dreame.catalog import (
+from custom_components.xiaomi_robot_vacuum.dreame.catalog import (
     catalog_supports_model,
     load_model_catalog,
 )
-from custom_components.dreame_vacuum.dreame.const import DEVICE_INFO
-from custom_components.dreame_vacuum.dreame.exceptions import DeviceException
+from custom_components.xiaomi_robot_vacuum.dreame.const import DEVICE_INFO
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import DeviceException
 import pytest
 
 
@@ -229,7 +229,7 @@ def test_catalog_rejects_records_capability_load_would_reject():
 
 
 def test_decoded_catalog_is_reused(monkeypatch: pytest.MonkeyPatch) -> None:
-    import custom_components.dreame_vacuum.dreame.catalog as catalog
+    import custom_components.xiaomi_robot_vacuum.dreame.catalog as catalog
 
     calls = {"n": 0}
     original = catalog.zlib.decompress

@@ -5,14 +5,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from custom_components.dreame_vacuum.dreame.family_codec import apply_family
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.family_codec import apply_family
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumActionMapping,
     DreameVacuumProperty,
     DreameVacuumPropertyMapping,
 )
-from custom_components.dreame_vacuum.xiaomi import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import (
     MODEL_E5,
     MODEL_E10,
     MODEL_E10C,
@@ -54,7 +54,7 @@ from custom_components.dreame_vacuum.xiaomi import (
     MODEL_X20,
     resolve_family,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
     MODEL_H40,
     MODEL_MIJIA_M40_S,
     MODEL_ROBOT_VACUUM_5,

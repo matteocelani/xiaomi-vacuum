@@ -7,19 +7,19 @@ import gzip
 import json
 from types import SimpleNamespace
 
-from custom_components.dreame_vacuum.dreame.catalog import (
+from custom_components.xiaomi_robot_vacuum.dreame.catalog import (
     catalog_supports_model,
     load_model_catalog,
 )
-from custom_components.dreame_vacuum.dreame.device import DreameVacuumDevice
-from custom_components.dreame_vacuum.dreame.exceptions import (
+from custom_components.xiaomi_robot_vacuum.dreame.device import DreameVacuumDevice
+from custom_components.xiaomi_robot_vacuum.dreame.exceptions import (
     DeviceException,
     InvalidActionException,
     InvalidValueException,
     NotSupportedException,
 )
-from custom_components.dreame_vacuum.dreame.protocol import DreameVacuumProtocol
-from custom_components.dreame_vacuum.dreame.types import (
+from custom_components.xiaomi_robot_vacuum.dreame.protocol import DreameVacuumProtocol
+from custom_components.xiaomi_robot_vacuum.dreame.types import (
     DreameVacuumAction,
     DreameVacuumActionMapping,
     DreameVacuumCarpetCleaning,
@@ -28,21 +28,24 @@ from custom_components.dreame_vacuum.dreame.types import (
     DreameVacuumPropertyMapping,
     DreameVacuumStatus,
 )
-from custom_components.dreame_vacuum.xiaomi import resolve_family
-from custom_components.dreame_vacuum.xiaomi.controls import (
+from custom_components.xiaomi_robot_vacuum.xiaomi import resolve_family
+from custom_components.xiaomi_robot_vacuum.xiaomi.controls import (
     ControlDomain,
     ValueKind,
     XiaomiControl,
     refresh_controls,
     write_control,
 )
-from custom_components.dreame_vacuum.xiaomi.exceptions import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.exceptions import (
     XiaomiControlException,
     XiaomiValueException,
 )
-from custom_components.dreame_vacuum.xiaomi.mapping import MODEL_S20_PLUS, MODEL_X20_MAX
-from custom_components.dreame_vacuum.xiaomi.model import coerce_outgoing
-from custom_components.dreame_vacuum.xiaomi.value_limits import (
+from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import (
+    MODEL_S20_PLUS,
+    MODEL_X20_MAX,
+)
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import coerce_outgoing
+from custom_components.xiaomi_robot_vacuum.xiaomi.value_limits import (
     is_uint8_address,
     wire_allowed,
 )
@@ -74,7 +77,7 @@ def _recording_action(sent: list[object]) -> object:
 
 
 def test_no_xiaomi_family_exposes_start_custom_or_a_null_piid() -> None:
-    from custom_components.dreame_vacuum.xiaomi.mapping import _FAMILIES
+    from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import _FAMILIES
 
     assert _FAMILIES
     for model, family in _FAMILIES.items():

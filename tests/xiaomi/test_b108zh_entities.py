@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from custom_components.dreame_vacuum.xiaomi import MODEL_MIJIA_SWEEP_MOP_3S_ZH
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_MIJIA_SWEEP_MOP_3S_ZH
 import pytest
 from tests.xiaomi.entity_contract import (
     EntityCase,

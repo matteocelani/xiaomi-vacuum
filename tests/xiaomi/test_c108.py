@@ -5,13 +5,16 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from custom_components.dreame_vacuum.dreame.types import DreameVacuumState
-from custom_components.dreame_vacuum.xiaomi import MODEL_E5
-from custom_components.dreame_vacuum.xiaomi.profile import (
+from custom_components.xiaomi_robot_vacuum.dreame.types import DreameVacuumState
+from custom_components.xiaomi_robot_vacuum.xiaomi import MODEL_E5
+from custom_components.xiaomi_robot_vacuum.xiaomi.profile import (
     STATION_PROPERTIES,
     STATION_STATES,
 )
-from custom_components.dreame_vacuum.xiaomi.sweep import SWEEP_PROPERTIES, SWEEP_STATES
+from custom_components.xiaomi_robot_vacuum.xiaomi.sweep import (
+    SWEEP_PROPERTIES,
+    SWEEP_STATES,
+)
 import pytest
 from tests.xiaomi.spec_helpers import (
     SpecCase,
@@ -209,7 +212,9 @@ def test_fault_names_follow_the_spec_value_list() -> None:
     listed = spec["value-list"]
     assert isinstance(listed, list)
     strings = json.loads(
-        Path("custom_components/dreame_vacuum/strings.json").read_text(encoding="utf-8")
+        Path("custom_components/xiaomi_robot_vacuum/strings.json").read_text(
+            encoding="utf-8"
+        )
     )
     entity = strings["entity"]
     assert isinstance(entity, dict)
