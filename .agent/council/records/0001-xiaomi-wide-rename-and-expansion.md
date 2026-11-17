@@ -1,9 +1,9 @@
 # 0001 — How should a Xiaomi-wide rename and expansion be sequenced?
 
-- Status: accepted
+- Status: superseded
 - Date: 2026-10-26
 - Supersedes: none
-- Superseded by: none
+- Superseded by: 0009
 
 ## Brief
 

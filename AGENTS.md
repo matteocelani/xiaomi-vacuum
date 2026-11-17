@@ -8,7 +8,7 @@ When this file and a rule file disagree, the rule file wins on its concern. When
 
 Community Home Assistant integration for Dreame, MOVA, Mijia, and TROUVER robot vacuums, forked from Tasshack/dreame-vacuum so it can be maintained as a long-lived project. It is not an official Dreame or Xiaomi product.
 
-The GitHub repository may be renamed toward `xiaomi-vacuum`, and repository docs may say so. The Home Assistant domain stays `dreame_vacuum`, and installed users keep their config entries. A second device family is added as a sibling package under this integration only in the pull request that adds a concrete device. A domain rename requires a new council. The sequence is [0001](.agent/council/records/0001-xiaomi-wide-rename-and-expansion.md).
+The repository name is `xiaomi-vacuum`. The Home Assistant domain is `xiaomi_robot_vacuum`. Council [0009](.agent/council/records/0009-hacs-domain-rename.md) superseded the domain-stay clause of [0001](.agent/council/records/0001-xiaomi-wide-rename-and-expansion.md): this integration does not share a folder with Tasshack/dreame-vacuum, and it does not migrate existing `dreame_vacuum` config entries. A second device family is added as a sibling package under this integration only in the pull request that adds a concrete device. A further domain rename requires a new council.
 
 The MIT license and its `Copyright (c) 2022 Tasshack` notice stay. Do not replace them, and do not add a copyright line, in passing.
 
