@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import time
 from typing import Protocol, runtime_checkable
+import zlib
 
 from .exceptions import DeviceException
 from .map import DreameVacuumMapDecoder
@@ -95,10 +96,12 @@ def _install_control_refresh(device: object, family: object) -> None:
             return changed
         try:
             refreshed = family.refresh_controls(device)
-        except Exception:
+            loaded = _load_published_map(device, family)
+        except (DeviceException, OSError, ValueError, TypeError, zlib.error):
+            # A bad control or map frame must not fail the property poll.
             _LOGGER.debug("Xiaomi control refresh failed", exc_info=True)
             return changed
-        if _load_published_map(device, family):
+        if loaded:
             return True
         if refreshed:
             return True
@@ -115,13 +118,9 @@ def _load_published_map(device: object, family: object) -> bool:
     siid, piid = address
     if not isinstance(siid, int) or not isinstance(piid, int):
         return False
-    try:
-        result = device._protocol.get_properties(
-            [{"did": "map", "siid": siid, "piid": piid}]
-        )
-    except Exception:
-        _LOGGER.debug("Xiaomi map read failed", exc_info=True)
-        return False
+    result = device._protocol.get_properties(
+        [{"did": f"{siid}.{piid}", "siid": siid, "piid": piid}]
+    )
     if not isinstance(result, list) or not result:
         return False
     item = result[0]
@@ -130,11 +129,7 @@ def _load_published_map(device: object, family: object) -> bool:
     value = item.get("value")
     if not isinstance(value, str) or not value:
         return False
-    try:
-        decoded = DreameVacuumMapDecoder.decode_map(value)
-    except Exception:
-        _LOGGER.debug("Xiaomi map decode failed", exc_info=True)
-        return False
+    decoded = DreameVacuumMapDecoder.decode_map(value)
     current = decoded[0] if isinstance(decoded, tuple) else None
     if current is None:
         return False

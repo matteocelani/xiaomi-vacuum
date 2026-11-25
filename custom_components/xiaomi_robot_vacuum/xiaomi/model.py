@@ -459,9 +459,12 @@ def regional_variant(
 
 def mapped_property(device: object, name: str) -> bool:
     """Return whether the installed codec publishes this Dreame property name."""
-    codec = getattr(device, "_property_codec", None)
-    overrides = getattr(codec, "property_overrides", None)
-    return isinstance(overrides, Mapping) and name in overrides
+    if not isinstance(device, _HasPropertyCodec):
+        return False
+    codec = device._property_codec
+    if not isinstance(codec, XiaomiModel):
+        return False
+    return name in codec.property_overrides
 
 
 def controls_of(device: object) -> tuple[XiaomiControl, ...]:

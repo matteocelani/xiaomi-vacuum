@@ -2,9 +2,40 @@
 
 from __future__ import annotations
 
+from typing import Protocol, runtime_checkable
+
 from .exceptions import XiaomiControlException
 
 _SERVICE = "room_sweep"
+
+
+@runtime_checkable
+class _RoomCodec(Protocol):
+    """A codec that names the room-sweep action."""
+
+    room_sweep: tuple[int, int, int] | None
+
+
+@runtime_checkable
+class _SendsAction(Protocol):
+    """The protocol object that can call one MIoT action."""
+
+    def action(
+        self,
+        siid: int,
+        aiid: int,
+        parameters: object = None,
+        retry_count: int = 2,
+    ) -> object:
+        """Send one action and return the device result."""
+
+
+@runtime_checkable
+class _RoomDevice(Protocol):
+    """A device that can start a room clean."""
+
+    _property_codec: _RoomCodec
+    _protocol: _SendsAction
 
 
 def supports_room_clean(device: object) -> bool:
@@ -15,22 +46,25 @@ def supports_room_clean(device: object) -> bool:
 def clean_rooms(device: object, segment_ids: object) -> None:
     """Start a room clean. The payload is the spec's room-id string."""
     address = _address(device)
-    if address is None:
+    if address is None or not isinstance(device, _RoomDevice):
+        raise XiaomiControlException(_SERVICE)
+    protocol = device._protocol
+    if not isinstance(protocol, _SendsAction):
         raise XiaomiControlException(_SERVICE)
     siid, aiid, piid = address
     payload = [{"piid": piid, "value": _room_list(segment_ids)}]
-    protocol = getattr(device, "_protocol", None)
-    action = getattr(protocol, "action", None)
-    if not callable(action):
-        raise XiaomiControlException(_SERVICE)
-    result = action(siid, aiid, payload)
+    result = protocol.action(siid, aiid, payload)
     if not isinstance(result, dict) or result.get("code") != 0:
         raise XiaomiControlException(_SERVICE)
 
 
 def _address(device: object) -> tuple[int, int, int] | None:
-    codec = getattr(device, "_property_codec", None)
-    address = getattr(codec, "room_sweep", None)
+    if not isinstance(device, _RoomDevice):
+        return None
+    codec = device._property_codec
+    if not isinstance(codec, _RoomCodec):
+        return None
+    address = codec.room_sweep
     if not isinstance(address, tuple) or len(address) != 3:
         return None
     siid, aiid, piid = address

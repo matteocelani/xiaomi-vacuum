@@ -54,6 +54,10 @@ def test_clean_rooms_rejects_a_bad_payload_or_a_failed_action() -> None:
     broken = _Device(family)
     broken._property_codec = _Codec((2, 13, "room"))
     assert supports_room_clean(broken) is False
+    assert supports_room_clean(object()) is False
+    plain = _Device(family)
+    plain._property_codec = object()
+    assert supports_room_clean(plain) is False
     for segment_ids in ("1", [], [0], [True]):
         with pytest.raises(XiaomiControlException):
             clean_rooms(device, segment_ids)
