@@ -194,3 +194,26 @@ def test_every_published_map_model_decodes_the_floor() -> None:
         assert current.no_go_areas
         assert current.virtual_walls
     assert found == list(_MAP_MODELS)
+
+
+def test_fields_parsed_before_the_grid_do_not_drop_rooms() -> None:
+    """A bad zone, point, cleanset, or room order must not discard the floor."""
+    short_zone = _current(_frame({"da2": {"areas": [[1, 2], [10, 20, 30, 40]]}}))
+    _assert_rooms(short_zone)
+    assert len(short_zone.active_areas) == 1
+
+    short_point = _current(_frame({"sp": [[1], [5, 6]]}))
+    _assert_rooms(short_point)
+    assert len(short_point.active_points) == 1
+
+    bad_cleanset = _current(_frame({"cleanset": "not-json"}))
+    _assert_rooms(bad_cleanset)
+    assert bad_cleanset.cleanset is None
+
+    bad_carpet = _current(_frame({"carpetcleanset": "not-json"}))
+    _assert_rooms(bad_carpet)
+    assert bad_carpet.carpet_cleanset is None
+
+    bad_order = _current(_frame({"cleanareaorder": [{"nope": 1}, {"2": 3}]}))
+    _assert_rooms(bad_order)
+    assert bad_order.cleaning_sequence == {"2": 3}
