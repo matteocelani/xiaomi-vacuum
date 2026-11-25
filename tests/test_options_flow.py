@@ -116,3 +116,29 @@ async def test_cloud_options_still_include_map_settings(hass: HomeAssistant) -> 
     assert "color_scheme" in markers
     assert "icon_set" in markers
     assert "prefer_cloud" in markers
+
+
+async def test_cloud_options_open_when_color_scheme_was_never_stored(
+    hass: HomeAssistant,
+) -> None:
+    """A username without a stored color scheme still opens the form."""
+    package, flow = _load_flow()
+    entry = MockConfigEntry(
+        domain=package.DOMAIN,
+        data={
+            CONF_NAME: "Cloud",
+            CONF_HOST: "127.0.0.1",
+            CONF_TOKEN: _TOKEN,
+            CONF_MAC: _MAC,
+            "username": "person@example.com",
+            "account_type": "mi",
+        },
+        options={"notify": False, "prefer_cloud": True},
+    )
+    entry.add_to_hass(hass)
+    handler = flow.DreameVacuumOptionsFlowHandler(entry)
+    handler.hass = hass
+    result = await handler.async_step_init(None)
+    assert result["type"] == "form"
+    markers = {key.schema for key in result["data_schema"].schema}
+    assert "color_scheme" in markers
