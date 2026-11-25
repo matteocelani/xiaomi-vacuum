@@ -174,6 +174,7 @@ def _install_control_refresh(device: _FamilyDevice, family: object) -> None:
         return
     if not isinstance(device, _PollsProperties):
         return
+    # The poll check does not require a value store. This assignment creates it.
     cast(_StoresControls, device)._xiaomi_values = {}
     original = device._request_properties
 
@@ -194,7 +195,7 @@ def _install_control_refresh(device: _FamilyDevice, family: object) -> None:
             return True
         return changed
 
-    # This device's poll is replaced. The class method stays for every other device.
+    # The poll method is an instance slot. The class method stays for every other device.
     slot = cast(_ReplaceablePoll, device)
     slot._request_properties = request_properties
 

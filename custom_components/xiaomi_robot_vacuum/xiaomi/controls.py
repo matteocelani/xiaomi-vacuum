@@ -35,8 +35,17 @@ class _ReadsProperties(Protocol):
         """Read one batch of properties."""
 
 
+@runtime_checkable
+class _HasProtocol(Protocol):
+    """A device that holds a MIoT protocol object."""
+
+    _protocol: object
+
+
 def _protocol(device: object) -> object:
-    protocol = getattr(device, "_protocol", None)
+    if not isinstance(device, _HasProtocol):
+        raise XiaomiControlException("protocol")
+    protocol = device._protocol
     if protocol is None:
         raise XiaomiControlException("protocol")
     return protocol
