@@ -8263,6 +8263,18 @@ _NAMED_ATTRIBUTES = {
 }
 
 
+def _optional_code(value: object) -> int | None:
+    """Return an integer reading, or None when it is missing or not numeric."""
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
 class DreameVacuumDeviceStatus:
     """Helper class for device status and int enum type properties.
     This class is used for determining various states of the device by its properties.
@@ -8368,26 +8380,28 @@ class DreameVacuumDeviceStatus:
     @property
     def battery_level(self) -> int:
         """Return battery level of the device."""
-        battery_level = self._get_property(DreameVacuumProperty.BATTERY_LEVEL)
-        # Zero is empty. Only a missing reading falls back to full.
+        battery_level = _optional_code(self._get_property(DreameVacuumProperty.BATTERY_LEVEL))
+        # Zero is empty. Only a missing or non-numeric reading falls back to full.
         if battery_level is None:
             return 100
-        return int(battery_level)
+        return battery_level
 
     @property
     def battery_charge_level(self) -> int:
         """Return max battery charge level of the device."""
-        battery_charge_level = self._get_property(DreameVacuumProperty.BATTERY_CHARGE_LEVEL)
-        # Zero is a real target. Only a missing reading falls back to full.
+        battery_charge_level = _optional_code(
+            self._get_property(DreameVacuumProperty.BATTERY_CHARGE_LEVEL)
+        )
+        # Zero is a real target. Only a missing or non-numeric reading falls back to full.
         if battery_charge_level is None:
             return 100
-        return int(battery_charge_level)
+        return battery_charge_level
 
     @property
     def volume(self) -> int:
         """Return sound volume level of the device."""
-        volume = self._get_property(DreameVacuumProperty.VOLUME)
-        return int(volume) if volume else 0
+        volume = _optional_code(self._get_property(DreameVacuumProperty.VOLUME))
+        return volume if volume is not None else 0
 
     @property
     def suction_level(self) -> DreameVacuumSuctionLevel:
@@ -8659,7 +8673,7 @@ class DreameVacuumDeviceStatus:
         if self.has_error:
             return DreameVacuumState.ERROR
 
-        value = self._get_property(DreameVacuumProperty.STATE)
+        value = _optional_code(self._get_property(DreameVacuumProperty.STATE))
         if value == 0:
             value = DreameVacuumState.CHARGING_COMPLETED.value
         if (
