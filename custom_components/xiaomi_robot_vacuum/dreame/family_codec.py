@@ -29,10 +29,14 @@ class _RefreshableControls(Protocol):
 class _PollsProperties(Protocol):
     """A device double or vacuum that can run a property poll."""
 
-    _xiaomi_values: dict[str, object]
-
     def _request_properties(self, properties: object = None) -> object:
         """Read properties. A missing argument reads the full set."""
+
+
+class _StoresControls(Protocol):
+    """Where the control poll keeps its last values."""
+
+    _xiaomi_values: dict[str, object]
 
 
 class _ReplaceablePoll(Protocol):
@@ -170,7 +174,7 @@ def _install_control_refresh(device: _FamilyDevice, family: object) -> None:
         return
     if not isinstance(device, _PollsProperties):
         return
-    device._xiaomi_values = {}
+    cast(_StoresControls, device)._xiaomi_values = {}
     original = device._request_properties
 
     def request_properties(properties: object = None) -> object:
