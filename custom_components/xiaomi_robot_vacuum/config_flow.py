@@ -101,7 +101,7 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
             }
             return self.async_create_entry(title="", data={**stored, **user_input})
 
-        notify = self._config_entry.options[CONF_NOTIFY]
+        notify = self._config_entry.options.get(CONF_NOTIFY, [])
         if isinstance(notify, bool):
             if notify is True:
                 notify = NOTIFICATION
@@ -113,7 +113,7 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
                 vol.Required(CONF_NOTIFY, default=notify): SelectSelector(SelectSelectorConfig(options=NOTIFICATION, multiple=True, translation_key='notifications')),
             }
         )
-        if self._config_entry.data[CONF_USERNAME]:
+        if self._config_entry.data.get(CONF_USERNAME):
             data_schema = data_schema.extend(
                 {
                     vol.Required(
