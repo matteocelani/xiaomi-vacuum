@@ -51,6 +51,10 @@ This integration cannot replace an existing `dreame_vacuum` install automaticall
 
 ## Install via HACS
 
+Xiaomi Vacuum is in the HACS default catalog, so you can find it by searching **Xiaomi Vacuum** in HACS, or open it directly in your Home Assistant instance:
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=matteocelani&repository=xiaomi-vacuum&category=integration)
+
 1. In HACS, open **Integrations**.
 2. Search for **Xiaomi Vacuum**.
 3. Download it and restart Home Assistant.
