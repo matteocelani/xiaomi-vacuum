@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from typing import Any
+import inspect
 import re
 import voluptuous as vol
 from collections.abc import Mapping
@@ -61,6 +62,35 @@ def _key_of(keys: dict[str, str], name: str | None) -> str:
         if value == name:
             return key
     return next(iter(keys))
+
+
+def _reauth_entry(flow: ConfigFlow) -> ConfigEntry:
+    """The entry being reauthenticated, on 2024.2 and on current core."""
+    getter = getattr(flow, "_get_reauth_entry", None)
+    if callable(getter):
+        return getter()
+    entry = flow.hass.config_entries.async_get_entry(flow.context["entry_id"])
+    if entry is None:
+        raise AbortFlow("reauth_unsuccessful")
+    return entry
+
+
+def _complete_reauth(flow: ConfigFlow, updates: Mapping[str, Any]) -> FlowResult:
+    """Save reauth data. 2024.2 has no helper; 2024.10 has no data_updates."""
+    entry = _reauth_entry(flow)
+    helper = getattr(flow, "async_update_reload_and_abort", None)
+    if callable(helper) and "data_updates" in inspect.signature(helper).parameters:
+        return helper(entry, data_updates=dict(updates))
+    data = {**entry.data, **updates}
+    if callable(helper):
+        return helper(entry, data=data)
+    flow.hass.config_entries.async_update_entry(entry, data=data)
+    schedule = getattr(flow.hass.config_entries, "async_schedule_reload", None)
+    if callable(schedule):
+        schedule(entry.entry_id)
+    else:
+        flow.hass.async_create_task(flow.hass.config_entries.async_reload(entry.entry_id))
+    return flow.async_abort(reason="reauth_successful")
 
 
 ACCOUNT_TYPE_DREAME = "dreame"
@@ -283,9 +313,9 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
                 error = "cannot_connect"
             else:
                 if self.reauth:
-                    return self.async_update_reload_and_abort(
-                        self._get_reauth_entry(),
-                        data_updates={
+                    return _complete_reauth(
+                        self,
+                        {
                             CONF_USERNAME: self.username,
                             CONF_PASSWORD: self.password,
                             CONF_HOST: self.host,
