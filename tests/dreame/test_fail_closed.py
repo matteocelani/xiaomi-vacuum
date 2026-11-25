@@ -303,6 +303,79 @@ def test_refresh_controls_keeps_going_when_one_read_fails() -> None:
     assert "alarm" not in device._xiaomi_values
 
 
+def test_an_omitted_property_keeps_the_last_value() -> None:
+    """A reply that skips one property must not wipe the value already stored."""
+    battery = XiaomiControl(
+        key="battery",
+        domain=ControlDomain.SENSOR,
+        siid=3,
+        piid=1,
+        value_kind=ValueKind.INT,
+    )
+    alarm = XiaomiControl(
+        key="alarm",
+        domain=ControlDomain.SWITCH,
+        siid=4,
+        piid=1,
+        value_kind=ValueKind.BOOL,
+    )
+    device = SimpleNamespace(
+        _xiaomi_values={"battery": 80, "alarm": 1},
+        _protocol=SimpleNamespace(
+            get_properties=lambda _items: [
+                {"did": "extra", "siid": 99, "piid": 9, "code": 0, "value": 1},
+                {"siid": 3, "piid": 1, "code": 0, "value": 70},
+            ]
+        ),
+    )
+
+    assert refresh_controls(device, (battery, alarm)) is True
+    assert device._xiaomi_values["battery"] == 70
+    assert device._xiaomi_values["alarm"] == 1
+
+
+def test_a_text_success_code_updates_the_stored_value() -> None:
+    """Some firmware sends the success code as text."""
+    battery = XiaomiControl(
+        key="battery",
+        domain=ControlDomain.SENSOR,
+        siid=3,
+        piid=1,
+        value_kind=ValueKind.INT,
+    )
+    device = SimpleNamespace(
+        _xiaomi_values={"battery": 80},
+        _protocol=SimpleNamespace(
+            get_properties=lambda _items: [
+                {"siid": 3, "piid": 1, "code": "0", "value": 64},
+            ]
+        ),
+    )
+
+    assert refresh_controls(device, (battery,)) is True
+    assert device._xiaomi_values["battery"] == 64
+
+
+def test_a_text_success_code_accepts_a_write() -> None:
+    """A write that returns the success code as text is applied."""
+    control = XiaomiControl(
+        key="alarm",
+        domain=ControlDomain.SWITCH,
+        siid=4,
+        piid=1,
+        writable=True,
+        value_kind=ValueKind.BOOL,
+    )
+    device = SimpleNamespace(
+        _property_codec=None,
+        _protocol=SimpleNamespace(set_property=lambda *_args: [{"code": "0"}]),
+        _xiaomi_values={},
+    )
+
+    write_control(device, control, True)
+    assert device._xiaomi_values["alarm"] is True
+
+
 def test_write_control_rejects_a_value_outside_the_declared_range() -> None:
     control = XiaomiControl(
         key="hours",
