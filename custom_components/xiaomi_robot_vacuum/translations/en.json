@@ -4006,6 +4006,36 @@
         }
       },
       "name": "Add schedule"
+    },
+    "xiaomi_set_dnd": {
+      "description": "Set do-not-disturb on a sweep-family robot. The clock properties are read-only. This calls set-notdisturb. A model without that action is rejected and nothing is sent.",
+      "fields": {
+        "enable": {
+          "description": "Whether do-not-disturb is on.",
+          "name": "Enable"
+        },
+        "end_hour": {
+          "description": "End hour from 0 to 23.",
+          "name": "End hour"
+        },
+        "end_minute": {
+          "description": "End minute from 0 to 59.",
+          "name": "End minute"
+        },
+        "start_hour": {
+          "description": "Start hour from 0 to 23.",
+          "name": "Start hour"
+        },
+        "start_minute": {
+          "description": "Start minute from 0 to 59.",
+          "name": "Start minute"
+        },
+        "timezone": {
+          "description": "Timezone offset from the spec. Omitted values are sent as 0.",
+          "name": "Timezone"
+        }
+      },
+      "name": "Set do not disturb"
     }
   },
   "exceptions": {

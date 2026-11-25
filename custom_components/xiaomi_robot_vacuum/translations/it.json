@@ -4006,6 +4006,36 @@
         }
       },
       "name": "Aggiungi programma"
+    },
+    "xiaomi_set_dnd": {
+      "description": "Imposta il non disturbare su un robot della famiglia sweep. Gli orari sono in sola lettura. Chiama set-notdisturb. Un modello senza quell'azione viene rifiutato e non viene inviato nulla.",
+      "fields": {
+        "enable": {
+          "description": "Se il non disturbare è attivo.",
+          "name": "Attiva"
+        },
+        "end_hour": {
+          "description": "Ora di fine da 0 a 23.",
+          "name": "Ora di fine"
+        },
+        "end_minute": {
+          "description": "Minuto di fine da 0 a 59.",
+          "name": "Minuto di fine"
+        },
+        "start_hour": {
+          "description": "Ora di inizio da 0 a 23.",
+          "name": "Ora di inizio"
+        },
+        "start_minute": {
+          "description": "Minuto di inizio da 0 a 59.",
+          "name": "Minuto di inizio"
+        },
+        "timezone": {
+          "description": "Offset del fuso dalla specifica. Se manca viene inviato 0.",
+          "name": "Fuso orario"
+        }
+      },
+      "name": "Imposta non disturbare"
     }
   },
   "exceptions": {

@@ -60,7 +60,7 @@ from .const import (
     CONSUMABLE_ROLLER_MOP_FILTER,
     CONSUMABLE_WATER_OUTLET_FILTER,
 )
-from .xiaomi import clean_rooms, supports_room_clean
+from .xiaomi import clean_rooms, set_dnd, supports_room_clean
 
 try:
     from homeassistant.components.vacuum import Segment
@@ -930,6 +930,19 @@ async def async_setup_entry(
         DreameVacuum.async_xiaomi_add_schedule.__name__,
     )
 
+    platform.async_register_entity_service(
+        "xiaomi_set_dnd",
+        {
+            vol.Required("enable"): cv.boolean,
+            vol.Required("start_hour"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+            vol.Required("start_minute"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+            vol.Required("end_hour"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+            vol.Required("end_minute"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+            vol.Optional("timezone"): vol.All(vol.Coerce(int), vol.Range(min=-99999, max=99999)),
+        },
+        DreameVacuum.async_xiaomi_set_dnd.__name__,
+    )
+
     activity_class = None
     ## For backwards compatibility
     try:
@@ -1410,6 +1423,21 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
             try:
                 add_schedule(self.device, fields)
+            except XiaomiControlException as error:
+                raise HomeAssistantError(str(error)) from error
+
+        await self.hass.async_add_executor_job(_call)
+
+    async def async_xiaomi_set_dnd(self, **fields: object) -> None:
+        """Set do-not-disturb through the sweep-family disturb action."""
+
+        def _call() -> None:
+            from homeassistant.exceptions import HomeAssistantError
+
+            from .xiaomi.exceptions import XiaomiControlException
+
+            try:
+                set_dnd(self.device, fields)
             except XiaomiControlException as error:
                 raise HomeAssistantError(str(error)) from error
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from .controls import XiaomiControl, invoke_control, read_control, write_control
+from .dnd import set_dnd
 from .exceptions import XiaomiControlException
 from .mapping import resolve_family
 from .model import (
@@ -106,6 +107,7 @@ __all__ = [
     "mapped_property",
     "read_control",
     "resolve_family",
+    "set_dnd",
     "supports_room_clean",
     "write_control",
 ]
