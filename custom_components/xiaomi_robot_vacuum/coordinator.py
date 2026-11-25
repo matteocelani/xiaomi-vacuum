@@ -470,7 +470,33 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
             else:
                 self._remove_persistent_notification(notification_id)
 
+    def _run_on_loop(self, func, *args) -> None:
+        """Home Assistant calls stay on the loop. Device timers are other threads."""
+        loop = self.hass.loop
+        try:
+            running = asyncio.get_running_loop()
+        except RuntimeError:
+            running = None
+        if running is loop:
+            func(*args)
+            return
+        loop.call_soon_threadsafe(func, *args)
+
+    def _clear_warning_off_loop(self) -> None:
+        """A warning clear writes to the robot, so it cannot run on the loop."""
+
+        def _clear() -> None:
+            try:
+                self._device.clear_warning()
+            except Exception:
+                LOGGER.warning("Unable to clear the warning", exc_info=True)
+
+        self.hass.async_add_executor_job(_clear)
+
     def _create_persistent_notification(self, content, notification_id) -> None:
+        self._run_on_loop(self._create_persistent_notification_on_loop, content, notification_id)
+
+    def _create_persistent_notification_on_loop(self, content, notification_id) -> None:
         if not self._device.disconnected and self._device.device_connected and self._notify:
             if isinstance(self._notify, list):
                 if notification_id == NOTIFICATION_ID_CLEANUP_COMPLETED:
@@ -504,6 +530,9 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
             )
 
     def _remove_persistent_notification(self, notification_id) -> None:
+        self._run_on_loop(self._remove_persistent_notification_on_loop, notification_id)
+
+    def _remove_persistent_notification_on_loop(self, notification_id) -> None:
         persistent_notification.dismiss(self.hass, f"{DOMAIN}_{self._device.mac}_{notification_id}")
 
     def _notification_dismiss_listener(self, type, data) -> None:
@@ -515,22 +544,25 @@ class DreameVacuumDataUpdateCoordinator(DataUpdateCoordinator[DreameVacuumDevice
             if self._has_warning:
                 if f"{DOMAIN}_{self._device.mac}_{NOTIFICATION_ID_WARNING}" not in notifications:
                     if warning_enabled:
-                        self._device.clear_warning()
+                        self._clear_warning_off_loop()
                     self._has_warning = self._device.status.has_warning
 
             if self._low_water:
                 if f"{DOMAIN}_{self._device.mac}_{NOTIFICATION_ID_LOW_WATER}" not in notifications:
                     if warning_enabled:
-                        self._device.clear_warning()
+                        self._clear_warning_off_loop()
                     self._low_water = self._device.status.low_water
 
             if self._drainage_status:
                 if f"{DOMAIN}_{self._device.mac}_{NOTIFICATION_ID_DRAINAGE_STATUS}" not in notifications:
                     if warning_enabled:
-                        self._device.clear_warning()
+                        self._clear_warning_off_loop()
                     self._drainage_status = self._device.status.draining_complete
 
     def _fire_event(self, event_id, data) -> None:
+        self._run_on_loop(self._fire_event_on_loop, event_id, data)
+
+    def _fire_event_on_loop(self, event_id, data) -> None:
         entity_id = er.async_get(self.hass).async_get_entity_id("vacuum", DOMAIN, f"{self._device.mac}_{DOMAIN}")
         if entity_id is None:
             entity_id = generate_entity_id("vacuum.{}", self._device.name, hass=self.hass)
