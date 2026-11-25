@@ -4569,51 +4569,65 @@ class DreameVacuumMapDecoder:
                     data_json.get("combineaddcleanedarea")
                 )[0]
 
-                if data_json.get("da2"):
-                    if data_json["da2"].get("areas"):
-                        map_data.active_areas = []
-                        for area in data_json["da2"]["areas"]:
-                            x_coords = sorted([area[0], area[2]])
-                            y_coords = sorted([area[1], area[3]])
-                            map_data.active_areas.append(
-                                Area(
-                                    x_coords[0],
-                                    y_coords[0],
-                                    x_coords[1],
-                                    y_coords[0],
-                                    x_coords[1],
-                                    y_coords[1],
-                                    x_coords[0],
-                                    y_coords[1],
-                                )
+                if isinstance(data_json.get("da2"), dict) and data_json["da2"].get("areas"):
+                    map_data.active_areas = []
+                    for area in data_json["da2"]["areas"]:
+                        if not isinstance(area, (list, tuple)) or len(area) < 4:
+                            continue
+                        x_coords = sorted([area[0], area[2]])
+                        y_coords = sorted([area[1], area[3]])
+                        map_data.active_areas.append(
+                            Area(
+                                x_coords[0],
+                                y_coords[0],
+                                x_coords[1],
+                                y_coords[0],
+                                x_coords[1],
+                                y_coords[1],
+                                x_coords[0],
+                                y_coords[1],
                             )
+                        )
 
                 if data_json.get("sp"):
                     map_data.active_points = []
                     for point in data_json["sp"]:
+                        if not isinstance(point, (list, tuple)) or len(point) < 2:
+                            continue
                         map_data.active_points.append(Point(point[0], point[1]))
 
                 if "cleanset" in data_json:
                     map_data.cleanset = data_json["cleanset"]
                     if isinstance(map_data.cleanset, str):
-                        map_data.cleanset = json.loads(map_data.cleanset)
-                    map_data.sequence = True
+                        try:
+                            map_data.cleanset = json.loads(map_data.cleanset)
+                        except json.JSONDecodeError:
+                            map_data.cleanset = None
+                    if map_data.cleanset is not None:
+                        map_data.sequence = True
 
                 if "carpetcleanset" in data_json:
                     map_data.carpet_cleanset = data_json["carpetcleanset"]
                     if isinstance(map_data.carpet_cleanset, str):
-                        map_data.carpet_cleanset = json.loads(map_data.carpet_cleanset)
+                        try:
+                            map_data.carpet_cleanset = json.loads(map_data.carpet_cleanset)
+                        except json.JSONDecodeError:
+                            map_data.carpet_cleanset = None
 
                 if "cleanareaorder" in data_json:
-                    map_data.cleaning_sequence = {}
+                    ordered = []
                     for item in data_json["cleanareaorder"]:
-                        for k, v in item.items():
-                            map_data.cleaning_sequence[k] = v
+                        if not isinstance(item, dict):
+                            continue
+                        for key, value in item.items():
+                            index = DreameVacuumMapDecoder._optional_int(key)
+                            if index is None:
+                                break
+                            ordered.append((index, key, value))
                             break
-
-                    map_data.cleaning_sequence = dict(
-                        sorted(map_data.cleaning_sequence.items(), key=lambda item: int(item[0]))
-                    )
+                    map_data.cleaning_sequence = {
+                        key: value for _index, key, value in sorted(ordered)
+                    }
                     if map_data.version == 1:
                         map_data.version = 2
 
