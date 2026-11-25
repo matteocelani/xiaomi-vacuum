@@ -231,6 +231,7 @@ def number_control(
     minimum: int,
     maximum: int,
     step: int = 1,
+    unit: str | None = None,
 ) -> XiaomiControl:
     """A writable integer range."""
     return XiaomiControl(
@@ -243,6 +244,7 @@ def number_control(
         minimum=minimum,
         maximum=maximum,
         step=step,
+        unit=unit,
     )
 
 

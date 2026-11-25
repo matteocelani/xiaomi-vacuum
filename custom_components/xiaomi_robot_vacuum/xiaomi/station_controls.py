@@ -205,11 +205,11 @@ EXTENDED_STATION_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
     measurement("xiaomi_last_clean_time", 2, 17, 0, 4294967295),
     measurement("xiaomi_drying_progress", 2, 88, 0, 100, "%"),
     measurement("xiaomi_cleaning_progress", 2, 89, 0, 100, "%"),
-    measurement("xiaomi_dry_left_time", 2, 90, 0, 9999),
+    measurement("xiaomi_dry_left_time", 2, 90, 0, 9999, "min"),
     measurement("xiaomi_voltage", 3, 3, 0, 65535),
     measurement("xiaomi_download_progress", 15, 4, 0, 100, "%"),
     measurement("xiaomi_dust_bag_life", 19, 1, 0, 100, "%"),
-    measurement("xiaomi_dust_bag_time_left", 19, 2, 0, 9999),
+    measurement("xiaomi_dust_bag_time_left", 19, 2, 0, 9999, "h"),
     enum_sensor(
         "xiaomi_water_check_status",
         2,
@@ -548,6 +548,7 @@ ROLLER_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
         _ROLLER_TIME_PROPERTY,
         0,
         9999,
+        "h",
     ),
     boolean_switch(
         "xiaomi_roller_outswing",
