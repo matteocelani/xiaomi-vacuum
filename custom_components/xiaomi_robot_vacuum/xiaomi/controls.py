@@ -395,17 +395,34 @@ def _read_one_by_one(
     return changed
 
 
+def _code_is_success(code: object) -> bool:
+    """Return whether a property result code means the value is present."""
+    if isinstance(code, bool) or code is None:
+        return False
+    if code == 0:
+        return True
+    if isinstance(code, str):
+        try:
+            return int(code) == 0
+        except ValueError:
+            return False
+    return False
+
+
 def _drop_failed(
     store: dict[str, object],
     batch: list[XiaomiControl],
     result: list[object],
 ) -> None:
-    accepted: set[tuple[object, object]] = set()
+    failed: set[tuple[object, object]] = set()
     for item in result:
-        if isinstance(item, dict) and item.get("code") == 0 and "value" in item:
-            accepted.add((item.get("siid"), item.get("piid")))
+        if not isinstance(item, dict) or "code" not in item:
+            continue
+        if _code_is_success(item.get("code")) and "value" in item:
+            continue
+        failed.add((item.get("siid"), item.get("piid")))
     for control in batch:
-        if (control.siid, control.piid) not in accepted:
+        if (control.siid, control.piid) in failed:
             store.pop(control.key, None)
 
 
@@ -413,7 +430,7 @@ def _accepted(result: object) -> bool:
     if not isinstance(result, list) or not result:
         return False
     first = result[0]
-    return isinstance(first, dict) and first.get("code") == 0
+    return isinstance(first, dict) and _code_is_success(first.get("code"))
 
 
 def _store_batch(
@@ -423,7 +440,11 @@ def _store_batch(
 ) -> bool:
     changed = False
     for item in result:
-        if not isinstance(item, dict) or item.get("code") != 0 or "value" not in item:
+        if (
+            not isinstance(item, dict)
+            or not _code_is_success(item.get("code"))
+            or "value" not in item
+        ):
             continue
         siid = item.get("siid")
         piid = item.get("piid")
