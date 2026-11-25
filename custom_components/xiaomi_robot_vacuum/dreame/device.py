@@ -5346,6 +5346,14 @@ class DreameVacuumDevice:
 
     def go_to(self, x, y) -> dict[str, Any] | None:
         """Go to a point and take pictures around."""
+        if (
+            isinstance(x, bool)
+            or isinstance(y, bool)
+            or not isinstance(x, int)
+            or not isinstance(y, int)
+        ):
+            raise InvalidActionException(key="coordinate_outside_map", x=x, y=y)
+
         if self.status.draining or self.status.self_repairing:
             raise UnavailableException(key="unavailable_while_draining")
 
@@ -5522,6 +5530,11 @@ class DreameVacuumDevice:
 
     def start_shortcut(self, shortcut_id: int) -> dict[str, Any] | None:
         """Start shortcut job."""
+        if isinstance(shortcut_id, bool) or not isinstance(shortcut_id, int):
+            raise InvalidActionException(
+                key="invalid_value", parameter="shortcut_id", value=shortcut_id
+            )
+
         if not self.capability.shortcuts and not self.status.shortcuts:
             raise NotSupportedException(feature="shortcuts")
 
