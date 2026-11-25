@@ -529,7 +529,7 @@ vacuum_reset_consumable:
             - "detergent"
             - "squeegee"
             - "onboard_dirty_water_tank"
-            - "dirty_water_tank"
+            - "dirty_water_channel"
             - "deodorizer"
             - "wheel"
             - "scale_inhibitor"
