@@ -1372,7 +1372,12 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if self._strings[13] in data:
                     self._key = data.get(self._strings[13])
                     self._secondary_key = data.get(self._strings[14])
-                    self._key_expire = time.time() + data.get(self._strings[15])
+                    raw_expire = data.get(self._strings[15])
+                    try:
+                        self._key_expire = time.time() + int(raw_expire)
+                    except (TypeError, ValueError):
+                        # A 200 with a missing or quoted expires_in is still a login.
+                        self._key_expire = None
                     self._uuid = data.get("uid")
                     self._domain = data.get("domain", self._domain)
                     self._region = data.get("region", self._region)
