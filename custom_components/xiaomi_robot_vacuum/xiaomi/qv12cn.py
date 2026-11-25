@@ -151,6 +151,7 @@ _ADDED_CONTROLS: Final = (
         _SCREEN_BRIGHTNESS_PROPERTY,
         _PERCENT_MINIMUM,
         _PERCENT_MAXIMUM,
+        unit="%",
     ),
     boolean_switch(
         "xiaomi_auto_screen_off",

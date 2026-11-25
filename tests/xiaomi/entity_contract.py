@@ -18,7 +18,7 @@ from custom_components.xiaomi_robot_vacuum.const import (
 )
 from custom_components.xiaomi_robot_vacuum.xiaomi.controls import XiaomiControl
 from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import XiaomiModel
-from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredState
+from custom_components.xiaomi_robot_vacuum.xiaomi.model import StoredState, display_unit
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from tests.xiaomi.helpers import FakeMiio, release_device, wire_for_state
 from tests.xiaomi.spec_helpers import (
@@ -802,6 +802,12 @@ async def _exercise_sensors(
     } | {"firmware_version"} | {
         control.key for control in family.controls if control.domain == "sensor"
     }
+    for control in family.controls:
+        if control.domain != "sensor" or control.unit is None:
+            continue
+        stored = hass.states.get(_entity_id(hass, entry_id, "sensor", control.key))
+        assert stored is not None
+        assert stored.attributes.get("unit_of_measurement") == control.unit
     await _show_sensors(hass, entry_id, fake, family, case.counter_samples)
     # Idle clears the current-job counters, so status is applied after them.
     await _show_sensors(hass, entry_id, fake, family, case.status_samples)
@@ -822,9 +828,16 @@ async def _show_sensors(
         mapping = family.property_overrides[name]
         fake.set_value(mapping["siid"], mapping["piid"], wire)
     await _refresh(hass, entry_id)
+    device = hass.data[DOMAIN][entry_id].device
     for name, (_wire, expected) in samples.items():
         state = _state(hass, entry_id, "sensor", name.lower())
         assert expected in state, (name, state)
+        unit = display_unit(device, name)
+        if unit is None:
+            continue
+        stored = hass.states.get(_entity_id(hass, entry_id, "sensor", name.lower()))
+        assert stored is not None
+        assert stored.attributes.get("unit_of_measurement") == unit
 
 
 async def _exercise_binary_sensors(
@@ -991,6 +1004,10 @@ async def _set_number_samples(
 ) -> None:
     """Set a number entity to its minimum, midpoint, and maximum."""
     entity_id = _entity_id(hass, entry_id, "number", control.key)
+    if control.unit is not None:
+        stored = hass.states.get(entity_id)
+        assert stored is not None
+        assert stored.attributes.get("unit_of_measurement") == control.unit
     assert control.minimum is not None
     assert control.maximum is not None
     middle = control.minimum + ((control.maximum - control.minimum) // 2)

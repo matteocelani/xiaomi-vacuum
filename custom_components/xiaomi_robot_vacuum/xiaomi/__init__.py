@@ -49,6 +49,7 @@ from .model import (
     MODEL_X20_PRO,
     control_keys,
     controls_of,
+    display_unit,
     mapped_property,
 )
 from .room import clean_rooms, supports_room_clean
@@ -100,6 +101,7 @@ __all__ = [
     "clean_rooms",
     "control_keys",
     "controls_of",
+    "display_unit",
     "invoke_control",
     "mapped_property",
     "read_control",

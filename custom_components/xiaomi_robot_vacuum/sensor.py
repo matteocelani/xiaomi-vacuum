@@ -37,6 +37,7 @@ from .dreame import (
 )
 from .coordinator import DreameVacuumDataUpdateCoordinator
 from .entity import DreameVacuumEntity, DreameVacuumEntityDescription, remove_entities
+from .xiaomi import display_unit
 from .xiaomi_controls import add_xiaomi_controls
 
 STREAM_STATUS_TO_ICON = {
@@ -685,3 +686,7 @@ class DreameVacuumSensorEntity(DreameVacuumEntity, SensorEntity):
                 description.value_fn = lambda value, entity: getattr(entity.device.status, prop)
         super().__init__(coordinator, description)
         self._generate_entity_id(ENTITY_ID_FORMAT)
+        if description.property_key is not None:
+            unit = display_unit(coordinator.device, description.property_key.name)
+            if unit is not None:
+                self._attr_native_unit_of_measurement = unit
