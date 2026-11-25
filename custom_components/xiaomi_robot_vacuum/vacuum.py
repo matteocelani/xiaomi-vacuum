@@ -1028,6 +1028,7 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
         else:
             self._attr_icon = "mdi:robot-vacuum"
 
+        suction_level = self.device.status.suction_level
         if (
             not (
                 self.device.status
@@ -1038,15 +1039,19 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
                 )
             )
             and not self.device.status.suction_unavailable
+            and suction_level not in (None, DreameVacuumSuctionLevel.UNKNOWN)
         ):
             self._attr_supported_features = self._attr_supported_features | VacuumEntityFeature.FAN_SPEED
-            self._attr_fan_speed = self.device.status.suction_level.name.lower().replace("quiet", "silent")
+            self._attr_fan_speed = suction_level.name.lower().replace("quiet", "silent")
             self._attr_fan_speed_list = [
                 level.name.lower().replace("quiet", "silent")
                 for level in DreameVacuumSuctionLevel
                 if level != DreameVacuumSuctionLevel.UNKNOWN
             ]
         else:
+            self._attr_supported_features = (
+                self._attr_supported_features & ~VacuumEntityFeature.FAN_SPEED
+            )
             self._attr_fan_speed = None
             self._attr_fan_speed_list = []
 
