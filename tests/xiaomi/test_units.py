@@ -20,6 +20,8 @@ _SPEC_UNITS = {
 }
 # v1 and v3 publish minutes for the same 0..18000 brush life. v2 says days.
 _KEEP_MINUTES = {("mijia.vacuum.v2", "xiaomi_main_brush_minutes")}
+# Spec unit is percentage, but the published range is 0..10. The entity is a level.
+_VOLUME_LEVEL = "xiaomi_volume"
 _DREAME_SENSOR_UNITS = {
     "CLEANING_TIME": "min",
     "DETERGENT_TIME_LEFT": "d",
@@ -48,6 +50,11 @@ def test_control_units_follow_the_spec() -> None:
                 continue
             if (model, control.key) in _KEEP_MINUTES:
                 assert control.unit == "min"
+                continue
+            if control.key == _VOLUME_LEVEL and spec.get("value-range") == [0, 10, 1]:
+                assert control.unit is None
+                assert control.minimum == 0
+                assert control.maximum == 10
                 continue
             assert control.unit == published, (model, control.key, published)
 

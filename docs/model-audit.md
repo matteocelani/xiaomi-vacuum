@@ -14,22 +14,22 @@ A new install shows the spec unit. An install that already registered the old un
 | mijia.vacuum.v1 | audited | Units, options, and ranges already match the spec. |
 | mijia.vacuum.v2 | audited | Brush life stays minutes. See the note above. |
 | mijia.vacuum.v3 | audited | Units, options, and ranges already match the spec. |
-| xiaomi.vacuum.b106bk | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.b106eu | fixed | Volume shows percent. The spec range is 0..10. |
+| xiaomi.vacuum.b106bk | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.b106eu | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
 | xiaomi.vacuum.b108gl | fixed | Cleaning time is seconds. Brush, filter, and mop life are days. |
-| xiaomi.vacuum.b112 | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.b112bk | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.b112gl | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.c101 | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.c101eu | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.c103 | fixed | Volume shows percent. The spec range is 0..10. |
-| xiaomi.vacuum.c104 | fixed | Volume shows percent. The spec range is 0..10. |
+| xiaomi.vacuum.b112 | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.b112bk | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.b112gl | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.c101 | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.c101eu | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.c103 | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
+| xiaomi.vacuum.c104 | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
 | xiaomi.vacuum.c107 | fixed | Cleaning time is seconds. Detergent life and dust-bag time are hours. |
 | xiaomi.vacuum.c108 | audited | Units, options, and ranges already match the spec. |
 | xiaomi.vacuum.d101 | fixed | Cleaning time is seconds. |
 | xiaomi.vacuum.d102ev | fixed | Cleaning time is seconds. Dust-bag time is hours. |
 | xiaomi.vacuum.d102gl | fixed | Cleaning time is seconds. Dust-bag time is hours. |
-| xiaomi.vacuum.d106gl | fixed | Volume shows percent. The spec range is 0..10. |
+| xiaomi.vacuum.d106gl | fixed | Volume is a 0..10 level. The spec says percentage, but the range is not 0..100. |
 | xiaomi.vacuum.d109gl | fixed | Cleaning time is seconds. |
 | xiaomi.vacuum.e101gb | fixed | Cleaning time is seconds. Dry time left is minutes. Detergent life and dust-bag time are hours. |
 | xiaomi.vacuum.ov21cn | fixed | Cleaning time is seconds. Dry time left is minutes. Detergent life and dust-bag time are hours. |

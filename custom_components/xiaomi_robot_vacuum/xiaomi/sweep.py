@@ -113,7 +113,9 @@ SWEEP_STATES: Final[dict[int, int]] = wire_map(
 SWEEP_CONTROLS: Final[tuple[XiaomiControl, ...]] = (
     enum_select("xiaomi_sweep_mode", 2, 4, _CLEANING_MODE_OPTIONS),
     enum_select("xiaomi_alarm", 4, 1, _ALARM_OPTIONS),
-    number_control("xiaomi_volume", 4, 2, 0, 10, unit="%"),
+    # The spec says percentage, but the legal values are 0..10. A percent
+    # label would show 7 as 7%. This is a level, and the wire value is unchanged.
+    number_control("xiaomi_volume", 4, 2, 0, 10),
     enum_select("xiaomi_sweep_type", 2, 8, _SWEEP_TYPE_OPTIONS),
     enum_select("xiaomi_repeat_clean", 7, 1, _REPEAT_OPTIONS),
     enum_sensor("xiaomi_dust_bin", 7, 3, _BOX_OPTIONS),
