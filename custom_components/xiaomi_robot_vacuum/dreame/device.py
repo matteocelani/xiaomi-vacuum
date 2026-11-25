@@ -319,6 +319,20 @@ from .map import DreameMapVacuumMapManager, DreameVacuumMapDecoder
 _LOGGER = logging.getLogger(__name__)
 
 
+def _code_is_success(code: object) -> bool:
+    """Return whether a property result code means the value is present."""
+    if isinstance(code, bool) or code is None:
+        return False
+    if code == 0:
+        return True
+    if isinstance(code, str):
+        try:
+            return int(code) == 0
+        except ValueError:
+            return False
+    return False
+
+
 class DreameVacuumDevice:
     """Support for Dreame Vacuum"""
 
@@ -606,13 +620,22 @@ class DreameVacuumDevice:
             except (TypeError, ValueError):
                 continue
             if did not in DreameVacuumProperty._value2member_map_:
-                did = DID(prop["siid"], prop["piid"], self.property_mapping)
-                if did is None:
+                siid = prop.get("siid")
+                piid = prop.get("piid")
+                if (
+                    isinstance(siid, bool)
+                    or isinstance(piid, bool)
+                    or not isinstance(siid, int)
+                    or not isinstance(piid, int)
+                ):
                     continue
-                did = int(did.value)
+                mapped = DID(siid, piid, self.property_mapping)
+                if mapped is None:
+                    continue
+                did = int(mapped.value)
             if did in UNUSED_PROPERTIES:
                 continue
-            if prop["code"] == 0 and "value" in prop:
+            if _code_is_success(prop.get("code")) and "value" in prop:
                 value = prop["value"]
                 if self._property_codec is not None:
                     value = self._property_codec.convert_incoming(
