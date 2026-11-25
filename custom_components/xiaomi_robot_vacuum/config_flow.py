@@ -118,7 +118,10 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
                 {
                     vol.Required(
                         CONF_COLOR_SCHEME,
-                        default=_key_of(COLOR_SCHEME_KEYS, self._config_entry.options[CONF_COLOR_SCHEME]),
+                        default=_key_of(
+                            COLOR_SCHEME_KEYS,
+                            self._config_entry.options.get(CONF_COLOR_SCHEME),
+                        ),
                     ): SelectSelector(
                         SelectSelectorConfig(options=list(COLOR_SCHEME_KEYS), translation_key="color_scheme")
                     ),
