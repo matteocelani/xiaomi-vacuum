@@ -4252,7 +4252,10 @@ class DreameVacuumMapDecoder:
             key = values[1]
             raw_map = values[0]
 
-        raw_map = base64.decodebytes(raw_map.encode("utf8"))
+        try:
+            raw_map = base64.decodebytes(raw_map.encode("utf8"))
+        except ValueError:
+            return None
 
         if key is not None:
             if iv is None:

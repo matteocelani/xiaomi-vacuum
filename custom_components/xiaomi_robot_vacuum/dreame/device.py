@@ -599,9 +599,12 @@ class DreameVacuumDevice:
         changed = False
         callbacks = []
         for prop in properties:
-            if not isinstance(prop, dict):
+            if not isinstance(prop, dict) or "did" not in prop or "code" not in prop:
                 continue
-            did = int(prop["did"])
+            try:
+                did = int(prop["did"])
+            except (TypeError, ValueError):
+                continue
             if did not in DreameVacuumProperty._value2member_map_:
                 did = DID(prop["siid"], prop["piid"], self.property_mapping)
                 if did is None:
@@ -883,7 +886,7 @@ class DreameVacuumDevice:
         results = []
         for batch in batches:
             result = self._protocol.get_properties(batch, timeout=(10 if len(batches) > 1 else None))
-            if result is None:
+            if not isinstance(result, list):
                 raise DeviceException(key="device_unavailable") from None
             results.extend(result)
 
