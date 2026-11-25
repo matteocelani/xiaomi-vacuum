@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import logging
+import time
 from typing import Protocol, runtime_checkable
 
 from .exceptions import DeviceException
+from .map import DreameVacuumMapDecoder
 from .types import DreameVacuumAction, DreameVacuumProperty
 
 _LOGGER = logging.getLogger(__name__)
@@ -96,11 +98,53 @@ def _install_control_refresh(device: object, family: object) -> None:
         except Exception:
             _LOGGER.debug("Xiaomi control refresh failed", exc_info=True)
             return changed
+        if _load_published_map(device, family):
+            return True
         if refreshed:
             return True
         return changed
 
     device._request_properties = request_properties
+
+
+def _load_published_map(device: object, family: object) -> bool:
+    """Decode a published map frame into the status the camera renders."""
+    address = getattr(family, "map_address", None)
+    if not isinstance(address, tuple) or len(address) != 2:
+        return False
+    siid, piid = address
+    if not isinstance(siid, int) or not isinstance(piid, int):
+        return False
+    try:
+        result = device._protocol.get_properties(
+            [{"did": "map", "siid": siid, "piid": piid}]
+        )
+    except Exception:
+        _LOGGER.debug("Xiaomi map read failed", exc_info=True)
+        return False
+    if not isinstance(result, list) or not result:
+        return False
+    item = result[0]
+    if not isinstance(item, dict) or item.get("code") != 0:
+        return False
+    value = item.get("value")
+    if not isinstance(value, str) or not value:
+        return False
+    try:
+        decoded = DreameVacuumMapDecoder.decode_map(value)
+    except Exception:
+        _LOGGER.debug("Xiaomi map decode failed", exc_info=True)
+        return False
+    current = decoded[0] if isinstance(decoded, tuple) else None
+    if current is None:
+        return False
+    if getattr(device.status, "_xiaomi_map_raw", None) == value:
+        return False
+    if getattr(current, "last_updated", None) is None:
+        current.last_updated = time.time()
+    device.status._xiaomi_map_raw = value
+    device.status._xiaomi_map = current
+    return True
 
 
 def _property_transport(device: object, family: object) -> object | None:

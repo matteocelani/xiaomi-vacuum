@@ -31,7 +31,14 @@ _MAP_WORDS: Final = (
     "furniture",
     "path",
 )
-_START_WORDS: Final = ("start-sweep", "start-clean", "start-mop", "start-only")
+_START_WORDS: Final = (
+    "start-sweep",
+    "start-clean",
+    "start-mop",
+    "start-only",
+    "start-room-sweep",
+    "start-vacuum-room-sweep",
+)
 _PAUSE_WORDS: Final = ("pause",)
 _CHARGE_WORDS: Final = ("start-charge", "start-charging")
 _STOP_WORDS: Final = ("stop-sweep", "stop-clean", "stop-charging")

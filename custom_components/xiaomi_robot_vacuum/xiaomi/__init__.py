@@ -49,7 +49,9 @@ from .model import (
     MODEL_X20_PRO,
     control_keys,
     controls_of,
+    mapped_property,
 )
+from .room import clean_rooms, supports_room_clean
 
 __all__ = [
     "MODEL_E5",
@@ -95,10 +97,13 @@ __all__ = [
     "MODEL_X20_PRO",
     "XiaomiControl",
     "XiaomiControlException",
+    "clean_rooms",
     "control_keys",
     "controls_of",
     "invoke_control",
+    "mapped_property",
     "read_control",
     "resolve_family",
+    "supports_room_clean",
     "write_control",
 ]

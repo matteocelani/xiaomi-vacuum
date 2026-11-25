@@ -85,6 +85,7 @@ ROBOT_VACUUM_6: Final = XiaomiModel(
         ),
     ),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         EXTENDED_STATION_CONTROLS,
         _ADDED_CONTROLS,

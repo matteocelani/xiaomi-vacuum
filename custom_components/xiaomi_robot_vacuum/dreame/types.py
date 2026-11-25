@@ -518,6 +518,8 @@ class DreameVacuumWaterVolume(IntEnum):
     """Dreame Vacuum water volume"""
 
     UNKNOWN = -1
+    # Xiaomi mop-water lists publish 0 as Off. Dreame levels stay 1..3.
+    OFF = 0
     LOW = 1
     MEDIUM = 2
     HIGH = 3

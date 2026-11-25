@@ -365,6 +365,8 @@ async def assert_entities_read_or_write(hass: HomeAssistant, case: EntityCase) -
                     )
                     assert fake.actions[-1] == (action["siid"], action["aiid"])
                     continue
+                if domain == "camera":
+                    continue
                 prop = _PROPERTY_BY_ENTITY.get(key, key.upper())
                 assert prop in properties, (domain, key)
                 assert properties[prop] in seen
@@ -403,8 +405,10 @@ def _assert_registry(
     assert not any(domain == "time" for domain, _key in keys)
     expected = set(case.entities)
     expected.update((str(control.domain), control.key) for control in family.controls)
+    if family.map_address is not None:
+        expected.add(("camera", "map_map"))
     assert keys == expected
-    assert not any(domain == "camera" for domain, _key in keys)
+    assert not any(domain == "camera" and key != "map_map" for domain, key in keys)
 
 
 def _registry_keys(hass: HomeAssistant, entry_id: str) -> set[tuple[str, str]]:

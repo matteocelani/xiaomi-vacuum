@@ -736,6 +736,7 @@
       "water_volume": {
         "name": "Water Volume",
         "state": {
+          "off": "Off",
           "low": "Low",
           "medium": "Medium",
           "high": "High"

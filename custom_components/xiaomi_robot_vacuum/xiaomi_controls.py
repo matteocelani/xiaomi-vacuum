@@ -162,6 +162,8 @@ class XiaomiNumber(_XiaomiEntity, NumberEntity):
     def native_value(self) -> int | None:
         """Return the integer currently stored for the control."""
         raw = self._raw()
+        if raw is None and not self._control.readable:
+            return self._control.minimum
         if isinstance(raw, bool) or not isinstance(raw, int):
             return None
         return raw
@@ -186,6 +188,9 @@ class XiaomiSelect(_XiaomiEntity, SelectEntity):
     def current_option(self) -> str | None:
         """Return the slug for the current wire value."""
         raw = self._raw()
+        if raw is None and not self._control.readable and self._attr_options:
+            # Write-only settings have no read. Show the first published value.
+            return self._attr_options[0]
         if isinstance(raw, bool) or not isinstance(raw, int):
             return None
         return _slug(self._control, raw)

@@ -253,6 +253,17 @@ def _dashboard(devices: Sequence[LabDevice]) -> str:
                 f"        alt_text: {device.family} map",
             ]
         )
+        if _has_map_camera(device.model):
+            lines.extend(
+                [
+                    "      - type: picture-entity",
+                    f"        entity: camera.{_slug(device.name)}_map",
+                    "        camera_image: camera." + _slug(device.name) + "_map",
+                    "        name: " + device.family + " map camera",
+                    "        show_name: true",
+                    "        show_state: true",
+                ]
+            )
     lines.extend(
         [
             "      - type: entities",
@@ -305,6 +316,12 @@ def _entries(devices: Sequence[LabDevice]) -> dict[str, object]:
         "key": "core.config_entries",
         "data": {"entries": entries},
     }
+
+
+def _has_map_camera(model: str) -> bool:
+    family = resolve_family(model)
+    address = getattr(family, "map_address", None)
+    return isinstance(address, tuple) and len(address) == 2
 
 
 def _slug(name: str) -> str:

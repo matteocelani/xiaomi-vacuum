@@ -39,5 +39,6 @@ S60_PLUS: Final = XiaomiModel(
     action_overrides=compose_addresses(S60_CLASS_ACTIONS),
     state_by_wire=compose_codes(S60_CLASS_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(S60_CLASS_CONTROLS, _DUST_STATION_CONTROLS),
 )

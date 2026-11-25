@@ -65,6 +65,7 @@ from tests.xiaomi.helpers import FakeMiio, release_device
 
 from homeassistant.const import CONF_HOST, CONF_NAME, CONF_TOKEN
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 
 _TOKEN = "00" * 16
 _MAC = "00:00:00:00:00:00"
@@ -285,12 +286,15 @@ def _unsafe_entities(hass: HomeAssistant) -> list[str]:
         "empty_water_tank",
     )
     found: list[str] = []
+    registry = er.async_get(hass)
     for state in hass.states.async_all():
         if state.domain == "time":
             found.append(state.entity_id)
             continue
+        entry = registry.async_get(state.entity_id)
+        unique_id = entry.unique_id if entry is not None else ""
         object_id = state.entity_id.split(".", 1)[-1]
-        if "_xiaomi_" in object_id:
+        if "_xiaomi_" in object_id or "xiaomi_" in unique_id:
             continue
         if any(name in object_id for name in blocked):
             found.append(state.entity_id)

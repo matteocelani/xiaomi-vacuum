@@ -120,6 +120,7 @@ S12: Final = XiaomiModel(
         },
     ),
     task_by_wire={},
+    room_sweep=(2, 7, 10),
     controls=compose_controls(
         SWEEP_CONTROLS,
         _ADDED_CONTROLS,
