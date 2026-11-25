@@ -1097,7 +1097,8 @@ class DreameVacuumDreameHomeCloudProtocol:
     def _refresh_expired_key(self) -> None:
         if self._key_expire:
             remaining = self._key_expire - time.time()
-            if 0 < remaining <= 600:
+            # Already expired tokens were left until the next 401. Refresh those too.
+            if remaining <= 600:
                 self.login()
 
     def _auth_failure(self, text) -> int:
