@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from io import BytesIO
+
 from custom_components.xiaomi_robot_vacuum.dreame.map import (
     DreameVacuumMapDecoder,
     DreameVacuumMapRenderer,
 )
+from PIL import Image
 from tests.virtual.dreame_map_robot import DreameMapRobot
 from tests.virtual.floor_plan import FLOOR_HEIGHT, FLOOR_WIDTH, encode_floor_plan
 
@@ -24,6 +27,22 @@ def test_floor_plan_decodes_two_rooms_and_renders_a_png() -> None:
     image = DreameVacuumMapRenderer().render_map(current)
     assert image.startswith(b"\x89PNG")
     assert len(image) > 1000
+    _assert_rooms_fill_the_frame(image)
+
+
+def _assert_rooms_fill_the_frame(image: bytes) -> None:
+    """The two rooms must occupy the frame, not sit as a speck in the padding."""
+    rendered = Image.open(BytesIO(image)).convert("RGBA")
+    width, height = rendered.size
+    corner = rendered.getpixel((0, 0))
+    counts: dict[tuple[int, int, int, int], int] = {}
+    for pixel in rendered.getdata():
+        if pixel == corner:
+            continue
+        counts[pixel] = counts.get(pixel, 0) + 1
+    covered = sum(counts.values())
+    assert covered / (width * height) >= 0.45
+    assert sum(1 for count in counts.values() if count / (width * height) >= 0.1) >= 2
 
 
 def test_docked_dreame_robot_does_not_publish_an_idle_status() -> None:
