@@ -5376,6 +5376,8 @@ class DreameVacuumMapDecoder:
                 if carpets is not None:
                     map_carpets = []
                     for carpet in carpets:
+                        if not isinstance(carpet, (list, tuple)) or len(carpet) < 4:
+                            continue
                         map_carpets.append(
                             Carpet(
                                 int(carpet[4]) if len(carpet) > 4 else None,

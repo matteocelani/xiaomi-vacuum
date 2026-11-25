@@ -108,6 +108,33 @@ def test_a_short_no_go_keeps_the_valid_zone() -> None:
     assert len(current.virtual_walls) == 1
 
 
+def test_a_short_carpet_keeps_later_walls() -> None:
+    """One truncated carpet must not drop walls parsed after it."""
+    current = _current(
+        _frame(
+            {
+                "vw": {"addcpt": [[1, 2]]},
+                "walls_info": {
+                    "storeys": [
+                        {
+                            "rooms": [
+                                {
+                                    "room_id": 1,
+                                    "walls": [[1, 0, 0, 10, 0, 0, 0, 0, 0, 10, 0]],
+                                }
+                            ]
+                        }
+                    ]
+                },
+            }
+        )
+    )
+
+    _assert_rooms(current)
+    assert current.walls
+    assert 1 in current.walls
+
+
 def test_rotated_floors_keep_their_angle() -> None:
     """Published rotation values stay on the decoded map and still render."""
     for angle in (0, 90, 180, 270):
