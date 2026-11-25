@@ -26,6 +26,30 @@ def test_floor_plan_decodes_two_rooms_and_renders_a_png() -> None:
     assert len(image) > 1000
 
 
+def test_docked_dreame_robot_does_not_publish_an_idle_status() -> None:
+    """A charging dock must not report status 0, which the card shows as Idle."""
+    robot = DreameMapRobot("dreame.vacuum.lab")
+
+    def read(siid: int, piid: int) -> object:
+        result = robot.dispatch(
+            "get_properties",
+            [{"did": "s", "siid": siid, "piid": piid}],
+        )
+        assert isinstance(result, list)
+        item = result[0]
+        assert isinstance(item, dict)
+        return item["value"]
+
+    battery = read(3, 1)
+    assert isinstance(battery, int)
+    assert read(2, 1) == 6
+    assert read(4, 1) == 6
+    assert read(3, 2) == 1
+    charge_level = read(28, 47)
+    assert isinstance(charge_level, int)
+    assert charge_level > battery
+
+
 def test_dreame_request_map_returns_the_same_floor_plan() -> None:
     """The Dreame family robot answers REQUEST_MAP with that frame."""
     robot = DreameMapRobot("dreame.vacuum.lab")

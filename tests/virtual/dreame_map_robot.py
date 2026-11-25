@@ -11,6 +11,11 @@ _ERROR: Final = (2, 2)
 _BATTERY: Final = (3, 1)
 _CHARGING: Final = 6
 _BATTERY_LEVEL: Final = 80
+_STATUS: Final = (4, 1)
+_CHARGING_STATUS: Final = (3, 2)
+_CHARGE_LEVEL: Final = (28, 47)
+_CHARGING_FLAG: Final = 1
+_CHARGE_TARGET: Final = 100
 _REQUEST_MAP: Final = (6, 1)
 _MAP_DATA_PIID: Final = 1
 _ROBOT_TIME_PIID: Final = 5
@@ -82,8 +87,12 @@ class DreameMapRobot:
 
     def _value(self, siid: int, piid: int) -> object:
         address = (siid, piid)
-        if address == _STATE:
+        if address in (_STATE, _STATUS):
             return _CHARGING
+        if address == _CHARGING_STATUS:
+            return _CHARGING_FLAG
+        if address == _CHARGE_LEVEL:
+            return _CHARGE_TARGET
         if address == _ERROR:
             return 0
         if address == _BATTERY:
