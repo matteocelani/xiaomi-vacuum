@@ -129,11 +129,12 @@ def _load_published_map(device: object, family: object) -> bool:
     value = item.get("value")
     if not isinstance(value, str) or not value:
         return False
+    # The frame is fetched every poll. Decode it only when the bytes changed.
+    if getattr(device.status, "_xiaomi_map_raw", None) == value:
+        return False
     decoded = DreameVacuumMapDecoder.decode_map(value)
     current = decoded[0] if isinstance(decoded, tuple) else None
     if current is None:
-        return False
-    if getattr(device.status, "_xiaomi_map_raw", None) == value:
         return False
     if getattr(current, "last_updated", None) is None:
         current.last_updated = time.time()
