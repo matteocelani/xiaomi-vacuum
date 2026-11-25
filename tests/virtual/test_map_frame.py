@@ -139,7 +139,9 @@ def test_every_published_map_fills_the_camera_frame(socket_enabled: None) -> Non
                 release_device(device)
 
 
-def test_local_dreame_keeps_room_ids_on_the_current_map(socket_enabled: None) -> None:
+def test_local_dreame_keeps_room_ids_on_the_current_map(
+    socket_enabled: None, caplog: pytest.LogCaptureFixture
+) -> None:
     """A token-only Dreame stores the lab frame as the current map, with both rooms."""
     del socket_enabled
     robot = DreameMapRobot("dreame.vacuum.p2008")
@@ -156,6 +158,9 @@ def test_local_dreame_keeps_room_ids_on_the_current_map(socket_enabled: None) ->
         try:
             assert device._map_manager is not None
             device._map_manager.update()
+            device._map_manager._available = True
+            device._map_manager.update()
+            assert "Map update Failed" not in caplog.text
             current = device.get_map(0)
             assert current is not None
             assert current.saved_map is False

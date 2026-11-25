@@ -1530,7 +1530,11 @@ class DreameMapVacuumMapManager:
                     elif cloud is None and self._map_data is None:
                         # REQUEST_MAP is a local action. A token-only device has no cloud client.
                         self._request_i_map()
-                elif not self._request_map_from_cloud() and self._device_running:
+                elif (
+                    self._protocol.cloud is not None
+                    and not self._request_map_from_cloud()
+                    and self._device_running
+                ):
                     _LOGGER.debug("No new map data received, retrying")
                     sleep(1)
                     if not self._request_map_from_cloud():
