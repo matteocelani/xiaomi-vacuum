@@ -108,6 +108,55 @@ def test_a_short_no_go_keeps_the_valid_zone() -> None:
     assert len(current.virtual_walls) == 1
 
 
+def _rooms(**extra: object) -> dict[str, object]:
+    rooms: dict[str, object] = {
+        "1": {
+            "type": 12,
+            "index": 0,
+            "name": base64.b64encode(b"Kitchen").decode("ascii"),
+        },
+        "2": {
+            "type": 1,
+            "index": 1,
+            "name": base64.b64encode(b"Hall").decode("ascii"),
+        },
+    }
+    rooms.update(extra)
+    return rooms
+
+
+def test_a_unicode_room_name_keeps_the_floor() -> None:
+    """A literal unicode name must not discard the rooms around it."""
+    rooms = _rooms()
+    rooms["2"] = {"type": 1, "index": 1, "name": "Cucina 🍳"}
+    current = _current(_frame({"seg_inf": rooms}))
+
+    assert current.segments is not None
+    assert current.segments[1].custom_name == "Kitchen"
+    assert 2 in current.segments
+    assert current.segments[2].custom_name == "Cucina 🍳"
+
+
+def test_a_bad_room_type_keeps_the_name() -> None:
+    """A non-numeric room type must not discard that room's name."""
+    rooms = _rooms()
+    rooms["2"] = {
+        "type": "kitchen",
+        "index": 1,
+        "name": base64.b64encode(b"Hall").decode("ascii"),
+    }
+    current = _current(_frame({"seg_inf": rooms}))
+
+    _assert_rooms(current)
+
+
+def test_a_bad_room_id_keeps_the_numbered_rooms() -> None:
+    """A room id that is not a number must not discard the numbered rooms."""
+    current = _current(_frame({"seg_inf": _rooms(room={"type": 1, "index": 0})}))
+
+    _assert_rooms(current)
+
+
 def test_a_short_carpet_keeps_later_walls() -> None:
     """One truncated carpet must not drop walls parsed after it."""
     current = _current(
