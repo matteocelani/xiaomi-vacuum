@@ -1500,21 +1500,26 @@ class DreameVacuumDevice:
         current_faults = self.status.faults.copy()
         faults = self.get_property(DreameVacuumProperty.FAULTS)
         if faults and faults != "" and faults != " " and faults != 0 and faults != "0":
-            try:
-                faults = str(faults).split(",")
-                self.status.faults = [
-                    int(fault)
-                    for fault in faults
-                    if int(fault) in DreameVacuumErrorCode._value2member_map_
-                    and int(fault) != DreameVacuumErrorCode.NO_ERROR.value
-                    and int(fault) != DreameVacuumErrorCode.UNKNOWN_ERROR.value
-                    and int(fault) != DreameVacuumErrorCode.UNKNOWN_WARNING.value
-                    and (int(fault) != DreameVacuumErrorCode.BATTERY_LOW.value or not self.status.charging)
-                    and (int(fault) != DreameVacuumErrorCode.REMOVE_MOP.value or not self.capability.self_wash_base)
-                ]
-            except Exception as ex:
-                self.status.faults = []
-                _LOGGER.warning("Failed to parse faults: %s", ex)
+            parsed: list[int] = []
+            for fault in str(faults).split(","):
+                token = fault.strip()
+                if not token:
+                    continue
+                try:
+                    code = int(token)
+                except (TypeError, ValueError):
+                    continue
+                if (
+                    code not in DreameVacuumErrorCode._value2member_map_
+                    or code == DreameVacuumErrorCode.NO_ERROR.value
+                    or code == DreameVacuumErrorCode.UNKNOWN_ERROR.value
+                    or code == DreameVacuumErrorCode.UNKNOWN_WARNING.value
+                    or (code == DreameVacuumErrorCode.BATTERY_LOW.value and self.status.charging)
+                    or (code == DreameVacuumErrorCode.REMOVE_MOP.value and self.capability.self_wash_base)
+                ):
+                    continue
+                parsed.append(code)
+            self.status.faults = parsed
         else:
             self.status.faults = []
 
@@ -11355,12 +11360,21 @@ class DreameVacuumDeviceStatus:
 
         attributes[ATTR_HAS_ERROR] = self.has_error
         if self.faults is not None:
-            attributes[ATTR_FAULTS] = {
-                int(fault): ERROR_CODE_TO_ERROR_NAME.get(DreameVacuumErrorCode(fault), STATE_UNKNOWN)
-                .replace("_", " ")
-                .capitalize()
-                for fault in self.faults
-            }
+            fault_names: dict[int, str] = {}
+            for fault in self.faults:
+                try:
+                    code = int(fault)
+                except (TypeError, ValueError):
+                    continue
+                try:
+                    error = DreameVacuumErrorCode(code)
+                except ValueError:
+                    fault_names[code] = STATE_UNKNOWN.replace("_", " ").capitalize()
+                    continue
+                fault_names[code] = (
+                    ERROR_CODE_TO_ERROR_NAME.get(error, STATE_UNKNOWN).replace("_", " ").capitalize()
+                )
+            attributes[ATTR_FAULTS] = fault_names
 
         if self._capability.lidar_navigation:
             attributes[ATTR_MAPPING] = self.fast_mapping
