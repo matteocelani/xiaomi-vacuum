@@ -2488,7 +2488,7 @@
         "name": "Lavaggio profondo del panno"
       },
       "dnd": {
-        "name": "DnD"
+        "name": "Non disturbare"
       },
       "dnd_disable_auto_empty": {
         "name": "Disattiva svuotamento automatico"
@@ -3125,10 +3125,10 @@
     },
     "time": {
       "dnd_end": {
-        "name": "Orario fine DnD"
+        "name": "Orario di fine non disturbare"
       },
       "dnd_start": {
-        "name": "Orario inizio DnD"
+        "name": "Orario di inizio non disturbare"
       },
       "off_peak_charging_end": {
         "name": "Orario fine fuori picco"
@@ -3239,8 +3239,8 @@
         "start_task": "Avvia attività",
         "start_washing": "Avvia lavaggio",
         "stop": "Ferma",
-        "stop_bag_drying": "Stop asciug. sacco",
-        "stop_drying": "Stop asciugatura",
+        "stop_bag_drying": "Ferma asciug. sacco",
+        "stop_drying": "Ferma asciugatura",
         "understood": "Capito",
         "virtual_threshold": "Soglia virtuale",
         "virtual_wall": "Muro",
@@ -3501,8 +3501,8 @@
         "service_call_failed": "Chiamata servizio fallita",
         "settings_will_applied": "Le modifiche saranno applicate al prossimo avvio.",
         "shortcut_will_deleted": "%name% sarà eliminato !",
-        "stop_bag_drying": "Stop asciugatura sacco ?",
-        "stop_drying": "Stop asciugatura ?",
+        "stop_bag_drying": "Fermare l'asciugatura del sacco?",
+        "stop_drying": "Fermare l'asciugatura?",
         "stop_task": "Arresta attività attuale ?",
         "task_disabled": "Attività disabilitata !",
         "task_will_stopped": "L'attività attuale sarà interrotta !",
