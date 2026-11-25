@@ -100,6 +100,34 @@ def test_secrets_geometry_and_signed_urls_are_redacted() -> None:
         assert secret not in dumped
 
 
+def test_property_enum_names_for_maps_and_stream_codes_are_redacted() -> None:
+    """The property dump uses enum names, which are not the lowercase keys."""
+    diagnostics = _load_diagnostics()
+    secrets = {
+        "MAP_DATA": "floor-secret-blob",
+        "OLD_MAP_DATA": "old-floor",
+        "OBJECT_NAME": "map-object-secret",
+        "MAP_EXTEND_DATA": "extend-secret",
+        "FRAME_INFO": "frame-secret",
+        "CLEAN_LOG_FILE_NAME": "log-file-secret",
+        "MAP_LIST": "map-list-secret",
+        "STREAM_CODE": "stream-secret",
+        "STREAM_SET_CODE": "stream-set-secret",
+        "STREAM_VERIFY_CODE": "stream-verify-secret",
+        "STREAM_RESET_CODE": "stream-reset-secret",
+    }
+    payload = {"properties": {**secrets, "battery": 80}}
+
+    sanitized = diagnostics.redact_diagnostics(payload)
+    dumped = json.dumps(sanitized)
+
+    assert sanitized["properties"]["battery"] == 80
+    for key in secrets:
+        assert sanitized["properties"][key] == _REDACTED
+    for secret in secrets.values():
+        assert secret not in dumped
+
+
 def test_diagnostics_do_not_build_a_map_image() -> None:
     source = Path("custom_components/xiaomi_robot_vacuum/diagnostics.py").read_text(
         encoding="utf-8"
