@@ -4792,10 +4792,15 @@ class DreameVacuumMapDecoder:
                         segments = DreameVacuumMapDecoder.get_segments(map_data)
                         segment_info = []
 
-                        if segments and "seg_inf" in data_json:
+                        if segments and isinstance(data_json.get("seg_inf"), dict):
                             seg_inf = data_json["seg_inf"]
                             for k, v in seg_inf.items():
-                                seg_id = int(k)
+                                if not isinstance(v, dict):
+                                    continue
+                                try:
+                                    seg_id = int(k)
+                                except (TypeError, ValueError):
+                                    continue
 
                                 segment_info.append(
                                     (seg_id, v.get("nei_id"), segments[seg_id].area if seg_id in segments else 0)
@@ -4815,7 +4820,10 @@ class DreameVacuumMapDecoder:
                                 if v.get("nei_id") is not None:
                                     target_seg.neighbors = v["nei_id"]
                                 if v.get("type") is not None:
-                                    target_seg.type = int(v["type"])
+                                    try:
+                                        target_seg.type = int(v["type"])
+                                    except (TypeError, ValueError):
+                                        pass
                                 if v.get("index") is not None:
                                     target_seg.index = v["index"]
                                 if v.get("roomID") is not None:
@@ -4840,10 +4848,14 @@ class DreameVacuumMapDecoder:
                                     else:
                                         target_seg.floor_material = DreameVacuumFloorMaterial.NONE.value
 
-                                if v.get(MAP_PARAMETER_NAME):
-                                    target_seg.custom_name = base64.b64decode(v.get(MAP_PARAMETER_NAME)).decode(
-                                        "utf-8"
-                                    )
+                                name = v.get(MAP_PARAMETER_NAME)
+                                if isinstance(name, str) and name:
+                                    try:
+                                        target_seg.custom_name = base64.b64decode(name, validate=True).decode("utf-8")
+                                    except (ValueError, UnicodeDecodeError):
+                                        # A literal unicode name is not base64. Keep it.
+                                        if not name.isascii():
+                                            target_seg.custom_name = name
 
                                 target_seg.visibility = (
                                     bool(seg_id not in map_data.hidden_segments)
