@@ -149,7 +149,7 @@ Configure a Dreame, MOVA, Mijia, or TROUVER vacuum with the upstream guides. Tho
 | Xiaomi Robot Vacuum E10C | `xiaomi.vacuum.b112bk` |
 | Xiaomi Robot Vacuum E5 | `xiaomi.vacuum.c108` |
 
-Map, rooms, and zones are not supported yet on Xiaomi models. These models were tested on a simulated robot, not real hardware. A manual check for a real S20+ or X20 Max is [hardware-test-s20-plus-x20-max.md](hardware-test-s20-plus-x20-max.md). That procedure does not add map, room, or zone support.
+Room cleaning is available on the Xiaomi models that publish a room-sweep action. A map camera is published for the S20+ and the Mijia 2S, 3S, and 3S CN models, which send a map frame. Zone cleaning is not supported on Xiaomi models yet. These models were tested on a simulated robot, not real hardware. A manual check for a real S20+ or X20 Max is [hardware-test-s20-plus-x20-max.md](hardware-test-s20-plus-x20-max.md). That procedure does not add map, room, or zone support.
 
 ## Features
 
