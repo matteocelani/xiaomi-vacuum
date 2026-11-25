@@ -114,3 +114,43 @@ def test_mi_home_region_prefix() -> None:
 
     assert china.get_api_url() == "https://api.io.mi.com/app"
     assert germany.get_api_url() == "https://de.api.io.mi.com/app"
+
+
+def _watch(cloud: protocol.DreameVacuumDreameHomeCloudProtocol) -> list[float | None]:
+    seen: list[float | None] = []
+
+    def login() -> bool:
+        seen.append(cloud._key_expire)
+        cloud._key_expire = _NOW + 3600
+        return True
+
+    cloud.login = login
+    return seen
+
+
+def test_an_expired_token_is_refreshed(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A token that already expired is refreshed before the next cloud call."""
+    cloud = _dreame(monkeypatch, "de")
+    seen = _watch(cloud)
+    cloud._key_expire = _NOW - 30
+    cloud._refresh_expired_key()
+    assert seen == [_NOW - 30]
+    assert cloud._key_expire == _NOW + 3600
+
+
+def test_a_token_inside_the_refresh_window_is_refreshed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    cloud = _dreame(monkeypatch, "us")
+    seen = _watch(cloud)
+    cloud._key_expire = _NOW + 120
+    cloud._refresh_expired_key()
+    assert seen == [_NOW + 120]
+
+
+def test_a_fresh_token_is_not_refreshed(monkeypatch: pytest.MonkeyPatch) -> None:
+    cloud = _dreame(monkeypatch, "sg")
+    seen = _watch(cloud)
+    cloud._key_expire = _NOW + 3600
+    cloud._refresh_expired_key()
+    assert seen == []
