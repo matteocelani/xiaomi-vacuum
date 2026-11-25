@@ -60,6 +60,7 @@ from .const import (
     CONSUMABLE_ROLLER_MOP_FILTER,
     CONSUMABLE_WATER_OUTLET_FILTER,
 )
+from .xiaomi import clean_rooms, supports_room_clean
 
 try:
     from homeassistant.components.vacuum import Segment
@@ -1142,6 +1143,15 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
     async def async_clean_segment(self, segments, repeats=1, suction_level="", water_volume="") -> None:
         """Clean selected segments."""
+        if supports_room_clean(self.device):
+            room_ids = segments if isinstance(segments, list) else [segments]
+            await self._try_command(
+                "Unable to call clean_segment: %s",
+                clean_rooms,
+                self.device,
+                room_ids,
+            )
+            return
         self._require_targeted_clean()
         await self._try_command(
             "Unable to call clean_segment: %s",

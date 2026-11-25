@@ -68,6 +68,7 @@ X20_MAX: Final = XiaomiModel(
     action_overrides=compose_addresses(STATION_ACTIONS),
     state_by_wire=compose_codes(STATION_STATES),
     task_by_wire=compose_codes(STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         _SHARED,
         replaced={

@@ -209,6 +209,7 @@ MIJIA_7_MAX: Final = XiaomiModel(
             int(ExtendedStationWireTask.AI_HOSTING),
         ),
     ),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         _SHARED_CONTROLS,
         _ADDED_CONTROLS,

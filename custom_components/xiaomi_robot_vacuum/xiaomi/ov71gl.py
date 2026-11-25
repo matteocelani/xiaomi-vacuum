@@ -49,6 +49,7 @@ S40_PRO: Final = XiaomiModel(
     action_overrides=compose_addresses(STATION_ACTIONS, omitted=_OMITTED_ACTIONS),
     state_by_wire=compose_codes(EXTENDED_STATION_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         EXTENDED_STATION_CONTROLS,
         HAIR_CUTTING_CONTROLS,

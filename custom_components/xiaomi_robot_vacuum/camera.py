@@ -382,6 +382,13 @@ class CameraResourcesView(HomeAssistantView):
         return response
 
 
+def _publishes_map_frame(device: object) -> bool:
+    """Return whether a Xiaomi codec publishes a map frame the renderer can draw."""
+    codec = getattr(device, "_property_codec", None)
+    address = getattr(codec, "map_address", None)
+    return isinstance(address, tuple) and len(address) == 2
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -389,13 +396,15 @@ async def async_setup_entry(
 ) -> None:
     """Set up Dreame Vacuum Camera based on a config entry."""
     coordinator: DreameVacuumDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    if coordinator.device.capability.map:
+    if coordinator.device.capability.map or _publishes_map_frame(coordinator.device):
         color_scheme = entry.options.get(CONF_COLOR_SCHEME)
         icon_set = entry.options.get(CONF_ICON_SET)
         low_resolution = entry.options.get(CONF_LOW_RESOLUTION, False)
         square = entry.options.get(CONF_SQUARE, False)
         hidden_map_objects = entry.options.get(CONF_HIDDEN_MAP_OBJECTS) or []
 
+        published = _publishes_map_frame(coordinator.device) and not coordinator.device.capability.map
+        descriptions = (CAMERAS[0],) if published else CAMERAS
         async_add_entities(
             DreameVacuumCameraEntity(
                 coordinator,
@@ -406,24 +415,25 @@ async def async_setup_entry(
                 low_resolution,
                 square,
             )
-            for description in CAMERAS
+            for description in descriptions
         )
 
-        update_map_cameras = partial(
-            async_update_map_cameras,
-            coordinator,
-            {},
-            async_add_entities,
-            color_scheme,
-            icon_set,
-            hidden_map_objects,
-            low_resolution,
-            square,
-        )
         platform = entity_platform.current_platform.get()
         platform.async_register_entity_service("update", {}, DreameVacuumCameraEntity.async_update.__name__)
-        coordinator.async_add_listener(update_map_cameras)
-        update_map_cameras()
+        if not published:
+            update_map_cameras = partial(
+                async_update_map_cameras,
+                coordinator,
+                {},
+                async_add_entities,
+                color_scheme,
+                icon_set,
+                hidden_map_objects,
+                low_resolution,
+                square,
+            )
+            coordinator.async_add_listener(update_map_cameras)
+            update_map_cameras()
 
         camera = hass.data["camera"]
         hass.http.register_view(CameraDataView(camera))
@@ -686,7 +696,7 @@ class DreameVacuumCameraEntity(DreameVacuumEntity, Camera):
         """Fetch state from the device."""
         self._last_map_request = 0
         map_data = self._map_data
-        if map_data and self.device.cloud_connected and (self.map_index > 0 or self.device.status.located):
+        if self._map_frame_ready(map_data):
             if map_data.last_updated:
                 self._state = datetime.fromtimestamp(int(map_data.last_updated))
             elif map_data.timestamp_ms:
@@ -811,9 +821,20 @@ class DreameVacuumCameraEntity(DreameVacuumEntity, Camera):
             del self._proxy_renderer
             self._proxy_renderer = None
 
+    def _map_frame_ready(self, map_data: object) -> bool:
+        """A decoded local frame is drawable without the Dreame cloud session."""
+        if not map_data or not self.device:
+            return False
+        if getattr(self.device.status, "_xiaomi_map", None) is not None:
+            return True
+        return bool(
+            self.device.cloud_connected
+            and (self.map_index > 0 or self.device.status.located)
+        )
+
     def update(self) -> None:
         map_data = self._map_data
-        if map_data and self.device.cloud_connected and (self.map_index > 0 or self.device.status.located):
+        if self._map_frame_ready(map_data):
             # Leave _default_map set so the first image request renders. Rendering every
             # saved map as soon as the cloud returns exhausted memory on small hosts.
 

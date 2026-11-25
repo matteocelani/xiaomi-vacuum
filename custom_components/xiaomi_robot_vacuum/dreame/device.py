@@ -653,14 +653,14 @@ class DreameVacuumDevice:
                     )
                     if not custom_property:
                         if current_value is not None:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "Property %s Changed: %s -> %s",
                                 DreameVacuumProperty(did).name,
                                 current_value,
                                 value,
                             )
                         else:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "Property %s Added: %s",
                                 DreameVacuumProperty(did).name,
                                 value,
@@ -1572,7 +1572,7 @@ class DreameVacuumDevice:
                     current_value = self.ai_data.get(prop.name)
                     if current_value != value:
                         if current_value is not None:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "AI Property %s Changed: %s -> %s",
                                 prop.name,
                                 current_value,
@@ -1584,7 +1584,7 @@ class DreameVacuumDevice:
                             ):
                                 self._map_property_changed(current_value)
                         else:
-                            _LOGGER.info("AI Property %s Added: %s", prop.name, value)
+                            _LOGGER.debug("AI Property %s Added: %s", prop.name, value)
                         changed = True
                         self.ai_data[prop.name] = value
         elif isinstance(ai_value, int):
@@ -1612,7 +1612,7 @@ class DreameVacuumDevice:
                 current_value = self.ai_data.get(prop.name)
                 if current_value != value:
                     if current_value is not None:
-                        _LOGGER.info(
+                        _LOGGER.debug(
                             "AI Property %s Changed: %s -> %s",
                             prop.name,
                             current_value,
@@ -1624,7 +1624,7 @@ class DreameVacuumDevice:
                         ):
                             self._map_property_changed(current_value)
                     else:
-                        _LOGGER.info("AI Property %s Added: %s", prop.name, value)
+                        _LOGGER.debug("AI Property %s Added: %s", prop.name, value)
                     changed = True
                     self.ai_data[prop.name] = value
 
@@ -1689,14 +1689,14 @@ class DreameVacuumDevice:
                                     self._previous_cleangenius = value
 
                             if current_value is not None:
-                                _LOGGER.info(
+                                _LOGGER.debug(
                                     "Property %s Changed: %s -> %s",
                                     prop.name,
                                     current_value,
                                     value,
                                 )
                             else:
-                                _LOGGER.info("Property %s Added: %s", prop.name, value)
+                                _LOGGER.debug("Property %s Added: %s", prop.name, value)
                             changed = True
                             self.auto_switch_data[prop.name] = value
 
@@ -3397,6 +3397,8 @@ class DreameVacuumDevice:
         Map manager does not need any device property for parsing and storing map data but map renderer does.
         For example if device is running but not mopping renderer does not show no mopping areas and this function handles that so renderer does not need device data too.
         """
+        if map_data and self._map_manager is None:
+            return map_data
         if map_data:
             map_data = self._map_manager.optimizer.optimize(
                 map_data,
@@ -3786,6 +3788,7 @@ class DreameVacuumDevice:
                 return self._map_manager.selected_map
             if map_index == 0:
                 return self.status.current_map
+        return getattr(self.status, "_xiaomi_map", None) if map_index in (0, 1) else None
 
     def update_map(self) -> None:
         """Trigger a map update.
@@ -4758,7 +4761,7 @@ class DreameVacuumDevice:
         self.schedule_update(10, True)
 
         current_map = copy.deepcopy(self.status.current_map)
-        if current_map and not self.status.started:
+        if current_map and not self.status.started and self._map_manager:
             self._map_manager.editor.clear_path()
 
         resume_paused = bool(self.status.paused)
@@ -4964,13 +4967,13 @@ class DreameVacuumDevice:
 
         properties = self.get_status_properties()
         current_map = copy.deepcopy(self.status.current_map)
-        if current_map:
+        if current_map and self._map_manager:
             self._map_manager.editor.set_cruise_points([])
 
         if self.status.started or (not self.status.started and self.status.returning_paused):
             self._update_property(DreameVacuumProperty.TASK_STATUS, DreameVacuumTaskStatus.COMPLETED.value)
             # Clear active segments on current map data
-            if current_map:
+            if current_map and self._map_manager:
                 self._map_manager.editor.set_active_segments([])
 
         if not self.status.docked:

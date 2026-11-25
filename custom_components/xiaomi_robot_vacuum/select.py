@@ -29,6 +29,7 @@ from .entity import (
     DreameVacuumEntityDescription,
     remove_entities,
 )
+from .xiaomi import mapped_property
 from .xiaomi_controls import add_xiaomi_controls
 
 from .dreame import (
@@ -91,6 +92,7 @@ SUCTION_LEVEL_TO_ICON = {
 }
 
 WATER_VOLUME_TO_ICON = {
+    DreameVacuumWaterVolume.OFF: "mdi:water-off",
     DreameVacuumWaterVolume.LOW: "mdi:water-minus",
     DreameVacuumWaterVolume.MEDIUM: "mdi:water",
     DreameVacuumWaterVolume.HIGH: "mdi:water-plus",
@@ -212,6 +214,19 @@ SELECTS: tuple[DreameVacuumSelectEntityDescription, ...] = (
             else WATER_VOLUME_TO_ICON.get(device.status.water_volume, "mdi:water")
         ),
         value_int_fn=lambda value, entity: DreameVacuumWaterVolume[value.upper()].value,
+        available_fn=lambda device: mapped_property(device, "WATER_VOLUME")
+        or (
+            device.status.water_tank_or_mop_installed
+            and not device.status.sweeping
+            and not (
+                device.status.customized_cleaning
+                and not (device.status.zone_cleaning or device.status.spot_cleaning)
+            )
+            and not device.status.cleangenius_cleaning
+            and not device.status.fast_mapping
+            and not device.status.scheduled_clean
+            and not device.status.cruising
+        ),
         exists_fn=lambda description, device: not device.capability.self_wash_base
         and DreameVacuumEntityDescription().exists_fn(description, device),
     ),
@@ -245,6 +260,8 @@ SELECTS: tuple[DreameVacuumSelectEntityDescription, ...] = (
         entity_category=None,
         value_fn=lambda value, entity: f"{value}x",
         value_int_fn=lambda value, entity: int(value[0]),
+        available_fn=lambda device: mapped_property(device, "AUTO_EMPTY_FREQUENCY")
+        or bool(device.get_property(DreameVacuumProperty.AUTO_DUST_COLLECTING)),
         exists_fn=lambda description, device: DreameVacuumEntityDescription().exists_fn(description, device)
         and not device.capability.auto_empty_mode,
     ),

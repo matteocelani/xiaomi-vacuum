@@ -190,6 +190,9 @@ class XiaomiModel:
     should_correct_docked_activity: bool = True
     controls: tuple[XiaomiControl, ...] = ()
     fault_names: dict[int, str] | None = None
+    map_address: tuple[int, int] | None = None
+    # siid, aiid, and the piid that carries the room-id string.
+    room_sweep: tuple[int, int, int] | None = None
 
     def convert_incoming(self, property_name: str, value: object) -> object:
         """Map a raw property value into the Dreame value domain."""
@@ -452,6 +455,16 @@ def regional_variant(
             control_replaced,
         ),
     )
+
+
+def mapped_property(device: object, name: str) -> bool:
+    """Return whether the installed codec publishes this Dreame property name."""
+    if not isinstance(device, _HasPropertyCodec):
+        return False
+    codec = device._property_codec
+    if not isinstance(codec, XiaomiModel):
+        return False
+    return name in codec.property_overrides
 
 
 def controls_of(device: object) -> tuple[XiaomiControl, ...]:

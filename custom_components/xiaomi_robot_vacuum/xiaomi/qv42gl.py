@@ -62,6 +62,7 @@ H50_ROLLER: Final = XiaomiModel(
     action_overrides=compose_addresses(H50_ROLLER_ACTIONS),
     state_by_wire=compose_codes(S60_CLASS_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         H50_ROLLER_CONTROLS,
         _ADDED_CONTROLS,

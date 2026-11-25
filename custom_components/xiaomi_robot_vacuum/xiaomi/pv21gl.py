@@ -45,6 +45,7 @@ ROBOT_VACUUM_6_PRO: Final = XiaomiModel(
     # Sweep-summon 27 is not published. Station assist 22 and 23 stay.
     state_by_wire=compose_codes(EXTENDED_STATION_STATES, SUMMON_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         EXTENDED_STATION_CONTROLS,
         (*CAMERA_ROLLER_CONTROLS, PRECISE_DIAGNOSIS, WATER_LEVEL_REMIND),

@@ -36,6 +36,7 @@ S60: Final = XiaomiModel(
     action_overrides=compose_addresses(S60_CLASS_ACTIONS, omitted=_OMITTED_ACTIONS),
     state_by_wire=compose_codes(S60_CLASS_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         S60_CLASS_CONTROLS,
         select_controls(EXTENDED_STATION_CONTROLS, ("xiaomi_stop_cut_hair",)),

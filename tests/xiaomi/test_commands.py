@@ -332,6 +332,9 @@ def test_property_reads_stay_inside_the_explicit_map():
             (mapping["siid"], mapping["piid"])
             for mapping in device.property_mapping.values()
         }
+        map_address = getattr(device._property_codec, "map_address", None)
+        if isinstance(map_address, tuple) and len(map_address) == 2:
+            allowed.add(map_address)
         controls = {
             (control.siid, control.piid)
             for control in device._property_codec.controls

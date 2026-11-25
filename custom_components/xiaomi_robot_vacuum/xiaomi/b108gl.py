@@ -145,5 +145,7 @@ S20_PLUS: Final = XiaomiModel(
     action_overrides=_ACTIONS,
     state_by_wire=_STATES,
     task_by_wire=_TASKS,
+    room_sweep=(2, 13, 13),
     controls=_CONTROLS,
+    map_address=(7, 5),
 )
