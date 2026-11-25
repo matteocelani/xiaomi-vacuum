@@ -8,14 +8,18 @@ import struct
 from typing import Final
 import zlib
 
-FLOOR_WIDTH: Final = 24
-FLOOR_HEIGHT: Final = 16
+# The renderer pads a map up to 120 by 80 cells. A smaller plan becomes a speck.
+FLOOR_WIDTH: Final = 160
+FLOOR_HEIGHT: Final = 110
 _HEADER_SIZE: Final = 27
 _FRAME_I: Final = 73
 _GRID_MM: Final = 50
 _KITCHEN: Final = 1
 _HALL: Final = 2
 _WALL: Final = 0x80
+_SPLIT: Final = 80
+_ROBOT_CELL: Final = (40, 55)
+_CHARGER_CELL: Final = (12, 12)
 _MAP_ID: Final = 1
 _FRAME_ID: Final = 1
 
@@ -23,16 +27,30 @@ _FRAME_ID: Final = 1
 def encode_floor_plan() -> str:
     """Return a base64 zlib I-frame with two rooms, a wall, and a dock."""
     grid = bytearray(FLOOR_WIDTH * FLOOR_HEIGHT)
-    for y in range(1, 13):
-        for x in range(1, 11):
+    for y in range(1, FLOOR_HEIGHT - 1):
+        for x in range(1, _SPLIT):
             grid[(y * FLOOR_WIDTH) + x] = _KITCHEN
-        grid[(y * FLOOR_WIDTH) + 11] = _WALL
-        for x in range(12, 23):
+        grid[(y * FLOOR_WIDTH) + _SPLIT] = _WALL
+        for x in range(_SPLIT + 1, FLOOR_WIDTH - 1):
             grid[(y * FLOOR_WIDTH) + x] = _HALL
     header = bytearray(_HEADER_SIZE)
     struct.pack_into("<HHB", header, 0, _MAP_ID, _FRAME_ID, _FRAME_I)
-    struct.pack_into("<hhh", header, 5, 6 * _GRID_MM, 6 * _GRID_MM, 0)
-    struct.pack_into("<hhh", header, 11, 2 * _GRID_MM, 2 * _GRID_MM, 0)
+    struct.pack_into(
+        "<hhh",
+        header,
+        5,
+        _ROBOT_CELL[0] * _GRID_MM,
+        _ROBOT_CELL[1] * _GRID_MM,
+        0,
+    )
+    struct.pack_into(
+        "<hhh",
+        header,
+        11,
+        _CHARGER_CELL[0] * _GRID_MM,
+        _CHARGER_CELL[1] * _GRID_MM,
+        0,
+    )
     struct.pack_into("<HHHHH", header, 17, _GRID_MM, FLOOR_WIDTH, FLOOR_HEIGHT, 0, 0)
     extra = {
         "timestamp_ms": 1_700_000_000_000,
