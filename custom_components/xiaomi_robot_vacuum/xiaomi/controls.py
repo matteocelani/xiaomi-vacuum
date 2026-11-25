@@ -2,12 +2,45 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace
 from enum import StrEnum
 from typing import Final, Protocol, runtime_checkable
 
 from .exceptions import XiaomiControlException
 from .value_limits import is_uint8_address
+
+
+@runtime_checkable
+class _WritesProperty(Protocol):
+    """A protocol that can write one property."""
+
+    def set_property(self, siid: int, piid: int, value: object) -> object:
+        """Write one property."""
+
+
+@runtime_checkable
+class _CallsAction(Protocol):
+    """A protocol that can call one action."""
+
+    def action(self, siid: int, aiid: int, parameters: object = None) -> object:
+        """Call one action."""
+
+
+@runtime_checkable
+class _ReadsProperties(Protocol):
+    """A protocol that can read one property batch."""
+
+    def get_properties(self, items: Sequence[Mapping[str, object]]) -> object:
+        """Read one batch of properties."""
+
+
+def _protocol(device: object) -> object:
+    protocol = getattr(device, "_protocol", None)
+    if protocol is None:
+        raise XiaomiControlException("protocol")
+    return protocol
+
 
 _MIOT_BATCH: Final = 10
 
@@ -280,7 +313,10 @@ def write_control(device: object, control: XiaomiControl, value: object) -> None
     if control.siid is None or control.piid is None:
         raise XiaomiControlException(control.key)
     value = _validated_value(device, control, value)
-    result = device._protocol.set_property(control.siid, control.piid, value)
+    protocol = _protocol(device)
+    if not isinstance(protocol, _WritesProperty):
+        raise XiaomiControlException(control.key)
+    result = protocol.set_property(control.siid, control.piid, value)
     if not _accepted(result):
         raise XiaomiControlException(control.key)
     store = _stored_values(device)
@@ -295,7 +331,10 @@ def invoke_control(device: object, control: XiaomiControl) -> None:
     payload = [
         {"piid": piid, "value": value} for piid, value in control.action_parameters
     ]
-    result = device._protocol.action(control.siid, control.aiid, payload)
+    protocol = _protocol(device)
+    if not isinstance(protocol, _CallsAction):
+        raise XiaomiControlException(control.key)
+    result = protocol.action(control.siid, control.aiid, payload)
     if not isinstance(result, dict) or result.get("code") != 0:
         raise XiaomiControlException(control.key)
 
@@ -320,7 +359,10 @@ def refresh_controls(device: object, controls: tuple[XiaomiControl, ...]) -> boo
             for control in batch
         ]
         try:
-            result = device._protocol.get_properties(items)
+            protocol = _protocol(device)
+            if not isinstance(protocol, _ReadsProperties):
+                continue
+            result = protocol.get_properties(items)
         except Exception:  # noqa: BLE001 - one control must not fail the property poll
             continue
         if not isinstance(result, list):
@@ -385,7 +427,10 @@ def _read_one_by_one(
     for control in batch:
         items = [{"did": control.key, "siid": control.siid, "piid": control.piid}]
         try:
-            result = device._protocol.get_properties(items)
+            protocol = _protocol(device)
+            if not isinstance(protocol, _ReadsProperties):
+                continue
+            result = protocol.get_properties(items)
         except Exception:  # noqa: BLE001 - one control must not fail the property poll
             continue
         if not isinstance(result, list):
