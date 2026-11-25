@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 
 _ROOT = Path("custom_components/xiaomi_robot_vacuum")
 _SHARED = frozenset(
@@ -41,6 +42,10 @@ _SHARED = frozenset(
         "Volume",
         "Xiaomi Home",
     }
+)
+_ENGLISH_LEFTOVER = re.compile(
+    r"\b(mop|docking|crossing|washboard|bumper|standby|climber|spot|genius|sweep)\b",
+    re.IGNORECASE,
 )
 
 
@@ -99,3 +104,49 @@ def test_italian_dnd_and_stop_labels_are_translated() -> None:
     assert actions["stop_bag_drying"] == "Ferma asciug. sacco"
     assert messages["stop_drying"] == "Fermare l'asciugatura?"
     assert messages["stop_bag_drying"] == "Fermare l'asciugatura del sacco?"
+
+
+def test_italian_labels_do_not_keep_english_words() -> None:
+    """State, service, and error labels are Italian, not leftover English words."""
+    italian = _leaves(_load("translations/it.json"))
+    leftover = {
+        path: value
+        for path, value in italian.items()
+        if _ENGLISH_LEFTOVER.search(value)
+    }
+    assert leftover == {}
+    assert (
+        italian["entity.sensor.obstacle_reason.state.failed_to_cross_threshold"]
+        == "Soglia non superata"
+    )
+    assert (
+        italian["entity.sensor.state.state.installing_mop"] == "Installazione del panno"
+    )
+    assert (
+        italian["entity.sensor.state.state.uninstalling_mop"] == "Rimozione del panno"
+    )
+    assert (
+        italian["entity.sensor.state.state.navigating_to_climber"]
+        == "Navigazione verso lo scavalcatore"
+    )
+    assert (
+        italian["entity.sensor.task_end_type.state.manual_docking"]
+        == "Aggancio manuale"
+    )
+    assert (
+        italian[
+            "entity.sensor.task_interrupt_reason.state.mop_pad_fallen_off_crossing_obstacle"
+        ]
+        == "Mocio caduto superando un ostacolo"
+    )
+    assert italian["entity.sensor.status.state.standby"] == "In attesa"
+    assert italian["entity.sensor.status.state.sleeping"] == "In sospensione"
+    assert italian["entity.sensor.error.state.bumper"] == "Paraurti bloccato"
+    assert (
+        italian["entity.sensor.error.state.mop_pad"]
+        == "Asse di lavaggio non installata correttamente."
+    )
+    assert (
+        italian["exceptions.fast_mapping_mop_installed.message"]
+        == "Assicurati che il panno non sia installato prima della mappatura rapida"
+    )

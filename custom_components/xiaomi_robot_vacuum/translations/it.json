@@ -233,7 +233,7 @@
               "paused": "In pausa",
               "cleaning": "In pulizia",
               "returning": "Ritorno alla base",
-              "spot_cleaning": "Pulizia mirata (Spot)",
+              "spot_cleaning": "Pulizia mirata",
               "follow_wall_cleaning": "Pulizia lungo i bordi",
               "charging": "In carica",
               "ota": "Aggiornamento OTA",
@@ -243,10 +243,10 @@
               "factory": "Impostazioni di fabbrica",
               "error": "Errore",
               "remote_control": "Controllo remoto",
-              "sleeping": "Standby prolungato",
+              "sleeping": "In sospensione",
               "self_repair": "Autoverifica del sistema",
               "factory_test": "Test di fabbrica",
-              "standby": "In attesa (Standby)",
+              "standby": "In attesa",
               "room_cleaning": "Pulizia stanze",
               "zone_cleaning": "Pulizia zona",
               "fast_mapping": "Mappatura rapida",
@@ -1356,7 +1356,7 @@
           "no_error": "Nessun errore",
           "drop": "Le ruote sono sollevate da terra",
           "cliff": "Sensori anticaduta bloccati o sporchi",
-          "bumper": "Paraurti (Bumper) bloccato",
+          "bumper": "Paraurti bloccato",
           "gesture": "Il robot è capovolto",
           "bumper_repeat": "Paraurti ripetutamente bloccato",
           "drop_repeat": "Le ruote sono rimaste sollevate",
@@ -1421,7 +1421,7 @@
           "water_tank_dry": "Acqua pulita insufficiente; riempi il serbatoio.",
           "dirty_water_tank_blocked": "Condotto del serbatoio dell'acqua sporca ostruito.",
           "dirty_water_tank_pump": "Errore della pompa dell'acqua sporca.",
-          "mop_pad": "Asse di lavaggio (washboard) non installato correttamente.",
+          "mop_pad": "Asse di lavaggio non installata correttamente.",
           "wet_mop_pad": "Livello dell'acqua anomalo nella base di lavaggio; si prega di pulirla.",
           "clean_mop_pad": "Pulizia completata; ricordati di pulire la base di lavaggio.",
           "clean_tank_level": "Controlla e riempi il serbatoio dell'acqua pulita.",
@@ -1510,7 +1510,7 @@
               "no_error": "Nessun errore",
               "drop": "Le ruote sono sollevate da terra\nRiposizionare il robot e riavviare.",
               "cliff": "Sensori anticaduta bloccati o sporchi\nPulisci il sensore di dislivello e inizia la pulizia lontano dalle scale.",
-              "bumper": "Paraurti (Bumper) bloccato\nSi prega di pulire e toccare delicatamente il sensore di collisione.",
+              "bumper": "Paraurti bloccato\nSi prega di pulire e toccare delicatamente il sensore di collisione.",
               "gesture": "Il robot è capovolto\nSpostare il robot su una superficie piana e ricominciare.",
               "bumper_repeat": "Paraurti ripetutamente bloccato\nSi prega di pulire e toccare delicatamente il sensore di collisione.",
               "drop_repeat": "Le ruote sono rimaste sollevate\nRiposizionare il robot e riavviare.",
@@ -1575,7 +1575,7 @@
               "water_tank_dry": "Acqua pulita insufficiente; riempi il serbatoio.\nAltrimenti, il robot non tornerà alla base per pulire il panno durante l'attività di pulizia.",
               "dirty_water_tank_blocked": "Condotto del serbatoio dell'acqua sporca ostruito.\nProva a riavviare il robot.",
               "dirty_water_tank_pump": "Errore della pompa dell'acqua sporca.\nProva a riavviare il robot.",
-              "mop_pad": "Asse di lavaggio (washboard) non installato correttamente.\nL'asse di lavaggio non è installata e il robot non può tornare alla base di autolavaggio. Assicurati che l'asse di lavaggio sia installato e che le chiusure su entrambi i lati siano ben fissate.",
+              "mop_pad": "Asse di lavaggio non installata correttamente.\nL'asse di lavaggio non è installata e il robot non può tornare alla base di autolavaggio. Assicurati che l'asse di lavaggio sia installata e che le chiusure su entrambi i lati siano ben fissate.",
               "wet_mop_pad": "Livello dell'acqua anomalo nella base di lavaggio; si prega di pulirla.\nIl livello dell'acqua dell'asse di lavaggio è anomalo. Si prega di pulirlo tempestivamente per evitare blocchi. Se il problema persiste, contatta il servizio clienti.",
               "clean_mop_pad": "Pulizia completata; ricordati di pulire la base di lavaggio.\nSi prega di pulire l'asse di lavaggio del mocio in tempo per evitare macchie o odori.",
               "clean_tank_level": "Controlla e riempi il serbatoio dell'acqua pulita.\nL'acqua nel serbatoio dell'acqua pulita sta per esaurirsi.",
@@ -1594,7 +1594,7 @@
               "lds_failed_to_lift": "Impossibile sollevare il modulo LDS.\nEliminare eventuali detriti attorno all'LDS e spostare il robot in un'area aperta per riprendere l'attività.",
               "robot_stuck": "LDS non può essere sollevato qui per il posizionamento.\nSpostare il robot in un'area aperta e riprendere l'attività.",
               "slippery_floor": "Pavimento scivoloso. Riprovare più tardi.\nPavimento scivoloso. Il robot non è riuscito a superare gli ostacoli. È possibile attendere che il robot riprovi oppure pulire l'acqua attorno ad esso e riprendere l'attività.",
-              "check_mop_install": "Controllare se il mocio è installato correttamente.\nControllare le istruzioni di installazione del mop",
+              "check_mop_install": "Controllare se il mocio è installato correttamente.\nControllare le istruzioni di installazione del mocio",
               "dirty_water_tank_full": "Livello anomalo nel serbatoio dell'acqua sporca.\nIl serbatoio dell'acqua usata del robot è troppo sporco. Si prega di rimuoverlo e pulirlo in tempo.",
               "retractable_leg_stuck": "Controllare se le gambe retrattili sono impigliate.\nLe gambe retrattili potrebbero rimanere aggrovigliate.",
               "internal_error": "Malfunzionamento dovuto a errore interno. Provare a riavviare il robot.\nErrore interno",
@@ -1608,7 +1608,7 @@
               "robot_stuck_on_slippery_surface": "Il robot è bloccato a causa dello scivolamento.\nIl robot è bloccato perché scivola. Si prega di pulire le ruote principali.",
               "robot_stuck_on_carpet": "Il robot scivola sul tappeto\n1. Allontanare il robot dal tappeto e riavviare l'attività\n2. Si consiglia di impostare il tappeto come zona vietata per evitare che il robot rimanga bloccato.\nIl robot è bloccato",
               "drainage_failed": "Drenaggio anomalo dal serbatoio dell'acqua sporca\nErrore della pompa delle acque reflue. Si prega di contattare il servizio clienti.",
-              "mop_not_detected": "Mocio non rilevato.\nMop non rilevato. Installa e continua l'attività.",
+              "mop_not_detected": "Mocio non rilevato.\nMocio non rilevato. Installa e continua l'attività.",
               "mop_holder_error": "Errore quantità/posizionamento supporto mocio nella base. Installare il supporto per scopa o regolarne la posizione per garantire una pulizia adeguata.\nErrore del supporto del panno nella stazione.",
               "dock_error": "Errore della base.\nControlla la stazione e prova i seguenti passaggi:\n1. Assicurarsi che il portello sia completamente chiuso.\n2. Assicurarsi che i tre gruppi di panni siano posizionati sulla botola nell'ordine rosso-giallo-blu. Se i panni si trovano attualmente sul trasportatore o sull'asse di lavaggio, rimetterli sullo sportello in quest'ordine e riprovare.\n3. Controllare eventuali detriti all'interno della stazione. Non inserire le mani, il robot o altri oggetti nell'asse di lavaggio quando si cambiano i panni.",
               "wash_failed": "Lavaggio del mocio sporco fallito.\nControlla la stazione e prova i seguenti passaggi:\n1. Collegare manualmente il panno da lavare al robot.\n2. Installare altri panni sporchi sul portello.\n3. Nell'app, vai su funzioni stazione, quindi lava, per riavviare l'operazione di lavaggio del panno.",
@@ -1758,7 +1758,7 @@
           "blocked_by_dynamic_obstacle": "Bloccato da ostacolo dinamico",
           "passage_too_low": "Passaggio troppo basso",
           "step_too_low": "Scalino troppo basso",
-          "failed_to_cross_threshold": "Errore crossing soglia"
+          "failed_to_cross_threshold": "Soglia non superata"
         }
       },
       "obstacle_type": {
@@ -1925,7 +1925,7 @@
           "smart_charging": "Ricarica intelligente",
           "second_cleaning": "Seconda passata di pulizia",
           "human_following": "Inseguimento umano",
-          "spot_cleaning": "Pulizia mirata (Spot)",
+          "spot_cleaning": "Pulizia mirata",
           "returning_auto_empty": "Ritorno alla base per svuotamento",
           "waiting_for_task": "In attesa di un'attività",
           "station_cleaning": "Pulizia della stazione base",
@@ -1954,20 +1954,20 @@
           "arranging_items": "Sistemazione oggetti",
           "pet_guarding": "Guardia animali",
           "pet_guarding_paused": "Guardia animali in pausa",
-          "installing_mop": "Installazione mop",
-          "uninstalling_mop": "Rimozione mop",
+          "installing_mop": "Installazione del panno",
+          "uninstalling_mop": "Rimozione del panno",
           "intelligent_recharging": "Ricarica intelligente",
           "assisted_cleaning": "Pulizia assistita",
           "entering_dock": "Ingresso nella base",
           "leaving_dock": "Uscita dalla base",
-          "navigating_to_climber": "Navigazione verso il climber",
-          "docking_to_climber": "Aggancio al climber",
-          "climber_docked": "Climber agganciato",
-          "climber_navigating": "Navigazione climber",
+          "navigating_to_climber": "Navigazione verso lo scavalcatore",
+          "docking_to_climber": "Aggancio allo scavalcatore",
+          "climber_docked": "Scavalcatore agganciato",
+          "climber_navigating": "Navigazione dello scavalcatore",
           "climbing_stairs": "Salita scale",
           "climbing_stairs_completed": "Salita scale completata",
-          "climber_at_dock": "Climber alla base",
-          "climber_leaving_dock": "Climber in uscita dalla base"
+          "climber_at_dock": "Scavalcatore alla base",
+          "climber_leaving_dock": "Scavalcatore in uscita dalla base"
         }
       },
       "station_drainage_status": {
@@ -1986,7 +1986,7 @@
           "paused": "In pausa",
           "cleaning": "In pulizia",
           "returning": "Ritorno alla base",
-          "spot_cleaning": "Pulizia mirata (Spot)",
+          "spot_cleaning": "Pulizia mirata",
           "follow_wall_cleaning": "Pulizia lungo i bordi",
           "charging": "In carica",
           "ota": "Aggiornamento OTA",
@@ -1996,10 +1996,10 @@
           "factory": "Impostazioni di fabbrica",
           "error": "Errore",
           "remote_control": "Controllo remoto",
-          "sleeping": "Standby prolungato",
+          "sleeping": "In sospensione",
           "self_repair": "Autoverifica del sistema",
           "factory_test": "Test di fabbrica",
-          "standby": "In attesa (Standby)",
+          "standby": "In attesa",
           "room_cleaning": "Pulizia stanze",
           "zone_cleaning": "Pulizia zona",
           "fast_mapping": "Mappatura rapida",
@@ -2035,9 +2035,9 @@
         "name": "Completato da",
         "state": {
           "other": "Altro",
-          "manual_docking": "Docking manuale",
+          "manual_docking": "Aggancio manuale",
           "docking": "In carica",
-          "failed_docking": "Docking fallito",
+          "failed_docking": "Aggancio non riuscito",
           "stop": "Ferma",
           "unknown": "Sconosciuto"
         }
@@ -2045,7 +2045,7 @@
       "task_interrupt_reason": {
         "name": "Motivo interruzione",
         "state": {
-          "abnormal_docking": "Docking anomalo",
+          "abnormal_docking": "Aggancio anomalo",
           "base_station_powered_off": "Stazione base spenta",
           "brush_entangled_by_carpet": "Spazzola impigliata nel tappeto",
           "brush_entangled_by_object": "Spazzola impigliata in un oggetto",
@@ -2057,7 +2057,7 @@
           "mop_pad_fallen_off": "Mocio caduto",
           "mop_pad_fallen_off_by_obstacle": "Mocio caduto per ostacolo",
           "mop_pad_fallen_off_by_table": "Mocio caduto per tavolo",
-          "mop_pad_fallen_off_crossing_obstacle": "Mocio caduto attraversando",
+          "mop_pad_fallen_off_crossing_obstacle": "Mocio caduto superando un ostacolo",
           "mop_pad_removed": "Mocio rimosso",
           "mop_pad_stuck": "Mocio bloccato",
           "robot_fallen": "Robot caduto",
@@ -2076,7 +2076,7 @@
           "cleaning": "In pulizia",
           "zone_cleaning": "Pulizia zona",
           "room_cleaning": "Pulizia stanza",
-          "spot_cleaning": "Pulizia mirata (Spot)",
+          "spot_cleaning": "Pulizia mirata",
           "fast_mapping": "Mappatura rapida",
           "cleaning_paused": "Pulizia in pausa",
           "room_cleaning_paused": "Pulizia stanza in pausa",
@@ -2127,7 +2127,7 @@
           "shortcut_paused": "Scorciatoia di pulizia in pausa",
           "scheduled": "Pulizia programmata",
           "scheduled_paused": "Pulizia programmata in pausa",
-          "smart": "Pulizia intelligente (Genius)",
+          "smart": "Pulizia intelligente",
           "smart_paused": "Pulizia intelligente in pausa",
           "partial": "Pulizia parziale",
           "partial_paused": "Pulizia parziale in pausa",
@@ -3375,7 +3375,7 @@
         "map_object_low_lying_area": "Zone basse",
         "map_object_material": "Materiale pavimento",
         "map_object_mop_path": "Percorso lavaggio",
-        "map_object_mop_type": "Tipo mop",
+        "map_object_mop_type": "Tipo di panno",
         "map_object_name": "Nome",
         "map_object_name_background": "Sfondo nome",
         "map_object_no_go": "Zona vietata",
@@ -3425,7 +3425,7 @@
       "state": {
         "active_task": "L'aspirapolvere è occupato !",
         "apply_changes_or_reload": "La mappa è cambiata !\nSovrascrivere o caricare le modifiche ?",
-        "auto_mount_mop_will_enabled": "Aggancio mop auto sarà abilitato !",
+        "auto_mount_mop_will_enabled": "L'aggancio automatico del panno sarà abilitato!",
         "backup_map": "Backup mappa ?",
         "backup_map_will_overwritten": "Il backup attuale verrà sovrascritto !",
         "bag_drying_will_stopped": "Asciugatura sacco sarà interrotta !",
@@ -3450,12 +3450,12 @@
         "dnd_will_deleted": "Il Silenzioso da %start% a %end% verrà eliminato !",
         "dock_in_restricted_area": "Base in zona vietata !",
         "dock_in_restricted_area_detail": "Base in zona vietata. Il robot potrebbe non ricaricarsi.",
-        "drying_will_stopped": "Asciugatura mop interrotta !",
+        "drying_will_stopped": "L'asciugatura del panno sarà interrotta!",
         "dust_collection_not_performed": "Attività di raccolta polvere (Svuotamento auto) non eseguita\nIl robot non eseguirà lo svuotamento automatico Non disturbare.",
-        "enable_auto_mount_mop": "Abilitare aggancio mop auto ?",
+        "enable_auto_mount_mop": "Abilitare l'aggancio automatico del panno?",
         "enable_carpet_recognition": "Il rilevam. tappeti sarà abilitato !",
         "enable_customized_cleaning": "Abilitare la pulizia personalizzata ?",
-        "enable_mop_change": "Abilitare cambio mop auto ?",
+        "enable_mop_change": "Abilitare il cambio automatico del panno?",
         "enable_task": "Abilitare l'attività ?",
         "entity_is_required": "Entità richiesta",
         "entity_not_available": "Entità non disponibile",
@@ -3472,7 +3472,7 @@
         "map_will_replaced": "La mappa attuale sarà sostituita dalla nuova !",
         "map_will_restored": "Ripristino allo stato del %date%",
         "mapping_started": "Mappatura iniziata...",
-        "mop_change_disabled": "Cambio mop auto disabilitato !",
+        "mop_change_disabled": "Il cambio automatico del panno è disabilitato!",
         "mop_wash_frequency_low": "Freq. lavaggio troppo bassa !",
         "mop_wash_frequency_will_increased": "Aumentata auto per mantenere l'umidità",
         "not_available": "Al momento non disponibile...",
@@ -3543,7 +3543,7 @@
         "map_edit": "Modifica mappa",
         "map_management": "Gestione mappe",
         "map_name_placeholder": "Mappa %index%",
-        "mop_type": "Tipo mop",
+        "mop_type": "Tipo di panno",
         "mopping_settings": "Param. lavaggio",
         "more_functions": "Altre funzioni",
         "name": "Card %name%",
@@ -3666,7 +3666,7 @@
       }
     },
     "vacuum_clean_spot": {
-      "name": "Pulizia punto singolo (Spot)",
+      "name": "Pulizia punto singolo",
       "description": "Avvia l'operazione di pulizia nei punti specifici selezionati sulla mappa.",
       "fields": {
         "points": {
@@ -3966,7 +3966,7 @@
       }
     },
     "xiaomi_add_schedule": {
-      "description": "Aggiunge un programma di pulizia della famiglia sweep. Il giorno è una maschera da 0 a 255. L'ordine dei bit non è nella specifica: verificalo sul robot. I campi che l'azione add-ii del modello non accetta vengono rifiutati e non inviati.",
+      "description": "Aggiunge un programma di pulizia della famiglia aspirapolvere. Il giorno è una maschera da 0 a 255. L'ordine dei bit non è nella specifica: verificalo sul robot. I campi che l'azione add-ii del modello non accetta vengono rifiutati e non inviati.",
       "fields": {
         "clean_way": {
           "description": "0 aspira, 1 aspira e lava, 2 lava. Inviato solo se add-ii elenca questo ingresso.",
@@ -4008,7 +4008,7 @@
       "name": "Aggiungi programma"
     },
     "xiaomi_set_dnd": {
-      "description": "Imposta il non disturbare su un robot della famiglia sweep. Gli orari sono in sola lettura. Chiama set-notdisturb. Un modello senza quell'azione viene rifiutato e non viene inviato nulla.",
+      "description": "Imposta il non disturbare su un robot della famiglia aspirapolvere. Gli orari sono in sola lettura. Chiama set-notdisturb. Un modello senza quell'azione viene rifiutato e non viene inviato nulla.",
       "fields": {
         "enable": {
           "description": "Se il non disturbare è attivo.",
@@ -4076,7 +4076,7 @@
       "message": "L'entità non è disponibile"
     },
     "fast_mapping_mop_installed": {
-      "message": "Assicurati che il panno mop non sia installato prima della mappatura rapida"
+      "message": "Assicurati che il panno non sia installato prima della mappatura rapida"
     },
     "follow_path_requires_camera": {
       "message": "Segui percorso funziona solo con lo streaming live della telecamera"
