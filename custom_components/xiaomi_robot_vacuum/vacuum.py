@@ -1661,13 +1661,22 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
     async def async_reset_consumable(self, consumable: str) -> None:
         """Reset consumable"""
-        action = CONSUMABLE_RESET_ACTION.get(consumable)
-        if action:
-            await self._try_command(
-                "Unable to call reset_consumable: %s",
-                self.device.call_action,
-                action,
-            )
+
+        def _reset() -> None:
+            from .xiaomi.consumable import reset_published_consumable
+            from .xiaomi.exceptions import XiaomiControlException
+
+            try:
+                handled = reset_published_consumable(self.device, consumable)
+            except XiaomiControlException as error:
+                raise InvalidActionException(key="unknown_action") from error
+            if handled:
+                return
+            action = CONSUMABLE_RESET_ACTION.get(consumable)
+            if action:
+                self.device.call_action(action)
+
+        await self._try_command("Unable to call reset_consumable: %s", _reset)
 
     async def async_rename_shortcut(self, shortcut_id, shortcut_name) -> None:
         """Rename a shortcut"""
