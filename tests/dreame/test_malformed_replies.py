@@ -26,6 +26,8 @@ def _device(reply: object) -> DreameVacuumDevice:
     device._property_codec = None
     device._dirty_data = {}
     device._property_update_callback = {}
+    device._update_callback = None
+    device._callback_timer = None
     device._protocol = SimpleNamespace(
         dreame_cloud=False,
         prefer_cloud=False,
@@ -61,6 +63,27 @@ def test_a_broken_item_is_skipped() -> None:
     )
     assert device._request_properties() is False
     assert device.data[_STATE.value] == 2
+
+
+def test_an_extra_property_does_not_drop_the_known_one() -> None:
+    """A property with an unknown did and no address is ignored."""
+    device = _device(
+        [
+            {"did": 99999, "code": 0, "value": 1},
+            {"did": "0", "siid": 2, "piid": 1, "code": 0, "value": 4},
+        ]
+    )
+
+    assert device._request_properties() is True
+    assert device.data[_STATE.value] == 4
+
+
+def test_a_string_success_code_still_updates() -> None:
+    """Some firmware sends the success code as text."""
+    device = _device([{"did": "0", "siid": 2, "piid": 1, "code": "0", "value": 4}])
+
+    assert device._request_properties() is True
+    assert device.data[_STATE.value] == 4
 
 
 def test_an_unexpected_error_code_leaves_the_stored_value() -> None:
