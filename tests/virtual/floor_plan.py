@@ -24,8 +24,10 @@ _MAP_ID: Final = 1
 _FRAME_ID: Final = 1
 
 
-def encode_floor_plan() -> str:
-    """Return a base64 zlib I-frame with two rooms, a wall, and a dock."""
+def encode_floor_plan(*, current: bool = False) -> str:
+    """Return a base64 zlib I-frame with two rooms, a wall, and a dock.
+    A current frame uses ris 0 and curtain, the map-v2 marks that keep room ids.
+    """
     grid = bytearray(FLOOR_WIDTH * FLOOR_HEIGHT)
     for y in range(1, FLOOR_HEIGHT - 1):
         for x in range(1, _SPLIT):
@@ -52,7 +54,7 @@ def encode_floor_plan() -> str:
         0,
     )
     struct.pack_into("<HHHHH", header, 17, _GRID_MM, FLOOR_WIDTH, FLOOR_HEIGHT, 0, 0)
-    extra = {
+    extra: dict[str, object] = {
         "timestamp_ms": 1_700_000_000_000,
         "seg_inf": {
             "1": {
@@ -67,6 +69,9 @@ def encode_floor_plan() -> str:
             },
         },
     }
+    if current:
+        extra["ris"] = 0
+        extra["curtain"] = []
     raw = bytes(header) + bytes(grid) + json.dumps(extra).encode("utf-8")
     return base64.b64encode(zlib.compress(raw)).decode("ascii")
 

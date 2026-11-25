@@ -1524,8 +1524,12 @@ class DreameMapVacuumMapManager:
                             "Need map request: %.2f",
                             time.time() - (self._current_timestamp_ms / 1000.0),
                         )
-                    if self._protocol.cloud.logged_in:
+                    cloud = self._protocol.cloud
+                    if cloud is not None and cloud.logged_in:
                         self._request_current_map()
+                    elif cloud is None and self._map_data is None:
+                        # REQUEST_MAP is a local action. A token-only device has no cloud client.
+                        self._request_i_map()
                 elif not self._request_map_from_cloud() and self._device_running:
                     _LOGGER.debug("No new map data received, retrying")
                     sleep(1)
@@ -4322,6 +4326,7 @@ class DreameVacuumMapDecoder:
                 ):
                     version = 3
 
+                partial_map.version = version
                 partial_map.data_json = data_json
             except Exception as ex:
                 _LOGGER.warning("Failed to parse data: %s", ex)

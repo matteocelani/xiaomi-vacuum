@@ -523,7 +523,7 @@ class DreameVacuumDevice:
             auth_key,
         )
         self._install_configured_family()
-        if self._protocol.cloud and self._wants_map_manager():
+        if self._wants_map_manager():
             self._map_manager = DreameMapVacuumMapManager(self._protocol)
             self._map_manager.action_mapping = self.action_mapping
             self._map_manager.property_mapping = self.property_mapping
@@ -2760,7 +2760,8 @@ class DreameVacuumDevice:
 
             self._last_update_failed = None
 
-            if self.device_connected and self._protocol.cloud is not None and (not self._ready or not self.available):
+            # A token-only Dreame has no cloud client. REQUEST_MAP is local.
+            if self.device_connected and (not self._ready or not self.available):
                 if self._map_manager:
                     self._map_manager.set_update_interval(self._map_update_interval)
                     self._map_manager.set_device_running(

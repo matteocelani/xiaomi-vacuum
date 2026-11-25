@@ -823,9 +823,11 @@ class DreameVacuumCameraEntity(DreameVacuumEntity, Camera):
 
     def _map_frame_ready(self, map_data: object) -> bool:
         """A decoded local frame is drawable without the Dreame cloud session."""
-        if not map_data or not self.device:
+        if not map_data or not self.device or getattr(map_data, "empty_map", False):
             return False
         if getattr(self.device.status, "_xiaomi_map", None) is not None:
+            return True
+        if getattr(map_data, "pixel_type", None) is not None:
             return True
         return bool(
             self.device.cloud_connected
