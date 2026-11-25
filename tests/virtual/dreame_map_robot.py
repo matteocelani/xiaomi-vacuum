@@ -30,6 +30,7 @@ class DreameMapRobot:
         self.mac = mac
         self.floor_plan = encode_floor_plan(current=True)
         self.actions: list[tuple[int, int]] = []
+        self._published: dict[tuple[int, int], object] = {}
 
     def dispatch(self, method: object, params: object) -> object | None:
         """Return one Dreame miIO result."""
@@ -85,8 +86,14 @@ class DreameMapRobot:
             ],
         }
 
+    def publish(self, siid: int, piid: int, value: object) -> None:
+        """Replace one property value, including a numeric zero."""
+        self._published[(siid, piid)] = value
+
     def _value(self, siid: int, piid: int) -> object:
         address = (siid, piid)
+        if address in self._published:
+            return self._published[address]
         if address in (_STATE, _STATUS):
             return _CHARGING
         if address == _CHARGING_STATUS:

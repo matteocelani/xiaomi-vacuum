@@ -8356,13 +8356,19 @@ class DreameVacuumDeviceStatus:
     def battery_level(self) -> int:
         """Return battery level of the device."""
         battery_level = self._get_property(DreameVacuumProperty.BATTERY_LEVEL)
-        return int(battery_level) if battery_level else 100
+        # Zero is empty. Only a missing reading falls back to full.
+        if battery_level is None:
+            return 100
+        return int(battery_level)
 
     @property
     def battery_charge_level(self) -> int:
         """Return max battery charge level of the device."""
         battery_charge_level = self._get_property(DreameVacuumProperty.BATTERY_CHARGE_LEVEL)
-        return int(battery_charge_level) if battery_charge_level else 100
+        # Zero is a real target. Only a missing reading falls back to full.
+        if battery_charge_level is None:
+            return 100
+        return int(battery_charge_level)
 
     @property
     def volume(self) -> int:
