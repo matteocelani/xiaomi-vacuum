@@ -77,3 +77,13 @@ markers = [
     "allow_hosts: hosts a loopback test may contact",
 ]
 asyncio_mode = "auto"
+
+[tool.mypy]
+python_version = "3.12"
+follow_imports = "silent"
+warn_unused_ignores = true
+files = [
+    "custom_components/xiaomi_robot_vacuum/xiaomi",
+    "custom_components/xiaomi_robot_vacuum/xiaomi_controls.py",
+    "custom_components/xiaomi_robot_vacuum/dreame/family_codec.py",
+]

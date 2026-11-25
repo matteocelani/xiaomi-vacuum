@@ -52,8 +52,7 @@ class _XiaomiEntity(DreameVacuumEntity):
     """Base for one declarative Xiaomi control."""
 
     # Home Assistant reads these attributes before the Dreame description, which
-    # does not declare them. None means the control has no device class.
-    _attr_device_class = None
+    # does not declare them. Device class stays on the platform entity.
     _attr_entity_registry_enabled_default = True
     _attr_entity_registry_visible_default = True
     _attr_force_update = False
@@ -67,6 +66,8 @@ class _XiaomiEntity(DreameVacuumEntity):
     ) -> None:
         self._control = control
         self._attr_entity_registry_enabled_default = control.enabled_by_default
+        # The Dreame description has no device class. Set it before Home Assistant reads it.
+        self._attr_device_class = None
         super().__init__(coordinator, DreameVacuumEntityDescription(key=control.key))
         self._attr_entity_category = (
             EntityCategory.DIAGNOSTIC if control.diagnostic else EntityCategory.CONFIG

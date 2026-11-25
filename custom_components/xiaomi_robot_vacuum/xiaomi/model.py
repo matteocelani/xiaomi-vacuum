@@ -589,7 +589,19 @@ def _assign_robot_type(capability: object, names: frozenset[str]) -> None:
     vars(capability)["robot_type"] = chosen
 
 
+@runtime_checkable
+class _ListedCapability(Protocol):
+    """Capability flags copied into the published list."""
+
+    custom_cleaning_mode: bool
+    cruising: bool
+    map: bool
+    walls: bool
+
+
 def _rebuild_capability_list(capability: object) -> None:
+    if not isinstance(capability, _ListedCapability):
+        return
     state = vars(capability)
     names = [
         key

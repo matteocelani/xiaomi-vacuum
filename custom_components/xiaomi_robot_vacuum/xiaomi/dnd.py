@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Final
+from typing import Final, Protocol
 
 from .exceptions import XiaomiControlException
 from .model import (
@@ -51,7 +51,26 @@ DND_MODELS: Final = frozenset(
 )
 
 
-def set_dnd(device: object, fields: Mapping[str, object]) -> None:
+class _ActionCaller(Protocol):
+    """A device that can send one MIoT action."""
+
+    _protocol: _SendsAction
+
+
+class _SendsAction(Protocol):
+    """The protocol object that can call one MIoT action."""
+
+    def action(
+        self,
+        siid: int,
+        aiid: int,
+        parameters: object = None,
+        retry_count: int = 2,
+    ) -> object:
+        """Send one action and return the device result."""
+
+
+def set_dnd(device: _ActionCaller, fields: Mapping[str, object]) -> None:
     """Call set-notdisturb with one validated payload. Illegal values never leave."""
     model = _model_of(device)
     if model not in DND_MODELS:
