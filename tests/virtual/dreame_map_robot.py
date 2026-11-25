@@ -28,7 +28,7 @@ class DreameMapRobot:
     def __init__(self, model: str, mac: str = "00:00:00:00:00:fe") -> None:
         self.model = model
         self.mac = mac
-        self.floor_plan = encode_floor_plan()
+        self.floor_plan = encode_floor_plan(current=True)
         self.actions: list[tuple[int, int]] = []
 
     def dispatch(self, method: object, params: object) -> object | None:

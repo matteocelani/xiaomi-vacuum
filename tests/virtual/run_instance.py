@@ -253,7 +253,7 @@ def _dashboard(devices: Sequence[LabDevice]) -> str:
                 f"        alt_text: {device.family} map",
             ]
         )
-        if _has_map_camera(device.model):
+        if _has_map_camera(device):
             lines.extend(
                 [
                     "      - type: picture-entity",
@@ -318,8 +318,10 @@ def _entries(devices: Sequence[LabDevice]) -> dict[str, object]:
     }
 
 
-def _has_map_camera(model: str) -> bool:
-    family = resolve_family(model)
+def _has_map_camera(device: LabDevice) -> bool:
+    if device.family == "dreame":
+        return True
+    family = resolve_family(device.model)
     address = getattr(family, "map_address", None)
     return isinstance(address, tuple) and len(address) == 2
 

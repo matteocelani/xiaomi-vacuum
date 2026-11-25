@@ -1,18 +1,43 @@
-"""Xiaomi models that publish a map frame expose it to the renderer."""
+"""Published map frames stay renderable, including a token-only Dreame."""
 
 from __future__ import annotations
 
+import importlib
 from io import BytesIO
+from pathlib import Path
+import sys
+from types import SimpleNamespace
 
 from custom_components.xiaomi_robot_vacuum.dreame.device import DreameVacuumDevice
 from custom_components.xiaomi_robot_vacuum.dreame.map import DreameVacuumMapRenderer
 from custom_components.xiaomi_robot_vacuum.xiaomi.mapping import resolve_family
 from PIL import Image
 import pytest
+from tests.virtual.dreame_map_robot import DreameMapRobot
 from tests.virtual.fleet_catalog import robot_profiles
 from tests.virtual.miio_endpoint import MiioEndpoint
 from tests.virtual.spec_robot import SpecRobot
 from tests.xiaomi.helpers import release_device
+
+
+def _camera_entity():
+    """Load the camera class after the dreame package init has run."""
+    dreame_name = "custom_components.xiaomi_robot_vacuum.dreame"
+    dreame = sys.modules.get(dreame_name)
+    if dreame is not None and not hasattr(dreame, "VERSION"):
+        init = (
+            Path(__file__).resolve().parents[2]
+            / "custom_components"
+            / "xiaomi_robot_vacuum"
+            / "dreame"
+            / "__init__.py"
+        )
+        executed = compile(init.read_text(encoding="utf-8"), str(init), "exec")
+        exec(executed, dreame.__dict__)
+    return importlib.import_module(
+        "custom_components.xiaomi_robot_vacuum.camera"
+    ).DreameVacuumCameraEntity
+
 
 _TOKEN = "00" * 16
 _MAC = "00:00:00:00:00:00"
@@ -112,6 +137,55 @@ def test_every_published_map_fills_the_camera_frame(socket_enabled: None) -> Non
                 _assert_rooms_fill_the_frame(image)
             finally:
                 release_device(device)
+
+
+def test_local_dreame_keeps_room_ids_on_the_current_map(
+    socket_enabled: None, caplog: pytest.LogCaptureFixture
+) -> None:
+    """A token-only Dreame stores the lab frame as the current map, with both rooms."""
+    del socket_enabled
+    robot = DreameMapRobot("dreame.vacuum.p2008")
+    with MiioEndpoint(robot):
+        device = DreameVacuumDevice(
+            "Lab Dreame",
+            "127.0.0.1",
+            _TOKEN,
+            "00:00:00:00:00:fe",
+            account_type="mi",
+            configured_model="dreame.vacuum.p2008",
+        )
+        device.connect_device()
+        try:
+            assert device._map_manager is not None
+            device._map_manager.update()
+            device._map_manager._available = True
+            device._map_manager.update()
+            assert "Map update Failed" not in caplog.text
+            current = device.get_map(0)
+            assert current is not None
+            assert current.saved_map is False
+            assert current.segments[1].custom_name == "Kitchen"
+            assert current.segments[2].custom_name == "Hall"
+            image = DreameVacuumMapRenderer().render_map(current)
+            assert image.startswith(b"\x89PNG")
+            _assert_rooms_fill_the_frame(image)
+            entity = object.__new__(_camera_entity())
+            object.__setattr__(entity, "coordinator", SimpleNamespace(device=device))
+            object.__setattr__(
+                entity, "entity_description", SimpleNamespace(map_type="current")
+            )
+            entity.map_index = 0
+            entity._default_map = True
+            entity._last_rendered = None
+            entity._last_updated = None
+            entity._frame_id = None
+            entity._state = None
+            entity._renderer = None
+            entity._proxy_renderer = None
+            entity.update()
+            assert entity._frame_id == current.frame_id
+        finally:
+            release_device(device)
 
 
 def _assert_rooms_fill_the_frame(image: bytes) -> None:
