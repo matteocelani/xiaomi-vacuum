@@ -4241,7 +4241,19 @@ class DreameVacuumMapDecoder:
         return segments, areas
 
     @staticmethod
+    def _optional_int(value: object) -> int | None:
+        """Return an int, or None when a corrupt map field is not numeric."""
+        if isinstance(value, bool) or not isinstance(value, (int, float, str)):
+            return None
+        try:
+            return int(value)
+        except ValueError:
+            return None
+
+    @staticmethod
     def decode_map_partial(raw_data, version=1, iv=None, key=None) -> MapDataPartial | None:
+        if not isinstance(raw_data, str) or not raw_data:
+            return None
         raw_map = raw_data.replace("_", "/").replace("-", "+")
 
         if len(raw_map) < 3:
@@ -4330,7 +4342,10 @@ class DreameVacuumMapDecoder:
 
     @staticmethod
     def decode_saved_map(raw_map: str, map_version: int = 1, rotation: int = 0, iv: str = None) -> MapData | None:
-        return DreameVacuumMapDecoder.decode_map(raw_map, map_version, rotation, iv)[0]
+        decoded = DreameVacuumMapDecoder.decode_map(raw_map, map_version, rotation, iv)
+        if not isinstance(decoded, tuple):
+            return None
+        return decoded[0]
 
     @staticmethod
     def decode_map_data_from_partial(partial_map: MapDataPartial, rotation: int = 0) -> MapData | None:
@@ -4392,24 +4407,34 @@ class DreameVacuumMapDecoder:
 
             if map_data.frame_type != MapFrameType.W.value:
                 if "mra" in data_json:
-                    map_data.rotation = int(data_json["mra"])
+                    rotation_value = DreameVacuumMapDecoder._optional_int(data_json["mra"])
+                    if rotation_value is not None:
+                        map_data.rotation = rotation_value
 
                 if "cs" in data_json:
-                    map_data.cleaned_area = int(data_json["cs"])
+                    cleaned_area = DreameVacuumMapDecoder._optional_int(data_json["cs"])
+                    if cleaned_area is not None:
+                        map_data.cleaned_area = cleaned_area
 
                 if "ct" in data_json:
-                    value = data_json["ct"]
-                    if isinstance(value, int) or isinstance(value, float) or isinstance(value, str):
-                        map_data.cleaning_time = int(value)
+                    cleaning_time = DreameVacuumMapDecoder._optional_int(data_json["ct"])
+                    if cleaning_time is not None:
+                        map_data.cleaning_time = cleaning_time
 
                 if "wm" in data_json:
-                    map_data.work_status = int(data_json["wm"])
+                    work_status = DreameVacuumMapDecoder._optional_int(data_json["wm"])
+                    if work_status is not None:
+                        map_data.work_status = work_status
 
                 if "cf" in data_json:
                     map_data.completed = bool(data_json["cf"] == 1)
 
                 if "clean_finish_remain_electricity" in data_json:
-                    map_data.remaining_battery = int(data_json["clean_finish_remain_electricity"])
+                    remaining_battery = DreameVacuumMapDecoder._optional_int(
+                        data_json["clean_finish_remain_electricity"]
+                    )
+                    if remaining_battery is not None:
+                        map_data.remaining_battery = remaining_battery
 
                 map_data.customized_cleaning = data_json.get("customeClean")
                 map_data.docked = bool("oc" in data_json and data_json["oc"])
@@ -4441,9 +4466,13 @@ class DreameVacuumMapDecoder:
                         else CleanupMethod.OTHER
                     )
                 if "ds" in data_json:
-                    map_data.dust_collection_count = int(data_json.get("ds", 0))
+                    dust_collection_count = DreameVacuumMapDecoder._optional_int(data_json.get("ds", 0))
+                    if dust_collection_count is not None:
+                        map_data.dust_collection_count = dust_collection_count
                 if "wt" in data_json:
-                    map_data.mop_wash_count = int(data_json.get("wt", 0))
+                    mop_wash_count = DreameVacuumMapDecoder._optional_int(data_json.get("wt", 0))
+                    if mop_wash_count is not None:
+                        map_data.mop_wash_count = mop_wash_count
                 map_data.multiple_cleaning_time = data_json.get("multime")
                 map_data.dos = data_json.get("dos")
                 map_data.mopping_mode = data_json.get("mooClean")
@@ -5311,6 +5340,8 @@ class DreameVacuumMapDecoder:
                 if areas is not None:
                     map_areas = []
                     for area in areas:
+                        if not isinstance(area, (list, tuple)) or len(area) < 4:
+                            continue
                         x_coords = sorted([area[0], area[2]])
                         y_coords = sorted([area[1], area[3]])
                         map_areas.append(
@@ -5338,12 +5369,15 @@ class DreameVacuumMapDecoder:
                             wall[3],
                         )
                         for wall in lines
+                        if isinstance(wall, (list, tuple)) and len(wall) >= 4
                     ]
 
             def parse_carpets(carpets):
                 if carpets is not None:
                     map_carpets = []
                     for carpet in carpets:
+                        if not isinstance(carpet, (list, tuple)) or len(carpet) < 4:
+                            continue
                         map_carpets.append(
                             Carpet(
                                 int(carpet[4]) if len(carpet) > 4 else None,
