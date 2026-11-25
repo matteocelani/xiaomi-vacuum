@@ -108,6 +108,43 @@ def test_a_short_no_go_keeps_the_valid_zone() -> None:
     assert len(current.virtual_walls) == 1
 
 
+def test_a_text_coordinate_keeps_the_valid_zone() -> None:
+    """A zone coordinate that is text must not drop the rooms or the next zone."""
+    current = _current(
+        _frame(
+            {
+                "vw": {
+                    "rect": [
+                        [1, "two", 3, 4],
+                        ["", 100, 400, 400],
+                        [100, 100, 400, 400],
+                    ]
+                }
+            }
+        )
+    )
+
+    _assert_rooms(current)
+    assert len(current.no_go_areas) == 1
+
+
+def test_a_text_carpet_id_keeps_the_rooms() -> None:
+    """A carpet id that is text must not drop the rooms or a later zone."""
+    current = _current(
+        _frame(
+            {
+                "vw": {
+                    "addcpt": [[10, 20, 30, 40, "kitchen"]],
+                },
+                "rec_vw": {"rect": [[100, 100, 400, 400]]},
+            }
+        )
+    )
+
+    _assert_rooms(current)
+    assert len(current.recommended_no_go_areas) == 1
+
+
 def _rooms(**extra: object) -> dict[str, object]:
     rooms: dict[str, object] = {
         "1": {

@@ -5371,14 +5371,29 @@ class DreameVacuumMapDecoder:
 
                 DreameVacuumMapDecoder.set_obstacle_segment(map_data, map_data.laser_obstacles)
 
+            def _coordinate(value: object) -> float | None:
+                if isinstance(value, bool) or value is None:
+                    return None
+                if isinstance(value, (int, float)):
+                    return float(value)
+                if isinstance(value, str) and value.strip():
+                    try:
+                        return float(value)
+                    except ValueError:
+                        return None
+                return None
+
             def parse_areas(areas):
                 if areas is not None:
                     map_areas = []
                     for area in areas:
                         if not isinstance(area, (list, tuple)) or len(area) < 4:
                             continue
-                        x_coords = sorted([area[0], area[2]])
-                        y_coords = sorted([area[1], area[3]])
+                        coords = [_coordinate(area[index]) for index in range(4)]
+                        if any(item is None for item in coords):
+                            continue
+                        x_coords = sorted([coords[0], coords[2]])
+                        y_coords = sorted([coords[1], coords[3]])
                         map_areas.append(
                             Area(
                                 x_coords[0],
@@ -5413,9 +5428,13 @@ class DreameVacuumMapDecoder:
                     for carpet in carpets:
                         if not isinstance(carpet, (list, tuple)) or len(carpet) < 4:
                             continue
+                        try:
+                            carpet_id = int(carpet[4]) if len(carpet) > 4 else None
+                        except (TypeError, ValueError):
+                            carpet_id = None
                         map_carpets.append(
                             Carpet(
-                                int(carpet[4]) if len(carpet) > 4 else None,
+                                carpet_id,
                                 carpet[0],
                                 carpet[1],
                                 carpet[2],
