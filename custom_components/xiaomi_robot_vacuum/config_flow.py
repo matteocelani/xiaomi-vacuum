@@ -108,6 +108,30 @@ ACCOUNT_TYPES = [
 ]
 
 
+def _token_is_hex32(token: object) -> bool:
+    """Return whether this is a 16-byte miIO token written as hex."""
+    if not isinstance(token, str) or len(token) != 32:
+        return False
+    try:
+        bytes.fromhex(token)
+    except ValueError:
+        return False
+    return True
+
+
+def _token_was_rejected(exc: BaseException) -> bool:
+    """Return whether the robot answered and refused the token."""
+    current: BaseException | None = exc
+    for _depth in range(6):
+        if current is None:
+            return False
+        text = str(current).lower()
+        if "invalid token" in text or "checksum error" in text:
+            return True
+        current = current.__cause__
+    return False
+
+
 class DreameVacuumOptionsFlowHandler(OptionsFlow):
     """Handle Dreame Vacuum options."""
 
@@ -281,6 +305,8 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
     async def async_step_connect(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Connect to a Dreame Vacuum device."""
         error = None
+        if not (self.username and self.password) and not _token_is_hex32(self.token):
+            return await self.async_step_local(error="wrong_token")
         if self.prefer_cloud or (self.token and len(self.token) == 32):
             try:
                 if (
@@ -309,8 +335,8 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
                         self.model = info["model"]
 
                     self.protocol.disconnect()
-            except:
-                error = "cannot_connect"
+            except Exception as exc:
+                error = "wrong_token" if _token_was_rejected(exc) else "cannot_connect"
             else:
                 if self.reauth:
                     return _complete_reauth(
