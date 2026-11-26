@@ -52,8 +52,7 @@ class _XiaomiEntity(DreameVacuumEntity):
     """Base for one declarative Xiaomi control."""
 
     # Home Assistant reads these attributes before the Dreame description, which
-    # does not declare them. None means the control has no device class.
-    _attr_device_class = None
+    # does not declare them. Device class stays on the platform entity.
     _attr_entity_registry_enabled_default = True
     _attr_entity_registry_visible_default = True
     _attr_force_update = False
@@ -67,6 +66,8 @@ class _XiaomiEntity(DreameVacuumEntity):
     ) -> None:
         self._control = control
         self._attr_entity_registry_enabled_default = control.enabled_by_default
+        # The Dreame description has no device class. Set it before Home Assistant reads it.
+        self._attr_device_class = None
         super().__init__(coordinator, DreameVacuumEntityDescription(key=control.key))
         self._attr_entity_category = (
             EntityCategory.DIAGNOSTIC if control.diagnostic else EntityCategory.CONFIG
@@ -162,6 +163,8 @@ class XiaomiNumber(_XiaomiEntity, NumberEntity):
     def native_value(self) -> int | None:
         """Return the integer currently stored for the control."""
         raw = self._raw()
+        if raw is None and not self._control.readable:
+            return self._control.minimum
         if isinstance(raw, bool) or not isinstance(raw, int):
             return None
         return raw
@@ -186,6 +189,9 @@ class XiaomiSelect(_XiaomiEntity, SelectEntity):
     def current_option(self) -> str | None:
         """Return the slug for the current wire value."""
         raw = self._raw()
+        if raw is None and not self._control.readable and self._attr_options:
+            # Write-only settings have no read. Show the first published value.
+            return self._attr_options[0]
         if isinstance(raw, bool) or not isinstance(raw, int):
             return None
         return _slug(self._control, raw)

@@ -192,7 +192,8 @@ def test_handshake_signature_is_checked() -> None:
     data = b"handshake"
     signature = key.sign(data, padding.PKCS1v15(), hashes.SHA256())
     _Socket._verify_signature(key.public_key(), 0x0401, signature, data)
+    # A trailing 0x00 is a valid signature byte, so replacing it is sometimes a no-op.
+    tampered = signature[:-1] + bytes([signature[-1] ^ 0xFF])
+    assert tampered != signature
     with pytest.raises(ConnectionError, match="signature"):
-        _Socket._verify_signature(
-            key.public_key(), 0x0401, signature[:-1] + b"\x00", data
-        )
+        _Socket._verify_signature(key.public_key(), 0x0401, tampered, data)

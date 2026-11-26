@@ -1097,7 +1097,8 @@ class DreameVacuumDreameHomeCloudProtocol:
     def _refresh_expired_key(self) -> None:
         if self._key_expire:
             remaining = self._key_expire - time.time()
-            if 0 < remaining <= 600:
+            # Already expired tokens were left until the next 401. Refresh those too.
+            if remaining <= 600:
                 self.login()
 
     def _auth_failure(self, text) -> int:
@@ -1372,7 +1373,12 @@ class DreameVacuumDreameHomeCloudProtocol:
                 if self._strings[13] in data:
                     self._key = data.get(self._strings[13])
                     self._secondary_key = data.get(self._strings[14])
-                    self._key_expire = time.time() + data.get(self._strings[15])
+                    raw_expire = data.get(self._strings[15])
+                    try:
+                        self._key_expire = time.time() + int(raw_expire)
+                    except (TypeError, ValueError):
+                        # A 200 with a missing or quoted expires_in is still a login.
+                        self._key_expire = None
                     self._uuid = data.get("uid")
                     self._domain = data.get("domain", self._domain)
                     self._region = data.get("region", self._region)
@@ -2735,7 +2741,7 @@ class DreameVacuumMiHomeCloudProtocol:
             return None
         return api_response["result"]
 
-    def request(self, url: str, params: Dict[str, str], retry_count=2, timeout=None) -> Any:
+    def request(self, url: str, params: Dict[str, str], retry_count=2, timeout=None, retried=False) -> Any:
         retries = 0
         if not retry_count or retry_count < 0:
             retry_count = 0
@@ -2783,6 +2789,8 @@ class DreameVacuumMiHomeCloudProtocol:
                 self._connected = True
                 decoded = self.decrypt_rc4(self.signed_nonce(fields["_nonce"]), response.text)
                 return json.loads(decoded) if decoded else None
+            if response.status_code == 401 and not retried and self.login():
+                return self.request(url, params, retry_count, timeout, True)
             _LOGGER.warning("Execute api call failed with HTTP status %s", response.status_code)
 
         if self._fail_count == 5:

@@ -233,7 +233,7 @@
               "paused": "In pausa",
               "cleaning": "In pulizia",
               "returning": "Ritorno alla base",
-              "spot_cleaning": "Pulizia mirata (Spot)",
+              "spot_cleaning": "Pulizia mirata",
               "follow_wall_cleaning": "Pulizia lungo i bordi",
               "charging": "In carica",
               "ota": "Aggiornamento OTA",
@@ -243,10 +243,10 @@
               "factory": "Impostazioni di fabbrica",
               "error": "Errore",
               "remote_control": "Controllo remoto",
-              "sleeping": "Standby prolungato",
+              "sleeping": "In sospensione",
               "self_repair": "Autoverifica del sistema",
               "factory_test": "Test di fabbrica",
-              "standby": "In attesa (Standby)",
+              "standby": "In attesa",
               "room_cleaning": "Pulizia stanze",
               "zone_cleaning": "Pulizia zona",
               "fast_mapping": "Mappatura rapida",
@@ -736,6 +736,7 @@
       "water_volume": {
         "name": "Volume acqua",
         "state": {
+          "off": "Spento",
           "low": "Basso",
           "medium": "Medio",
           "high": "Elevato"
@@ -755,6 +756,429 @@
           "off": "Disattivato",
           "high_frequency": "Alta frequenza",
           "low_frequency": "Bassa frequenza"
+        }
+      },
+      "xiaomi_ai_recognition": {
+        "name": "Riconoscimento IA",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_air_dry": {
+        "name": "Asciugatura ad aria",
+        "state": {
+          "pause": "Pausa",
+          "start": "Avvia"
+        }
+      },
+      "xiaomi_alarm": {
+        "name": "Allarme",
+        "state": {
+          "play": "Riproduci"
+        }
+      },
+      "xiaomi_back_wash": {
+        "name": "Ritorno al lavaggio",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_back_wash_area": {
+        "name": "Area di ritorno al lavaggio",
+        "state": {
+          "five": "5 m²",
+          "ten": "10 m²"
+        }
+      },
+      "xiaomi_basic_suction": {
+        "name": "Aspirazione",
+        "state": {
+          "basic": "Standard",
+          "silent": "Silenzioso",
+          "strong": "Forte"
+        }
+      },
+      "xiaomi_carpet_avoid": {
+        "name": "Evita i tappeti",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_carpet_boost": {
+        "name": "Potenza sui tappeti",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_carpet_cleaning_method": {
+        "name": "Pulizia tappeti",
+        "state": {
+          "avoid": "Evita",
+          "ignore": "Ignora",
+          "self_adaption": "Adattivo",
+          "span": "Attraversa"
+        }
+      },
+      "xiaomi_child_lock": {
+        "name": "Blocco bambini",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_clean_mode": {
+        "name": "Modalità di pulizia",
+        "state": {
+          "butler": "Maggiordomo",
+          "general": "Generale",
+          "preference": "Preferenza"
+        }
+      },
+      "xiaomi_clean_times": {
+        "name": "Passate di pulizia",
+        "state": {
+          "one_time": "Una volta",
+          "three_time": "Tre volte",
+          "two_time": "Due volte"
+        }
+      },
+      "xiaomi_cleaning_mode": {
+        "name": "Modalità di pulizia",
+        "state": {
+          "mopping_after_sweeping": "Prima aspira, poi lava",
+          "sweeping": "Aspirazione",
+          "sweeping_and_mopping": "Aspirazione e lavaggio"
+        }
+      },
+      "xiaomi_cut_hair_frequency": {
+        "name": "Frequenza taglio peli",
+        "state": {
+          "during_task": "Durante l'attività",
+          "every_clean": "A ogni pulizia",
+          "every_three_cleans": "Ogni 3 pulizie",
+          "every_two_cleans": "Ogni 2 pulizie"
+        }
+      },
+      "xiaomi_detergent_level": {
+        "name": "Livello detergente",
+        "state": {
+          "few": "Basso",
+          "lots": "Massimo",
+          "many": "Alto",
+          "standard": "Standard"
+        }
+      },
+      "xiaomi_dirt_recognition": {
+        "name": "Riconoscimento sporco",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_drying_time": {
+        "name": "Tempo di asciugatura",
+        "state": {
+          "hours_10": "10 ore",
+          "hours_11": "11 ore",
+          "hours_12": "12 ore",
+          "hours_2": "2 ore",
+          "hours_3": "3 ore",
+          "hours_4": "4 ore",
+          "hours_5": "5 ore",
+          "hours_6": "6 ore",
+          "hours_7": "7 ore",
+          "hours_8": "8 ore",
+          "hours_9": "9 ore"
+        }
+      },
+      "xiaomi_dust_arrest_power": {
+        "name": "Potenza di svuotamento",
+        "state": {
+          "normal": "Normale",
+          "silent": "Silenzioso",
+          "strong": "Forte"
+        }
+      },
+      "xiaomi_edge_sweep_frequency": {
+        "name": "Frequenza pulizia bordi",
+        "state": {
+          "every_time": "Ogni volta",
+          "seven_sweeps": "Ogni 7 passate"
+        }
+      },
+      "xiaomi_electrolysis": {
+        "name": "Elettrolisi",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_fan_level": {
+        "name": "Livello ventola",
+        "state": {
+          "medium": "Medio",
+          "silent": "Silenzioso",
+          "standard": "Standard",
+          "strong": "Forte"
+        }
+      },
+      "xiaomi_fan_mode": {
+        "name": "Modalità ventola",
+        "state": {
+          "basic": "Base",
+          "full_speed": "Velocità massima",
+          "silent": "Silenzioso",
+          "strong": "Forte"
+        }
+      },
+      "xiaomi_flash_light": {
+        "name": "Luce della fotocamera",
+        "state": {
+          "auto": "Automatico",
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_mop_avoid": {
+        "name": "Evita con il panno",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_mop_route": {
+        "name": "Percorso di lavaggio",
+        "state": {
+          "bowtype": "A archi",
+          "s_shape": "A S",
+          "y_shape": "A Y"
+        }
+      },
+      "xiaomi_mop_shake": {
+        "name": "Scuotimento panno",
+        "state": {
+          "high": "Alto",
+          "low": "Basso",
+          "mid": "Medio"
+        }
+      },
+      "xiaomi_mop_swing_frequency": {
+        "name": "Frequenza oscillazione panno",
+        "state": {
+          "every_time": "Ogni volta",
+          "seven_sweeps": "Ogni 7 passate"
+        }
+      },
+      "xiaomi_mop_temperature": {
+        "name": "Temperatura del panno",
+        "state": {
+          "hot": "Caldo",
+          "normal": "Normale",
+          "smart": "Intelligente",
+          "warm": "Tiepido"
+        }
+      },
+      "xiaomi_mop_wash_area": {
+        "name": "Area di lavaggio panno",
+        "state": {
+          "eight_square_meters": "8 m²",
+          "fifteen_square_meters": "15 m²",
+          "five_square_meters": "5 m²",
+          "ten_square_meters": "10 m²",
+          "twenty_five_square_meters": "25 m²",
+          "twenty_square_meters": "20 m²"
+        }
+      },
+      "xiaomi_mop_wash_frequency": {
+        "name": "Frequenza lavaggio panno",
+        "state": {
+          "by_area": "Per area",
+          "by_room": "Per stanza",
+          "by_time": "Per tempo"
+        }
+      },
+      "xiaomi_mop_water_no_tank": {
+        "name": "Acqua di lavaggio",
+        "state": {
+          "daily": "Ogni giorno",
+          "deep": "Profonda"
+        }
+      },
+      "xiaomi_obstacle_crossing": {
+        "name": "Superamento ostacoli",
+        "state": {
+          "extreme_mode": "Estremo",
+          "safe_mode": "Sicuro"
+        }
+      },
+      "xiaomi_obstacle_strategy": {
+        "name": "Evitamento ostacoli",
+        "state": {
+          "high_coverage": "Copertura alta",
+          "less_collisions": "Meno collisioni"
+        }
+      },
+      "xiaomi_pet_recognition": {
+        "name": "Riconoscimento animali",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_repeat_clean": {
+        "name": "Pulizia ripetuta",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_suction": {
+        "name": "Aspirazione",
+        "state": {
+          "close": "Spento",
+          "forth": "Quattro",
+          "medium": "Medio",
+          "one": "Uno",
+          "silent": "Silenzioso",
+          "standard": "Standard",
+          "three": "Tre",
+          "turbo": "Turbo",
+          "two": "Due"
+        }
+      },
+      "xiaomi_suction_level": {
+        "name": "Livello di aspirazione",
+        "state": {
+          "basic": "Standard",
+          "full_speed": "Velocità massima",
+          "silent": "Silenzioso",
+          "strong": "Forte"
+        }
+      },
+      "xiaomi_sweep_avoid": {
+        "name": "Evita in aspirazione",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_sweep_mode": {
+        "name": "Modalità di pulizia",
+        "state": {
+          "mop": "Lavaggio",
+          "sweep": "Aspirazione",
+          "sweep_and_mop": "Aspirazione e lavaggio",
+          "sweep_then_mop": "Prima aspira, poi lava"
+        }
+      },
+      "xiaomi_sweep_route": {
+        "name": "Percorso di aspirazione",
+        "state": {
+          "careful": "Cauto",
+          "daily": "Ogni giorno",
+          "quick": "Rapida"
+        }
+      },
+      "xiaomi_sweep_type": {
+        "name": "Tipo di aspirazione",
+        "state": {
+          "area": "Area",
+          "corner": "Angoli",
+          "edge": "Bordi",
+          "explore": "Esplora",
+          "floor": "Pavimento",
+          "global": "Tutta la casa",
+          "manual": "Manuale",
+          "material_prefer": "Preferenza materiale",
+          "mop": "Lavaggio",
+          "point": "Zona",
+          "remote": "Telecomando",
+          "room": "Stanza",
+          "room_prefer": "Preferenza stanza"
+        }
+      },
+      "xiaomi_tank_shake": {
+        "name": "Scuotimento serbatoio",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_target_water": {
+        "name": "Livello dell'acqua desiderato",
+        "state": {
+          "level1": "Livello 1",
+          "level2": "Livello 2",
+          "level3": "Livello 3"
+        }
+      },
+      "xiaomi_video_recording_warnings": {
+        "name": "Avviso di registrazione video",
+        "state": {
+          "light": "Luce",
+          "strong_reminder": "Promemoria forte",
+          "voice": "Voce"
+        }
+      },
+      "xiaomi_voice_language": {
+        "name": "Lingua della voce",
+        "state": {
+          "english": "Inglese",
+          "french": "Francese",
+          "german": "Tedesco",
+          "italian": "Italiano",
+          "korean": "Coreano",
+          "polish": "Lucidatura",
+          "russian": "Russo",
+          "simplified_chinese": "Cinese semplificato",
+          "spanish": "Spagnolo",
+          "traditional_chinese": "Cinese tradizionale"
+        }
+      },
+      "xiaomi_wash_water_output": {
+        "name": "Acqua di lavaggio panno",
+        "state": {
+          "daily": "Ogni giorno",
+          "deep": "Profonda",
+          "save_water": "Risparmio acqua"
+        }
+      },
+      "xiaomi_wash_water_temperature": {
+        "name": "Temperatura dell'acqua di lavaggio",
+        "state": {
+          "hot": "Caldo",
+          "ordinary": "Temperatura ambiente",
+          "smart": "Intelligente",
+          "warm": "Tiepido"
+        }
+      },
+      "xiaomi_water_level": {
+        "name": "Livello dell'acqua",
+        "state": {
+          "close": "Spento",
+          "high": "Alto",
+          "low": "Basso",
+          "mid": "Medio",
+          "one": "Uno",
+          "three": "Tre",
+          "two": "Due"
+        }
+      },
+      "xiaomi_worry_free_mode": {
+        "name": "Modalità senza pensieri",
+        "state": {
+          "butler": "Maggiordomo",
+          "deep_clean": "Pulizia profonda",
+          "deep_clean_2": "Pulizia profonda 2",
+          "general": "Generale",
+          "pet": "Animale",
+          "silent": "Silenzioso",
+          "silent_clean": "Pulizia silenziosa",
+          "standard": "Standard"
         }
       }
     },
@@ -932,7 +1356,7 @@
           "no_error": "Nessun errore",
           "drop": "Le ruote sono sollevate da terra",
           "cliff": "Sensori anticaduta bloccati o sporchi",
-          "bumper": "Paraurti (Bumper) bloccato",
+          "bumper": "Paraurti bloccato",
           "gesture": "Il robot è capovolto",
           "bumper_repeat": "Paraurti ripetutamente bloccato",
           "drop_repeat": "Le ruote sono rimaste sollevate",
@@ -997,7 +1421,7 @@
           "water_tank_dry": "Acqua pulita insufficiente; riempi il serbatoio.",
           "dirty_water_tank_blocked": "Condotto del serbatoio dell'acqua sporca ostruito.",
           "dirty_water_tank_pump": "Errore della pompa dell'acqua sporca.",
-          "mop_pad": "Asse di lavaggio (washboard) non installato correttamente.",
+          "mop_pad": "Asse di lavaggio non installata correttamente.",
           "wet_mop_pad": "Livello dell'acqua anomalo nella base di lavaggio; si prega di pulirla.",
           "clean_mop_pad": "Pulizia completata; ricordati di pulire la base di lavaggio.",
           "clean_tank_level": "Controlla e riempi il serbatoio dell'acqua pulita.",
@@ -1047,7 +1471,37 @@
           "blocked_by_obstacle": "Robot bloccato da un ostacolo.",
           "robotic_arm_stopped": "Braccio robotico fermo.",
           "drainage_outlet_filter": "Il filtro di uscita dell'acqua di scarico del robot è ostruito.",
-          "main_wheels_error": "Errore ruote principali."
+          "main_wheels_error": "Errore ruote principali.",
+          "e5_anti_drop_sensor": "Sensore anti-caduta",
+          "e5_battery_error": "Errore batteria",
+          "e5_battery_low": "Batteria scarica",
+          "e5_charging_error": "Errore di ricarica",
+          "e5_fan_error": "Errore ventola",
+          "e5_front_bumper_stuck": "Paraurti anteriore bloccato",
+          "e5_ground_slope": "Pavimento in pendenza",
+          "e5_left_wheel_error": "Errore ruota sinistra",
+          "e5_left_wheel_stuck": "Ruota sinistra bloccata",
+          "e5_machine_trapped": "Robot bloccato",
+          "e5_no_faults": "Nessun errore",
+          "e5_right_wheel_error": "Errore ruota destra",
+          "e5_right_wheel_stuck": "Ruota destra bloccata",
+          "e5_side_brush_error": "Errore spazzola laterale",
+          "e5_side_brush_stuck": "Spazzola laterale bloccata",
+          "e5_wheel_suspended": "Ruota sospesa",
+          "essential_bump": "Errore paraurti",
+          "essential_charging": "Errore di ricarica",
+          "essential_cliff": "Errore sensore di dislivello",
+          "essential_dustbin": "Errore contenitore della polvere",
+          "essential_everything_ok": "Tutto a posto",
+          "essential_fan": "Errore motore ventola",
+          "essential_left_wheel": "Errore ruota sinistra",
+          "essential_low_battery": "Errore batteria scarica",
+          "essential_main_brush": "Errore spazzola principale",
+          "essential_no_faults": "Nessun errore",
+          "essential_no_water": "Errore mancanza d'acqua",
+          "essential_picked_up": "Errore di sollevamento",
+          "essential_right_wheel": "Errore ruota destra",
+          "essential_side_brush": "Errore spazzola laterale"
         },
         "state_attributes": {
           "description": {
@@ -1056,7 +1510,7 @@
               "no_error": "Nessun errore",
               "drop": "Le ruote sono sollevate da terra\nRiposizionare il robot e riavviare.",
               "cliff": "Sensori anticaduta bloccati o sporchi\nPulisci il sensore di dislivello e inizia la pulizia lontano dalle scale.",
-              "bumper": "Paraurti (Bumper) bloccato\nSi prega di pulire e toccare delicatamente il sensore di collisione.",
+              "bumper": "Paraurti bloccato\nSi prega di pulire e toccare delicatamente il sensore di collisione.",
               "gesture": "Il robot è capovolto\nSpostare il robot su una superficie piana e ricominciare.",
               "bumper_repeat": "Paraurti ripetutamente bloccato\nSi prega di pulire e toccare delicatamente il sensore di collisione.",
               "drop_repeat": "Le ruote sono rimaste sollevate\nRiposizionare il robot e riavviare.",
@@ -1121,7 +1575,7 @@
               "water_tank_dry": "Acqua pulita insufficiente; riempi il serbatoio.\nAltrimenti, il robot non tornerà alla base per pulire il panno durante l'attività di pulizia.",
               "dirty_water_tank_blocked": "Condotto del serbatoio dell'acqua sporca ostruito.\nProva a riavviare il robot.",
               "dirty_water_tank_pump": "Errore della pompa dell'acqua sporca.\nProva a riavviare il robot.",
-              "mop_pad": "Asse di lavaggio (washboard) non installato correttamente.\nL'asse di lavaggio non è installata e il robot non può tornare alla base di autolavaggio. Assicurati che l'asse di lavaggio sia installato e che le chiusure su entrambi i lati siano ben fissate.",
+              "mop_pad": "Asse di lavaggio non installata correttamente.\nL'asse di lavaggio non è installata e il robot non può tornare alla base di autolavaggio. Assicurati che l'asse di lavaggio sia installata e che le chiusure su entrambi i lati siano ben fissate.",
               "wet_mop_pad": "Livello dell'acqua anomalo nella base di lavaggio; si prega di pulirla.\nIl livello dell'acqua dell'asse di lavaggio è anomalo. Si prega di pulirlo tempestivamente per evitare blocchi. Se il problema persiste, contatta il servizio clienti.",
               "clean_mop_pad": "Pulizia completata; ricordati di pulire la base di lavaggio.\nSi prega di pulire l'asse di lavaggio del mocio in tempo per evitare macchie o odori.",
               "clean_tank_level": "Controlla e riempi il serbatoio dell'acqua pulita.\nL'acqua nel serbatoio dell'acqua pulita sta per esaurirsi.",
@@ -1140,7 +1594,7 @@
               "lds_failed_to_lift": "Impossibile sollevare il modulo LDS.\nEliminare eventuali detriti attorno all'LDS e spostare il robot in un'area aperta per riprendere l'attività.",
               "robot_stuck": "LDS non può essere sollevato qui per il posizionamento.\nSpostare il robot in un'area aperta e riprendere l'attività.",
               "slippery_floor": "Pavimento scivoloso. Riprovare più tardi.\nPavimento scivoloso. Il robot non è riuscito a superare gli ostacoli. È possibile attendere che il robot riprovi oppure pulire l'acqua attorno ad esso e riprendere l'attività.",
-              "check_mop_install": "Controllare se il mocio è installato correttamente.\nControllare le istruzioni di installazione del mop",
+              "check_mop_install": "Controllare se il mocio è installato correttamente.\nControllare le istruzioni di installazione del mocio",
               "dirty_water_tank_full": "Livello anomalo nel serbatoio dell'acqua sporca.\nIl serbatoio dell'acqua usata del robot è troppo sporco. Si prega di rimuoverlo e pulirlo in tempo.",
               "retractable_leg_stuck": "Controllare se le gambe retrattili sono impigliate.\nLe gambe retrattili potrebbero rimanere aggrovigliate.",
               "internal_error": "Malfunzionamento dovuto a errore interno. Provare a riavviare il robot.\nErrore interno",
@@ -1154,7 +1608,7 @@
               "robot_stuck_on_slippery_surface": "Il robot è bloccato a causa dello scivolamento.\nIl robot è bloccato perché scivola. Si prega di pulire le ruote principali.",
               "robot_stuck_on_carpet": "Il robot scivola sul tappeto\n1. Allontanare il robot dal tappeto e riavviare l'attività\n2. Si consiglia di impostare il tappeto come zona vietata per evitare che il robot rimanga bloccato.\nIl robot è bloccato",
               "drainage_failed": "Drenaggio anomalo dal serbatoio dell'acqua sporca\nErrore della pompa delle acque reflue. Si prega di contattare il servizio clienti.",
-              "mop_not_detected": "Mocio non rilevato.\nMop non rilevato. Installa e continua l'attività.",
+              "mop_not_detected": "Mocio non rilevato.\nMocio non rilevato. Installa e continua l'attività.",
               "mop_holder_error": "Errore quantità/posizionamento supporto mocio nella base. Installare il supporto per scopa o regolarne la posizione per garantire una pulizia adeguata.\nErrore del supporto del panno nella stazione.",
               "dock_error": "Errore della base.\nControlla la stazione e prova i seguenti passaggi:\n1. Assicurarsi che il portello sia completamente chiuso.\n2. Assicurarsi che i tre gruppi di panni siano posizionati sulla botola nell'ordine rosso-giallo-blu. Se i panni si trovano attualmente sul trasportatore o sull'asse di lavaggio, rimetterli sullo sportello in quest'ordine e riprovare.\n3. Controllare eventuali detriti all'interno della stazione. Non inserire le mani, il robot o altri oggetti nell'asse di lavaggio quando si cambiano i panni.",
               "wash_failed": "Lavaggio del mocio sporco fallito.\nControlla la stazione e prova i seguenti passaggi:\n1. Collegare manualmente il panno da lavare al robot.\n2. Installare altri panni sporchi sul portello.\n3. Nell'app, vai su funzioni stazione, quindi lava, per riavviare l'operazione di lavaggio del panno.",
@@ -1172,7 +1626,37 @@
               "robotic_arm_stopped": "Braccio robotico fermo.\nTenere premuto il pulsante Stazione e il pulsante On/Off del braccio robotico per reimpostare prima di riutilizzarlo.",
               "drainage_outlet_filter": "Il filtro di uscita dell'acqua di scarico del robot è ostruito.\nSi prega di pulire tempestivamente il filtro di uscita delle acque reflue del robot per garantire un flusso d'acqua regolare.",
               "main_wheels_error": "Errore ruote principali.\nRilevata anomalia alla ruota. L'attività di pulizia è stata sospesa. Puoi provare a riprendere la pulizia utilizzando il pulsante sul robot o tramite l'app. Se il problema persiste, contattaci per ricevere assistenza.",
-              "unknown": "Errore sconosciuto"
+              "unknown": "Errore sconosciuto",
+              "e5_anti_drop_sensor": "Sensore anti-caduta",
+              "e5_battery_error": "Errore batteria",
+              "e5_battery_low": "Batteria scarica",
+              "e5_charging_error": "Errore di ricarica",
+              "e5_fan_error": "Errore ventola",
+              "e5_front_bumper_stuck": "Paraurti anteriore bloccato",
+              "e5_ground_slope": "Pavimento in pendenza",
+              "e5_left_wheel_error": "Errore ruota sinistra",
+              "e5_left_wheel_stuck": "Ruota sinistra bloccata",
+              "e5_machine_trapped": "Robot bloccato",
+              "e5_no_faults": "Nessun errore",
+              "e5_right_wheel_error": "Errore ruota destra",
+              "e5_right_wheel_stuck": "Ruota destra bloccata",
+              "e5_side_brush_error": "Errore spazzola laterale",
+              "e5_side_brush_stuck": "Spazzola laterale bloccata",
+              "e5_wheel_suspended": "Ruota sospesa",
+              "essential_bump": "Errore paraurti",
+              "essential_charging": "Errore di ricarica",
+              "essential_cliff": "Errore sensore di dislivello",
+              "essential_dustbin": "Errore contenitore della polvere",
+              "essential_everything_ok": "Tutto a posto",
+              "essential_fan": "Errore motore ventola",
+              "essential_left_wheel": "Errore ruota sinistra",
+              "essential_low_battery": "Errore batteria scarica",
+              "essential_main_brush": "Errore spazzola principale",
+              "essential_no_faults": "Nessun errore",
+              "essential_no_water": "Errore mancanza d'acqua",
+              "essential_picked_up": "Errore di sollevamento",
+              "essential_right_wheel": "Errore ruota destra",
+              "essential_side_brush": "Errore spazzola laterale"
             }
           }
         }
@@ -1274,7 +1758,7 @@
           "blocked_by_dynamic_obstacle": "Bloccato da ostacolo dinamico",
           "passage_too_low": "Passaggio troppo basso",
           "step_too_low": "Scalino troppo basso",
-          "failed_to_cross_threshold": "Errore crossing soglia"
+          "failed_to_cross_threshold": "Soglia non superata"
         }
       },
       "obstacle_type": {
@@ -1441,7 +1925,7 @@
           "smart_charging": "Ricarica intelligente",
           "second_cleaning": "Seconda passata di pulizia",
           "human_following": "Inseguimento umano",
-          "spot_cleaning": "Pulizia mirata (Spot)",
+          "spot_cleaning": "Pulizia mirata",
           "returning_auto_empty": "Ritorno alla base per svuotamento",
           "waiting_for_task": "In attesa di un'attività",
           "station_cleaning": "Pulizia della stazione base",
@@ -1470,20 +1954,20 @@
           "arranging_items": "Sistemazione oggetti",
           "pet_guarding": "Guardia animali",
           "pet_guarding_paused": "Guardia animali in pausa",
-          "installing_mop": "Installazione mop",
-          "uninstalling_mop": "Rimozione mop",
+          "installing_mop": "Installazione del panno",
+          "uninstalling_mop": "Rimozione del panno",
           "intelligent_recharging": "Ricarica intelligente",
           "assisted_cleaning": "Pulizia assistita",
           "entering_dock": "Ingresso nella base",
           "leaving_dock": "Uscita dalla base",
-          "navigating_to_climber": "Navigazione verso il climber",
-          "docking_to_climber": "Aggancio al climber",
-          "climber_docked": "Climber agganciato",
-          "climber_navigating": "Navigazione climber",
+          "navigating_to_climber": "Navigazione verso lo scavalcatore",
+          "docking_to_climber": "Aggancio allo scavalcatore",
+          "climber_docked": "Scavalcatore agganciato",
+          "climber_navigating": "Navigazione dello scavalcatore",
           "climbing_stairs": "Salita scale",
           "climbing_stairs_completed": "Salita scale completata",
-          "climber_at_dock": "Climber alla base",
-          "climber_leaving_dock": "Climber in uscita dalla base"
+          "climber_at_dock": "Scavalcatore alla base",
+          "climber_leaving_dock": "Scavalcatore in uscita dalla base"
         }
       },
       "station_drainage_status": {
@@ -1502,7 +1986,7 @@
           "paused": "In pausa",
           "cleaning": "In pulizia",
           "returning": "Ritorno alla base",
-          "spot_cleaning": "Pulizia mirata (Spot)",
+          "spot_cleaning": "Pulizia mirata",
           "follow_wall_cleaning": "Pulizia lungo i bordi",
           "charging": "In carica",
           "ota": "Aggiornamento OTA",
@@ -1512,10 +1996,10 @@
           "factory": "Impostazioni di fabbrica",
           "error": "Errore",
           "remote_control": "Controllo remoto",
-          "sleeping": "Standby prolungato",
+          "sleeping": "In sospensione",
           "self_repair": "Autoverifica del sistema",
           "factory_test": "Test di fabbrica",
-          "standby": "In attesa (Standby)",
+          "standby": "In attesa",
           "room_cleaning": "Pulizia stanze",
           "zone_cleaning": "Pulizia zona",
           "fast_mapping": "Mappatura rapida",
@@ -1551,9 +2035,9 @@
         "name": "Completato da",
         "state": {
           "other": "Altro",
-          "manual_docking": "Docking manuale",
+          "manual_docking": "Aggancio manuale",
           "docking": "In carica",
-          "failed_docking": "Docking fallito",
+          "failed_docking": "Aggancio non riuscito",
           "stop": "Ferma",
           "unknown": "Sconosciuto"
         }
@@ -1561,7 +2045,7 @@
       "task_interrupt_reason": {
         "name": "Motivo interruzione",
         "state": {
-          "abnormal_docking": "Docking anomalo",
+          "abnormal_docking": "Aggancio anomalo",
           "base_station_powered_off": "Stazione base spenta",
           "brush_entangled_by_carpet": "Spazzola impigliata nel tappeto",
           "brush_entangled_by_object": "Spazzola impigliata in un oggetto",
@@ -1573,7 +2057,7 @@
           "mop_pad_fallen_off": "Mocio caduto",
           "mop_pad_fallen_off_by_obstacle": "Mocio caduto per ostacolo",
           "mop_pad_fallen_off_by_table": "Mocio caduto per tavolo",
-          "mop_pad_fallen_off_crossing_obstacle": "Mocio caduto attraversando",
+          "mop_pad_fallen_off_crossing_obstacle": "Mocio caduto superando un ostacolo",
           "mop_pad_removed": "Mocio rimosso",
           "mop_pad_stuck": "Mocio bloccato",
           "robot_fallen": "Robot caduto",
@@ -1592,7 +2076,7 @@
           "cleaning": "In pulizia",
           "zone_cleaning": "Pulizia zona",
           "room_cleaning": "Pulizia stanza",
-          "spot_cleaning": "Pulizia mirata (Spot)",
+          "spot_cleaning": "Pulizia mirata",
           "fast_mapping": "Mappatura rapida",
           "cleaning_paused": "Pulizia in pausa",
           "room_cleaning_paused": "Pulizia stanza in pausa",
@@ -1643,7 +2127,7 @@
           "shortcut_paused": "Scorciatoia di pulizia in pausa",
           "scheduled": "Pulizia programmata",
           "scheduled_paused": "Pulizia programmata in pausa",
-          "smart": "Pulizia intelligente (Genius)",
+          "smart": "Pulizia intelligente",
           "smart_paused": "Pulizia intelligente in pausa",
           "partial": "Pulizia parziale",
           "partial_paused": "Pulizia parziale in pausa",
@@ -1708,6 +2192,205 @@
       },
       "wheel_dirty_time_left": {
         "name": "Tempo residuo ruote"
+      },
+      "xiaomi_base_station_status": {
+        "name": "Stato della base"
+      },
+      "xiaomi_base_station_tank": {
+        "name": "Serbatoio della base",
+        "state": {
+          "emptying": "Svuotamento",
+          "emptying_completed": "Svuotamento completato",
+          "emptying_failed": "Svuotamento non riuscito",
+          "idle": "Inattivo"
+        }
+      },
+      "xiaomi_charging_state": {
+        "name": "Stato di ricarica",
+        "state": {
+          "charging": "In carica",
+          "charging_finished": "Ricarica completata",
+          "not_charging": "Non in carica"
+        }
+      },
+      "xiaomi_cleaning_area": {
+        "name": "Area pulita"
+      },
+      "xiaomi_cleaning_progress": {
+        "name": "Avanzamento pulizia"
+      },
+      "xiaomi_cleaning_time": {
+        "name": "Tempo di pulizia"
+      },
+      "xiaomi_current_voice": {
+        "name": "Voce attuale"
+      },
+      "xiaomi_dnd_enabled": {
+        "name": "Non disturbare",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_dnd_end_hour": {
+        "name": "Ora di fine non disturbare"
+      },
+      "xiaomi_dnd_end_minute": {
+        "name": "Minuto di fine non disturbare"
+      },
+      "xiaomi_dnd_start_hour": {
+        "name": "Ora di inizio non disturbare"
+      },
+      "xiaomi_dnd_start_minute": {
+        "name": "Minuto di inizio non disturbare"
+      },
+      "xiaomi_download_progress": {
+        "name": "Avanzamento download della voce"
+      },
+      "xiaomi_download_status": {
+        "name": "Download della voce",
+        "state": {
+          "apply_fail": "Applicazione non riuscita",
+          "apply_success": "Applicato",
+          "download_fail": "Download non riuscito",
+          "downloaded": "Scaricato",
+          "downloading": "Download in corso",
+          "not_downloaded": "Non scaricato"
+        }
+      },
+      "xiaomi_dry_left_time": {
+        "name": "Tempo di asciugatura rimanente"
+      },
+      "xiaomi_drying_progress": {
+        "name": "Avanzamento asciugatura"
+      },
+      "xiaomi_dust_bag_life": {
+        "name": "Vita del sacchetto"
+      },
+      "xiaomi_dust_bag_time_left": {
+        "name": "Tempo rimanente del sacchetto"
+      },
+      "xiaomi_dust_bin": {
+        "name": "Contenitore della polvere",
+        "state": {
+          "dust_box": "Cassetta della polvere",
+          "none": "Nessuno",
+          "two_in_one": "Cassetta e serbatoio",
+          "water_box": "Serbatoio dell'acqua"
+        }
+      },
+      "xiaomi_filter_minutes": {
+        "name": "Tempo rimanente del filtro"
+      },
+      "xiaomi_host_tank": {
+        "name": "Serbatoio del robot",
+        "state": {
+          "emptying": "Svuotamento",
+          "emptying_completed": "Svuotamento completato",
+          "emptying_failed": "Svuotamento non riuscito",
+          "idle": "Inattivo",
+          "not_installed": "Non installato"
+        }
+      },
+      "xiaomi_laser_position": {
+        "name": "Posizione del laser",
+        "state": {
+          "bottom": "Basso",
+          "lifting": "In sollevamento",
+          "lowering": "In abbassamento",
+          "top": "Alto"
+        }
+      },
+      "xiaomi_last_clean_time": {
+        "name": "Ultima pulizia"
+      },
+      "xiaomi_main_brush_minutes": {
+        "name": "Tempo rimanente della spazzola principale"
+      },
+      "xiaomi_mop_cloth": {
+        "name": "Panno",
+        "state": {
+          "exist": "Installato",
+          "none": "Nessuno"
+        }
+      },
+      "xiaomi_notice": {
+        "name": "Avviso"
+      },
+      "xiaomi_robot_notice": {
+        "name": "Avviso del robot",
+        "state": {
+          "battery_20": "Batteria al 20 percento",
+          "busy_blocks_schedule": "Occupato, programma non avviato",
+          "cleaning_complete": "Pulizia completata",
+          "dnd_blocks_resume": "Non disturbare ha bloccato la ripresa",
+          "dnd_blocks_schedule": "Non disturbare ha bloccato il programma",
+          "filter_life": "Vita del filtro",
+          "keep_cleaning": "Riprendi la pulizia",
+          "none": "Nessuno",
+          "schedule_cleaning": "Pulizia programmata",
+          "shutdown": "Spegnimento",
+          "side_brush_life": "Vita della spazzola laterale",
+          "start_recharging": "Avvia il ritorno alla ricarica",
+          "stop_recharging": "Ferma il ritorno alla ricarica",
+          "update_succeeded": "Aggiornamento riuscito",
+          "upgrade_failed": "Aggiornamento non riuscito"
+        }
+      },
+      "xiaomi_roller_life": {
+        "name": "Vita del rullo"
+      },
+      "xiaomi_roller_time_left": {
+        "name": "Tempo rimanente del rullo"
+      },
+      "xiaomi_self_check_results": {
+        "name": "Risultati dell'autodiagnosi"
+      },
+      "xiaomi_sewage_tank": {
+        "name": "Serbatoio dell'acqua sporca",
+        "state": {
+          "full": "Pieno",
+          "not_full": "Non pieno"
+        }
+      },
+      "xiaomi_side_brush_minutes": {
+        "name": "Tempo rimanente della spazzola laterale"
+      },
+      "xiaomi_station_water_level": {
+        "name": "Serbatoio dell'acqua",
+        "state": {
+          "empty": "Vuoto",
+          "not_empty": "Non vuoto"
+        }
+      },
+      "xiaomi_sweep_mop_status": {
+        "name": "Stato aspirazione e lavaggio",
+        "state": {
+          "idle": "Inattivo",
+          "mopping": "Lavaggio",
+          "sweeping": "Aspirazione"
+        }
+      },
+      "xiaomi_total_clean_area": {
+        "name": "Area totale pulita"
+      },
+      "xiaomi_total_clean_time": {
+        "name": "Tempo totale di pulizia"
+      },
+      "xiaomi_voltage": {
+        "name": "Tensione batteria"
+      },
+      "xiaomi_water_check_status": {
+        "name": "Controllo dell'acqua",
+        "state": {
+          "check_fail": "Non riuscito",
+          "check_success": "Riuscito",
+          "checking": "Controllo in corso",
+          "uncheck": "Non controllato"
+        }
+      },
+      "xiaomi_water_tank_level": {
+        "name": "Livello del serbatoio"
       }
     },
     "switch": {
@@ -1805,7 +2488,7 @@
         "name": "Lavaggio profondo del panno"
       },
       "dnd": {
-        "name": "DnD"
+        "name": "Non disturbare"
       },
       "dnd_disable_auto_empty": {
         "name": "Disattiva svuotamento automatico"
@@ -1950,6 +2633,163 @@
       },
       "wider_corner_coverage": {
         "name": "Copertura angoli ampia"
+      },
+      "xiaomi_ai_cleaning": {
+        "name": "Pulizia IA"
+      },
+      "xiaomi_ai_improve": {
+        "name": "Miglioramento IA"
+      },
+      "xiaomi_ai_managed_cleaning": {
+        "name": "Pulizia gestita dall'IA"
+      },
+      "xiaomi_ai_wake_up": {
+        "name": "Attivazione vocale IA"
+      },
+      "xiaomi_alarm": {
+        "name": "Allarme"
+      },
+      "xiaomi_alarm_enabled": {
+        "name": "Allarme"
+      },
+      "xiaomi_auto_mop_dry": {
+        "name": "Asciugatura automatica del panno"
+      },
+      "xiaomi_auto_night_fill_light": {
+        "name": "Luce notturna di riempimento"
+      },
+      "xiaomi_auto_screen_brightness": {
+        "name": "Luminosità automatica dello schermo"
+      },
+      "xiaomi_auto_screen_off": {
+        "name": "Spegnimento automatico dello schermo"
+      },
+      "xiaomi_auto_wash_roller": {
+        "name": "Lavaggio automatico del rullo"
+      },
+      "xiaomi_auto_water_change": {
+        "name": "Cambio acqua automatico"
+      },
+      "xiaomi_brush_outswing": {
+        "name": "Oscillazione spazzola"
+      },
+      "xiaomi_carpet_avoidance": {
+        "name": "Evitamento tappeti"
+      },
+      "xiaomi_carpet_deep_cleaning": {
+        "name": "Pulizia profonda dei tappeti"
+      },
+      "xiaomi_carpet_discriminate": {
+        "name": "Riconoscimento tappeti"
+      },
+      "xiaomi_cut_hair": {
+        "name": "Taglio peli"
+      },
+      "xiaomi_defecation_detection": {
+        "name": "Rilevamento deiezioni"
+      },
+      "xiaomi_detergent_delivery": {
+        "name": "Erogazione detergente"
+      },
+      "xiaomi_detergent_reminder": {
+        "name": "Promemoria detergente"
+      },
+      "xiaomi_detergent_self_delivery": {
+        "name": "Erogazione automatica del detergente"
+      },
+      "xiaomi_dirt_detection": {
+        "name": "Rilevamento sporco"
+      },
+      "xiaomi_edge_swing_tail_sweep": {
+        "name": "Pulizia bordi con oscillazione"
+      },
+      "xiaomi_enable_mop_wash": {
+        "name": "Lavaggio panno"
+      },
+      "xiaomi_exit_remote_dialog": {
+        "name": "Chiudi la finestra del telecomando"
+      },
+      "xiaomi_floor_material_detection": {
+        "name": "Rilevamento del materiale del pavimento"
+      },
+      "xiaomi_hot_spray": {
+        "name": "Spruzzo caldo"
+      },
+      "xiaomi_hot_water_wash": {
+        "name": "Lavaggio panno con acqua calda"
+      },
+      "xiaomi_light": {
+        "name": "Luce"
+      },
+      "xiaomi_liquid_dirt_detection": {
+        "name": "Rilevamento sporco liquido"
+      },
+      "xiaomi_mop_auto_lift": {
+        "name": "Sollevamento automatico del panno"
+      },
+      "xiaomi_mop_outer_swing": {
+        "name": "Oscillazione panno"
+      },
+      "xiaomi_no_disturb": {
+        "name": "Non disturbare"
+      },
+      "xiaomi_object_detection": {
+        "name": "Rilevamento oggetti"
+      },
+      "xiaomi_pet_snaps": {
+        "name": "Foto degli animali"
+      },
+      "xiaomi_precise_diagnosis": {
+        "name": "Diagnosi precisa"
+      },
+      "xiaomi_real_scene_capture": {
+        "name": "Cattura della scena reale"
+      },
+      "xiaomi_remember_map": {
+        "name": "Memorizza la mappa",
+        "state": {
+          "close": "Spento",
+          "open": "Acceso"
+        }
+      },
+      "xiaomi_repeat_wash_mop": {
+        "name": "Ripeti il lavaggio del panno"
+      },
+      "xiaomi_roller_outswing": {
+        "name": "Estensione del rullo"
+      },
+      "xiaomi_room_detection": {
+        "name": "Rilevamento stanze"
+      },
+      "xiaomi_screen": {
+        "name": "Schermo"
+      },
+      "xiaomi_solid_dirt_detection": {
+        "name": "Rilevamento sporco solido"
+      },
+      "xiaomi_stream_enabled": {
+        "name": "Flusso video"
+      },
+      "xiaomi_stream_visible_to_shared_users": {
+        "name": "Video visibile agli utenti condivisi"
+      },
+      "xiaomi_sweep_ai_detection": {
+        "name": "Rilevamento IA in aspirazione"
+      },
+      "xiaomi_sweep_break": {
+        "name": "Riprendi dopo un'interruzione"
+      },
+      "xiaomi_sweep_carpet_first": {
+        "name": "Aspira prima i tappeti"
+      },
+      "xiaomi_use_detergent": {
+        "name": "Usa il detergente"
+      },
+      "xiaomi_vibration_mop": {
+        "name": "Panno vibrante"
+      },
+      "xiaomi_water_level_remind": {
+        "name": "Promemoria livello dell'acqua"
       }
     },
     "button": {
@@ -2048,6 +2888,132 @@
       },
       "water_tank_draining": {
         "name": "Drenaggio serbatoio acqua"
+      },
+      "xiaomi_back_to_wash": {
+        "name": "Torna a lavare"
+      },
+      "xiaomi_calibrate_imu": {
+        "name": "Calibra i sensori"
+      },
+      "xiaomi_call_clean": {
+        "name": "Chiama per pulire"
+      },
+      "xiaomi_cancel_water_check": {
+        "name": "Annulla il controllo dell'acqua"
+      },
+      "xiaomi_empty_host_tank": {
+        "name": "Svuota il serbatoio del robot"
+      },
+      "xiaomi_empty_station_tank": {
+        "name": "Svuota il serbatoio della base"
+      },
+      "xiaomi_enter_check_mode": {
+        "name": "Entra in modalità di controllo"
+      },
+      "xiaomi_enter_remote": {
+        "name": "Entra nel telecomando"
+      },
+      "xiaomi_exit_remote": {
+        "name": "Esci dal telecomando"
+      },
+      "xiaomi_find_pet": {
+        "name": "Trova l'animale"
+      },
+      "xiaomi_reset_dust_bag": {
+        "name": "Azzera il sacchetto"
+      },
+      "xiaomi_reset_filter": {
+        "name": "Azzera il filtro"
+      },
+      "xiaomi_reset_main_brush": {
+        "name": "Azzera la spazzola principale"
+      },
+      "xiaomi_reset_mop": {
+        "name": "Azzera il panno"
+      },
+      "xiaomi_reset_roller": {
+        "name": "Azzera la vita del rullo"
+      },
+      "xiaomi_reset_side_brush": {
+        "name": "Azzera la spazzola laterale"
+      },
+      "xiaomi_set_calibration": {
+        "name": "Calibra"
+      },
+      "xiaomi_spot_clean": {
+        "name": "Pulizia locale"
+      },
+      "xiaomi_start_charging": {
+        "name": "Avvia la ricarica"
+      },
+      "xiaomi_start_cut_hair": {
+        "name": "Avvia il taglio peli"
+      },
+      "xiaomi_start_dry": {
+        "name": "Avvia l'asciugatura"
+      },
+      "xiaomi_start_eject": {
+        "name": "Espelli"
+      },
+      "xiaomi_start_mop": {
+        "name": "Avvia il lavaggio"
+      },
+      "xiaomi_start_mop_wash": {
+        "name": "Avvia il lavaggio del panno"
+      },
+      "xiaomi_start_only_sweep": {
+        "name": "Avvia solo l'aspirazione"
+      },
+      "xiaomi_start_roller_wash": {
+        "name": "Avvia il lavaggio del rullo"
+      },
+      "xiaomi_start_station_cleaning": {
+        "name": "Pulisci la base"
+      },
+      "xiaomi_start_station_self_clean": {
+        "name": "Avvia l'autopulizia della base"
+      },
+      "xiaomi_start_sweep": {
+        "name": "Avvia l'aspirazione"
+      },
+      "xiaomi_start_sweep_mop": {
+        "name": "Avvia aspirazione e lavaggio"
+      },
+      "xiaomi_start_water_check": {
+        "name": "Avvia il controllo dell'acqua"
+      },
+      "xiaomi_stop_and_charge": {
+        "name": "Ferma e ricarica"
+      },
+      "xiaomi_stop_charging": {
+        "name": "Ferma la ricarica"
+      },
+      "xiaomi_stop_cut_hair": {
+        "name": "Ferma il taglio peli"
+      },
+      "xiaomi_stop_dry": {
+        "name": "Ferma l'asciugatura"
+      },
+      "xiaomi_stop_mop_wash": {
+        "name": "Ferma il lavaggio del panno"
+      },
+      "xiaomi_stop_roller_wash": {
+        "name": "Ferma il lavaggio del rullo"
+      },
+      "xiaomi_stop_station_self_clean": {
+        "name": "Ferma l'autopulizia della base"
+      },
+      "xiaomi_stop_working": {
+        "name": "Ferma il lavoro"
+      },
+      "xiaomi_sweep_before_mop": {
+        "name": "Aspira prima di lavare"
+      },
+      "xiaomi_sweep_dust_arrest": {
+        "name": "Svuotamento durante la pulizia"
+      },
+      "xiaomi_try_listen": {
+        "name": "Anteprima vocale"
       }
     },
     "camera": {
@@ -2102,6 +3068,21 @@
             "name": "Elementi"
           }
         }
+      },
+      "xiaomi_auto_water_change_installed": {
+        "name": "Cambio acqua automatico installato"
+      },
+      "xiaomi_current_child_lock": {
+        "name": "Stato del blocco bambini"
+      },
+      "xiaomi_current_dnd": {
+        "name": "Stato non disturbare"
+      },
+      "xiaomi_sleep_status": {
+        "name": "Riposo"
+      },
+      "xiaomi_stream_physical_lock": {
+        "name": "Blocco dei comandi video"
       }
     },
     "number": {
@@ -2128,14 +3109,26 @@
       },
       "wetness_level": {
         "name": "Umidità"
+      },
+      "xiaomi_dry_time": {
+        "name": "Tempo di asciugatura"
+      },
+      "xiaomi_mop_wash_interval": {
+        "name": "Intervallo lavaggio panno"
+      },
+      "xiaomi_screen_brightness": {
+        "name": "Luminosità dello schermo"
+      },
+      "xiaomi_volume": {
+        "name": "Volume"
       }
     },
     "time": {
       "dnd_end": {
-        "name": "Orario fine DnD"
+        "name": "Orario di fine non disturbare"
       },
       "dnd_start": {
-        "name": "Orario inizio DnD"
+        "name": "Orario di inizio non disturbare"
       },
       "off_peak_charging_end": {
         "name": "Orario fine fuori picco"
@@ -2246,8 +3239,8 @@
         "start_task": "Avvia attività",
         "start_washing": "Avvia lavaggio",
         "stop": "Ferma",
-        "stop_bag_drying": "Stop asciug. sacco",
-        "stop_drying": "Stop asciugatura",
+        "stop_bag_drying": "Ferma asciug. sacco",
+        "stop_drying": "Ferma asciugatura",
         "understood": "Capito",
         "virtual_threshold": "Soglia virtuale",
         "virtual_wall": "Muro",
@@ -2382,7 +3375,7 @@
         "map_object_low_lying_area": "Zone basse",
         "map_object_material": "Materiale pavimento",
         "map_object_mop_path": "Percorso lavaggio",
-        "map_object_mop_type": "Tipo mop",
+        "map_object_mop_type": "Tipo di panno",
         "map_object_name": "Nome",
         "map_object_name_background": "Sfondo nome",
         "map_object_no_go": "Zona vietata",
@@ -2432,7 +3425,7 @@
       "state": {
         "active_task": "L'aspirapolvere è occupato !",
         "apply_changes_or_reload": "La mappa è cambiata !\nSovrascrivere o caricare le modifiche ?",
-        "auto_mount_mop_will_enabled": "Aggancio mop auto sarà abilitato !",
+        "auto_mount_mop_will_enabled": "L'aggancio automatico del panno sarà abilitato!",
         "backup_map": "Backup mappa ?",
         "backup_map_will_overwritten": "Il backup attuale verrà sovrascritto !",
         "bag_drying_will_stopped": "Asciugatura sacco sarà interrotta !",
@@ -2457,12 +3450,12 @@
         "dnd_will_deleted": "Il Silenzioso da %start% a %end% verrà eliminato !",
         "dock_in_restricted_area": "Base in zona vietata !",
         "dock_in_restricted_area_detail": "Base in zona vietata. Il robot potrebbe non ricaricarsi.",
-        "drying_will_stopped": "Asciugatura mop interrotta !",
+        "drying_will_stopped": "L'asciugatura del panno sarà interrotta!",
         "dust_collection_not_performed": "Attività di raccolta polvere (Svuotamento auto) non eseguita\nIl robot non eseguirà lo svuotamento automatico Non disturbare.",
-        "enable_auto_mount_mop": "Abilitare aggancio mop auto ?",
+        "enable_auto_mount_mop": "Abilitare l'aggancio automatico del panno?",
         "enable_carpet_recognition": "Il rilevam. tappeti sarà abilitato !",
         "enable_customized_cleaning": "Abilitare la pulizia personalizzata ?",
-        "enable_mop_change": "Abilitare cambio mop auto ?",
+        "enable_mop_change": "Abilitare il cambio automatico del panno?",
         "enable_task": "Abilitare l'attività ?",
         "entity_is_required": "Entità richiesta",
         "entity_not_available": "Entità non disponibile",
@@ -2479,7 +3472,7 @@
         "map_will_replaced": "La mappa attuale sarà sostituita dalla nuova !",
         "map_will_restored": "Ripristino allo stato del %date%",
         "mapping_started": "Mappatura iniziata...",
-        "mop_change_disabled": "Cambio mop auto disabilitato !",
+        "mop_change_disabled": "Il cambio automatico del panno è disabilitato!",
         "mop_wash_frequency_low": "Freq. lavaggio troppo bassa !",
         "mop_wash_frequency_will_increased": "Aumentata auto per mantenere l'umidità",
         "not_available": "Al momento non disponibile...",
@@ -2508,8 +3501,8 @@
         "service_call_failed": "Chiamata servizio fallita",
         "settings_will_applied": "Le modifiche saranno applicate al prossimo avvio.",
         "shortcut_will_deleted": "%name% sarà eliminato !",
-        "stop_bag_drying": "Stop asciugatura sacco ?",
-        "stop_drying": "Stop asciugatura ?",
+        "stop_bag_drying": "Fermare l'asciugatura del sacco?",
+        "stop_drying": "Fermare l'asciugatura?",
         "stop_task": "Arresta attività attuale ?",
         "task_disabled": "Attività disabilitata !",
         "task_will_stopped": "L'attività attuale sarà interrotta !",
@@ -2550,7 +3543,7 @@
         "map_edit": "Modifica mappa",
         "map_management": "Gestione mappe",
         "map_name_placeholder": "Mappa %index%",
-        "mop_type": "Tipo mop",
+        "mop_type": "Tipo di panno",
         "mopping_settings": "Param. lavaggio",
         "more_functions": "Altre funzioni",
         "name": "Card %name%",
@@ -2673,7 +3666,7 @@
       }
     },
     "vacuum_clean_spot": {
-      "name": "Pulizia punto singolo (Spot)",
+      "name": "Pulizia punto singolo",
       "description": "Avvia l'operazione di pulizia nei punti specifici selezionati sulla mappa.",
       "fields": {
         "points": {
@@ -2971,6 +3964,78 @@
           "description": "Definisce se l'ostacolo deve essere effettivamente ignorato o meno."
         }
       }
+    },
+    "xiaomi_add_schedule": {
+      "description": "Aggiunge un programma di pulizia della famiglia aspirapolvere. Il giorno è una maschera da 0 a 255. L'ordine dei bit non è nella specifica: verificalo sul robot. I campi che l'azione add-ii del modello non accetta vengono rifiutati e non inviati.",
+      "fields": {
+        "clean_way": {
+          "description": "0 aspira, 1 aspira e lava, 2 lava. Inviato solo se add-ii elenca questo ingresso.",
+          "name": "Tipo di pulizia"
+        },
+        "day": {
+          "description": "Maschera dei giorni da 0 a 255. La specifica non indica quale bit è il lunedì.",
+          "name": "Giorno"
+        },
+        "enable": {
+          "description": "Se questo programma è attivo.",
+          "name": "Attiva"
+        },
+        "hour": {
+          "description": "Ora da 0 a 23.",
+          "name": "Ora"
+        },
+        "minute": {
+          "description": "Minuto da 0 a 59.",
+          "name": "Minuto"
+        },
+        "repeat": {
+          "description": "Ripete questo programma. Non è una seconda passata di pulizia.",
+          "name": "Ripeti"
+        },
+        "suction": {
+          "description": "Valore di aspirazione della specifica di questo modello. Inviato solo se add-ii elenca questo ingresso.",
+          "name": "Aspirazione"
+        },
+        "twice_clean": {
+          "description": "Seconda passata di pulizia. Nessuna azione add-ii accetta questo ingresso, quindi il servizio lo rifiuta.",
+          "name": "Doppia pulizia"
+        },
+        "water": {
+          "description": "Valore dell'acqua della specifica di questo modello. Inviato solo se add-ii elenca questo ingresso.",
+          "name": "Acqua"
+        }
+      },
+      "name": "Aggiungi programma"
+    },
+    "xiaomi_set_dnd": {
+      "description": "Imposta il non disturbare su un robot della famiglia aspirapolvere. Gli orari sono in sola lettura. Chiama set-notdisturb. Un modello senza quell'azione viene rifiutato e non viene inviato nulla.",
+      "fields": {
+        "enable": {
+          "description": "Se il non disturbare è attivo.",
+          "name": "Attiva"
+        },
+        "end_hour": {
+          "description": "Ora di fine da 0 a 23.",
+          "name": "Ora di fine"
+        },
+        "end_minute": {
+          "description": "Minuto di fine da 0 a 59.",
+          "name": "Minuto di fine"
+        },
+        "start_hour": {
+          "description": "Ora di inizio da 0 a 23.",
+          "name": "Ora di inizio"
+        },
+        "start_minute": {
+          "description": "Minuto di inizio da 0 a 59.",
+          "name": "Minuto di inizio"
+        },
+        "timezone": {
+          "description": "Offset del fuso dalla specifica. Se manca viene inviato 0.",
+          "name": "Fuso orario"
+        }
+      },
+      "name": "Imposta non disturbare"
     }
   },
   "exceptions": {
@@ -3011,7 +4076,7 @@
       "message": "L'entità non è disponibile"
     },
     "fast_mapping_mop_installed": {
-      "message": "Assicurati che il panno mop non sia installato prima della mappatura rapida"
+      "message": "Assicurati che il panno non sia installato prima della mappatura rapida"
     },
     "follow_path_requires_camera": {
       "message": "Segui percorso funziona solo con lo streaming live della telecamera"
@@ -3105,6 +4170,9 @@
     },
     "zone_too_small": {
       "message": "La zona {zone} è più piccola della dimensione minima della zona ({width}, {height})"
+    },
+    "xiaomi_control_failed": {
+      "message": "L'aspirapolvere ha rifiutato {control}."
     }
   }
 }

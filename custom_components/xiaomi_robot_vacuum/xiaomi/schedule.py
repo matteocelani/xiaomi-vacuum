@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Final
+from typing import Final, Protocol
 
 from .exceptions import XiaomiControlException
 from .model import (
@@ -140,7 +140,26 @@ def schedule_property_name(model: str, siid: int, piid: int) -> str | None:
     return None
 
 
-def add_schedule(device: object, fields: Mapping[str, object]) -> None:
+class _SendsAction(Protocol):
+    """The protocol object that can call one MIoT action."""
+
+    def action(
+        self,
+        siid: int,
+        aiid: int,
+        parameters: object = None,
+        retry_count: int = 2,
+    ) -> object:
+        """Send one action and return the device result."""
+
+
+class _ActionCaller(Protocol):
+    """A device that can send one MIoT action."""
+
+    _protocol: _SendsAction
+
+
+def add_schedule(device: _ActionCaller, fields: Mapping[str, object]) -> None:
     """Call add-ii with one validated payload. Extra or illegal values never leave."""
     model = _model_of(device)
     if model not in SCHEDULE_MODELS:

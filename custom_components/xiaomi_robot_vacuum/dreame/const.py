@@ -61,6 +61,7 @@ SUCTION_LEVEL_STANDARD: Final = "standard"
 SUCTION_LEVEL_STRONG: Final = "strong"
 SUCTION_LEVEL_TURBO: Final = "turbo"
 
+WATER_VOLUME_OFF: Final = "off"
 WATER_VOLUME_LOW: Final = "low"
 WATER_VOLUME_MEDIUM: Final = "medium"
 WATER_VOLUME_HIGH: Final = "high"
@@ -813,6 +814,7 @@ SUCTION_LEVEL_CODE_TO_NAME: Final = {
 
 # Dreame Vacuum water volume names
 WATER_VOLUME_CODE_TO_NAME: Final = {
+    DreameVacuumWaterVolume.OFF: WATER_VOLUME_OFF,
     DreameVacuumWaterVolume.LOW: WATER_VOLUME_LOW,
     DreameVacuumWaterVolume.MEDIUM: WATER_VOLUME_MEDIUM,
     DreameVacuumWaterVolume.HIGH: WATER_VOLUME_HIGH,

@@ -102,6 +102,20 @@ class StoredTask(IntEnum):
 
 
 _UNKNOWN_STORED: Final = -1
+_SECONDS: Final = "s"
+_HOURS: Final = "h"
+_DAYS: Final = "d"
+# The Dreame sensor defaults are minutes, hours, or days. These addresses publish
+# a different unit, and the same address is not reused for another unit.
+_DISPLAY_UNITS: Final[dict[tuple[str, int, int], str]] = {
+    ("CLEANING_TIME", 2, 6): _SECONDS,
+    ("CLEANING_TIME", 2, 7): _SECONDS,
+    ("DETERGENT_TIME_LEFT", 18, 4): _HOURS,
+    ("MAIN_BRUSH_TIME_LEFT", 8, 1): _DAYS,
+    ("SIDE_BRUSH_TIME_LEFT", 9, 1): _DAYS,
+    ("FILTER_TIME_LEFT", 10, 1): _DAYS,
+    ("MOP_PAD_TIME_LEFT", 11, 1): _DAYS,
+}
 # Populated when a mapped action's spec publishes input piids. Empty means none.
 _ACTION_INPUTS: Final[dict[tuple[str, int, int], frozenset[int]]] = {}
 _UNKNOWN_FAULT_NAME: Final = "unknown"
@@ -190,6 +204,9 @@ class XiaomiModel:
     should_correct_docked_activity: bool = True
     controls: tuple[XiaomiControl, ...] = ()
     fault_names: dict[int, str] | None = None
+    map_address: tuple[int, int] | None = None
+    # siid, aiid, and the piid that carries the room-id string.
+    room_sweep: tuple[int, int, int] | None = None
 
     def convert_incoming(self, property_name: str, value: object) -> object:
         """Map a raw property value into the Dreame value domain."""
@@ -454,6 +471,29 @@ def regional_variant(
     )
 
 
+def display_unit(device: object, property_name: str) -> str | None:
+    """Return the spec unit when the Dreame sensor default would mislabel it."""
+    if not isinstance(device, _HasPropertyCodec):
+        return None
+    codec = device._property_codec
+    if not isinstance(codec, XiaomiModel):
+        return None
+    mapping = codec.property_overrides.get(property_name)
+    if mapping is None:
+        return None
+    return _DISPLAY_UNITS.get((property_name, mapping["siid"], mapping["piid"]))
+
+
+def mapped_property(device: object, name: str) -> bool:
+    """Return whether the installed codec publishes this Dreame property name."""
+    if not isinstance(device, _HasPropertyCodec):
+        return False
+    codec = device._property_codec
+    if not isinstance(codec, XiaomiModel):
+        return False
+    return name in codec.property_overrides
+
+
 def controls_of(device: object) -> tuple[XiaomiControl, ...]:
     """Return the controls installed on a device, or none for other families."""
     if not isinstance(device, _HasPropertyCodec):
@@ -549,7 +589,19 @@ def _assign_robot_type(capability: object, names: frozenset[str]) -> None:
     vars(capability)["robot_type"] = chosen
 
 
+@runtime_checkable
+class _ListedCapability(Protocol):
+    """Capability flags copied into the published list."""
+
+    custom_cleaning_mode: bool
+    cruising: bool
+    map: bool
+    walls: bool
+
+
 def _rebuild_capability_list(capability: object) -> None:
+    if not isinstance(capability, _ListedCapability):
+        return
     state = vars(capability)
     names = [
         key

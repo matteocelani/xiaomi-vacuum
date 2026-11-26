@@ -64,8 +64,14 @@ def release_device(device: object) -> None:
     disconnect = getattr(device, "disconnect", None)
     if disconnect is not None:
         disconnect()
-    for name in ("_update_timer", "_keep_alive_timer", "_callback_timer"):
-        timer = getattr(device, name, None)
+    timers = [
+        getattr(device, name, None)
+        for name in ("_update_timer", "_keep_alive_timer", "_callback_timer")
+    ]
+    manager = getattr(device, "_map_manager", None)
+    if manager is not None:
+        timers.append(getattr(manager, "_update_timer", None))
+    for timer in timers:
         thread = getattr(timer, "_thread", None) if timer is not None else None
         if thread is not None:
             thread.join(timeout=2)

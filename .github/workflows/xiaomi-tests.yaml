@@ -23,6 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install \
             ruff \
+            "mypy==2.4.1" \
             pytest \
             pytest-asyncio \
             hypothesis \
@@ -37,5 +38,7 @@ jobs:
         run: |
           ruff check tests custom_components/xiaomi_robot_vacuum/xiaomi custom_components/xiaomi_robot_vacuum/xiaomi_controls.py custom_components/xiaomi_robot_vacuum/dreame/family_codec.py
           ruff format --check tests custom_components/xiaomi_robot_vacuum/xiaomi custom_components/xiaomi_robot_vacuum/xiaomi_controls.py custom_components/xiaomi_robot_vacuum/dreame/family_codec.py
+      - name: Mypy on the Xiaomi package
+        run: mypy
       - name: Pytest
         run: python -m pytest

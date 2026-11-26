@@ -319,6 +319,20 @@ from .map import DreameMapVacuumMapManager, DreameVacuumMapDecoder
 _LOGGER = logging.getLogger(__name__)
 
 
+def _code_is_success(code: object) -> bool:
+    """Return whether a property result code means the value is present."""
+    if isinstance(code, bool) or code is None:
+        return False
+    if code == 0:
+        return True
+    if isinstance(code, str):
+        try:
+            return int(code) == 0
+        except ValueError:
+            return False
+    return False
+
+
 class DreameVacuumDevice:
     """Support for Dreame Vacuum"""
 
@@ -523,7 +537,7 @@ class DreameVacuumDevice:
             auth_key,
         )
         self._install_configured_family()
-        if self._protocol.cloud and self._wants_map_manager():
+        if self._wants_map_manager():
             self._map_manager = DreameMapVacuumMapManager(self._protocol)
             self._map_manager.action_mapping = self.action_mapping
             self._map_manager.property_mapping = self.property_mapping
@@ -599,17 +613,29 @@ class DreameVacuumDevice:
         changed = False
         callbacks = []
         for prop in properties:
-            if not isinstance(prop, dict):
+            if not isinstance(prop, dict) or "did" not in prop or "code" not in prop:
                 continue
-            did = int(prop["did"])
+            try:
+                did = int(prop["did"])
+            except (TypeError, ValueError):
+                continue
             if did not in DreameVacuumProperty._value2member_map_:
-                did = DID(prop["siid"], prop["piid"], self.property_mapping)
-                if did is None:
+                siid = prop.get("siid")
+                piid = prop.get("piid")
+                if (
+                    isinstance(siid, bool)
+                    or isinstance(piid, bool)
+                    or not isinstance(siid, int)
+                    or not isinstance(piid, int)
+                ):
                     continue
-                did = int(did.value)
+                mapped = DID(siid, piid, self.property_mapping)
+                if mapped is None:
+                    continue
+                did = int(mapped.value)
             if did in UNUSED_PROPERTIES:
                 continue
-            if prop["code"] == 0 and "value" in prop:
+            if _code_is_success(prop.get("code")) and "value" in prop:
                 value = prop["value"]
                 if self._property_codec is not None:
                     value = self._property_codec.convert_incoming(
@@ -653,14 +679,14 @@ class DreameVacuumDevice:
                     )
                     if not custom_property:
                         if current_value is not None:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "Property %s Changed: %s -> %s",
                                 DreameVacuumProperty(did).name,
                                 current_value,
                                 value,
                             )
                         else:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "Property %s Added: %s",
                                 DreameVacuumProperty(did).name,
                                 value,
@@ -883,7 +909,7 @@ class DreameVacuumDevice:
         results = []
         for batch in batches:
             result = self._protocol.get_properties(batch, timeout=(10 if len(batches) > 1 else None))
-            if result is None:
+            if not isinstance(result, list):
                 raise DeviceException(key="device_unavailable") from None
             results.extend(result)
 
@@ -1497,21 +1523,26 @@ class DreameVacuumDevice:
         current_faults = self.status.faults.copy()
         faults = self.get_property(DreameVacuumProperty.FAULTS)
         if faults and faults != "" and faults != " " and faults != 0 and faults != "0":
-            try:
-                faults = str(faults).split(",")
-                self.status.faults = [
-                    int(fault)
-                    for fault in faults
-                    if int(fault) in DreameVacuumErrorCode._value2member_map_
-                    and int(fault) != DreameVacuumErrorCode.NO_ERROR.value
-                    and int(fault) != DreameVacuumErrorCode.UNKNOWN_ERROR.value
-                    and int(fault) != DreameVacuumErrorCode.UNKNOWN_WARNING.value
-                    and (int(fault) != DreameVacuumErrorCode.BATTERY_LOW.value or not self.status.charging)
-                    and (int(fault) != DreameVacuumErrorCode.REMOVE_MOP.value or not self.capability.self_wash_base)
-                ]
-            except Exception as ex:
-                self.status.faults = []
-                _LOGGER.warning("Failed to parse faults: %s", ex)
+            parsed: list[int] = []
+            for fault in str(faults).split(","):
+                token = fault.strip()
+                if not token:
+                    continue
+                try:
+                    code = int(token)
+                except (TypeError, ValueError):
+                    continue
+                if (
+                    code not in DreameVacuumErrorCode._value2member_map_
+                    or code == DreameVacuumErrorCode.NO_ERROR.value
+                    or code == DreameVacuumErrorCode.UNKNOWN_ERROR.value
+                    or code == DreameVacuumErrorCode.UNKNOWN_WARNING.value
+                    or (code == DreameVacuumErrorCode.BATTERY_LOW.value and self.status.charging)
+                    or (code == DreameVacuumErrorCode.REMOVE_MOP.value and self.capability.self_wash_base)
+                ):
+                    continue
+                parsed.append(code)
+            self.status.faults = parsed
         else:
             self.status.faults = []
 
@@ -1572,7 +1603,7 @@ class DreameVacuumDevice:
                     current_value = self.ai_data.get(prop.name)
                     if current_value != value:
                         if current_value is not None:
-                            _LOGGER.info(
+                            _LOGGER.debug(
                                 "AI Property %s Changed: %s -> %s",
                                 prop.name,
                                 current_value,
@@ -1584,7 +1615,7 @@ class DreameVacuumDevice:
                             ):
                                 self._map_property_changed(current_value)
                         else:
-                            _LOGGER.info("AI Property %s Added: %s", prop.name, value)
+                            _LOGGER.debug("AI Property %s Added: %s", prop.name, value)
                         changed = True
                         self.ai_data[prop.name] = value
         elif isinstance(ai_value, int):
@@ -1612,7 +1643,7 @@ class DreameVacuumDevice:
                 current_value = self.ai_data.get(prop.name)
                 if current_value != value:
                     if current_value is not None:
-                        _LOGGER.info(
+                        _LOGGER.debug(
                             "AI Property %s Changed: %s -> %s",
                             prop.name,
                             current_value,
@@ -1624,7 +1655,7 @@ class DreameVacuumDevice:
                         ):
                             self._map_property_changed(current_value)
                     else:
-                        _LOGGER.info("AI Property %s Added: %s", prop.name, value)
+                        _LOGGER.debug("AI Property %s Added: %s", prop.name, value)
                     changed = True
                     self.ai_data[prop.name] = value
 
@@ -1689,14 +1720,14 @@ class DreameVacuumDevice:
                                     self._previous_cleangenius = value
 
                             if current_value is not None:
-                                _LOGGER.info(
+                                _LOGGER.debug(
                                     "Property %s Changed: %s -> %s",
                                     prop.name,
                                     current_value,
                                     value,
                                 )
                             else:
-                                _LOGGER.info("Property %s Added: %s", prop.name, value)
+                                _LOGGER.debug("Property %s Added: %s", prop.name, value)
                             changed = True
                             self.auto_switch_data[prop.name] = value
 
@@ -2757,7 +2788,8 @@ class DreameVacuumDevice:
 
             self._last_update_failed = None
 
-            if self.device_connected and self._protocol.cloud is not None and (not self._ready or not self.available):
+            # A token-only Dreame has no cloud client. REQUEST_MAP is local.
+            if self.device_connected and (not self._ready or not self.available):
                 if self._map_manager:
                     self._map_manager.set_update_interval(self._map_update_interval)
                     self._map_manager.set_device_running(
@@ -3397,6 +3429,8 @@ class DreameVacuumDevice:
         Map manager does not need any device property for parsing and storing map data but map renderer does.
         For example if device is running but not mopping renderer does not show no mopping areas and this function handles that so renderer does not need device data too.
         """
+        if map_data and self._map_manager is None:
+            return map_data
         if map_data:
             map_data = self._map_manager.optimizer.optimize(
                 map_data,
@@ -3786,6 +3820,7 @@ class DreameVacuumDevice:
                 return self._map_manager.selected_map
             if map_index == 0:
                 return self.status.current_map
+        return getattr(self.status, "_xiaomi_map", None) if map_index in (0, 1) else None
 
     def update_map(self) -> None:
         """Trigger a map update.
@@ -4758,7 +4793,7 @@ class DreameVacuumDevice:
         self.schedule_update(10, True)
 
         current_map = copy.deepcopy(self.status.current_map)
-        if current_map and not self.status.started:
+        if current_map and not self.status.started and self._map_manager:
             self._map_manager.editor.clear_path()
 
         resume_paused = bool(self.status.paused)
@@ -4964,13 +4999,13 @@ class DreameVacuumDevice:
 
         properties = self.get_status_properties()
         current_map = copy.deepcopy(self.status.current_map)
-        if current_map:
+        if current_map and self._map_manager:
             self._map_manager.editor.set_cruise_points([])
 
         if self.status.started or (not self.status.started and self.status.returning_paused):
             self._update_property(DreameVacuumProperty.TASK_STATUS, DreameVacuumTaskStatus.COMPLETED.value)
             # Clear active segments on current map data
-            if current_map:
+            if current_map and self._map_manager:
                 self._map_manager.editor.set_active_segments([])
 
         if not self.status.docked:
@@ -5339,6 +5374,14 @@ class DreameVacuumDevice:
 
     def go_to(self, x, y) -> dict[str, Any] | None:
         """Go to a point and take pictures around."""
+        if (
+            isinstance(x, bool)
+            or isinstance(y, bool)
+            or not isinstance(x, int)
+            or not isinstance(y, int)
+        ):
+            raise InvalidActionException(key="coordinate_outside_map", x=x, y=y)
+
         if self.status.draining or self.status.self_repairing:
             raise UnavailableException(key="unavailable_while_draining")
 
@@ -5515,6 +5558,11 @@ class DreameVacuumDevice:
 
     def start_shortcut(self, shortcut_id: int) -> dict[str, Any] | None:
         """Start shortcut job."""
+        if isinstance(shortcut_id, bool) or not isinstance(shortcut_id, int):
+            raise InvalidActionException(
+                key="invalid_value", parameter="shortcut_id", value=shortcut_id
+            )
+
         if not self.capability.shortcuts and not self.status.shortcuts:
             raise NotSupportedException(feature="shortcuts")
 
@@ -8243,6 +8291,18 @@ _NAMED_ATTRIBUTES = {
 }
 
 
+def _optional_code(value: object) -> int | None:
+    """Return an integer reading, or None when it is missing or not numeric."""
+    if isinstance(value, bool) or value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
 class DreameVacuumDeviceStatus:
     """Helper class for device status and int enum type properties.
     This class is used for determining various states of the device by its properties.
@@ -8348,20 +8408,28 @@ class DreameVacuumDeviceStatus:
     @property
     def battery_level(self) -> int:
         """Return battery level of the device."""
-        battery_level = self._get_property(DreameVacuumProperty.BATTERY_LEVEL)
-        return int(battery_level) if battery_level else 100
+        battery_level = _optional_code(self._get_property(DreameVacuumProperty.BATTERY_LEVEL))
+        # Zero is empty. Only a missing or non-numeric reading falls back to full.
+        if battery_level is None:
+            return 100
+        return battery_level
 
     @property
     def battery_charge_level(self) -> int:
         """Return max battery charge level of the device."""
-        battery_charge_level = self._get_property(DreameVacuumProperty.BATTERY_CHARGE_LEVEL)
-        return int(battery_charge_level) if battery_charge_level else 100
+        battery_charge_level = _optional_code(
+            self._get_property(DreameVacuumProperty.BATTERY_CHARGE_LEVEL)
+        )
+        # Zero is a real target. Only a missing or non-numeric reading falls back to full.
+        if battery_charge_level is None:
+            return 100
+        return battery_charge_level
 
     @property
     def volume(self) -> int:
         """Return sound volume level of the device."""
-        volume = self._get_property(DreameVacuumProperty.VOLUME)
-        return int(volume) if volume else 0
+        volume = _optional_code(self._get_property(DreameVacuumProperty.VOLUME))
+        return volume if volume is not None else 0
 
     @property
     def suction_level(self) -> DreameVacuumSuctionLevel:
@@ -8633,7 +8701,7 @@ class DreameVacuumDeviceStatus:
         if self.has_error:
             return DreameVacuumState.ERROR
 
-        value = self._get_property(DreameVacuumProperty.STATE)
+        value = _optional_code(self._get_property(DreameVacuumProperty.STATE))
         if value == 0:
             value = DreameVacuumState.CHARGING_COMPLETED.value
         if (
@@ -11315,12 +11383,21 @@ class DreameVacuumDeviceStatus:
 
         attributes[ATTR_HAS_ERROR] = self.has_error
         if self.faults is not None:
-            attributes[ATTR_FAULTS] = {
-                int(fault): ERROR_CODE_TO_ERROR_NAME.get(DreameVacuumErrorCode(fault), STATE_UNKNOWN)
-                .replace("_", " ")
-                .capitalize()
-                for fault in self.faults
-            }
+            fault_names: dict[int, str] = {}
+            for fault in self.faults:
+                try:
+                    code = int(fault)
+                except (TypeError, ValueError):
+                    continue
+                try:
+                    error = DreameVacuumErrorCode(code)
+                except ValueError:
+                    fault_names[code] = STATE_UNKNOWN.replace("_", " ").capitalize()
+                    continue
+                fault_names[code] = (
+                    ERROR_CODE_TO_ERROR_NAME.get(error, STATE_UNKNOWN).replace("_", " ").capitalize()
+                )
+            attributes[ATTR_FAULTS] = fault_names
 
         if self._capability.lidar_navigation:
             attributes[ATTR_MAPPING] = self.fast_mapping

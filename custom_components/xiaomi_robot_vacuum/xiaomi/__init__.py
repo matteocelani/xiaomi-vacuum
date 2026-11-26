@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from .controls import XiaomiControl, invoke_control, read_control, write_control
+from .dnd import set_dnd
 from .exceptions import XiaomiControlException
 from .mapping import resolve_family
 from .model import (
@@ -49,7 +50,10 @@ from .model import (
     MODEL_X20_PRO,
     control_keys,
     controls_of,
+    display_unit,
+    mapped_property,
 )
+from .room import clean_rooms, supports_room_clean
 
 __all__ = [
     "MODEL_E5",
@@ -95,10 +99,15 @@ __all__ = [
     "MODEL_X20_PRO",
     "XiaomiControl",
     "XiaomiControlException",
+    "clean_rooms",
     "control_keys",
     "controls_of",
+    "display_unit",
     "invoke_control",
+    "mapped_property",
     "read_control",
     "resolve_family",
+    "set_dnd",
+    "supports_room_clean",
     "write_control",
 ]

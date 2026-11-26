@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from typing import Any
+import inspect
 import re
 import voluptuous as vol
 from collections.abc import Mapping
@@ -63,6 +64,35 @@ def _key_of(keys: dict[str, str], name: str | None) -> str:
     return next(iter(keys))
 
 
+def _reauth_entry(flow: ConfigFlow) -> ConfigEntry:
+    """The entry being reauthenticated, on 2024.2 and on current core."""
+    getter = getattr(flow, "_get_reauth_entry", None)
+    if callable(getter):
+        return getter()
+    entry = flow.hass.config_entries.async_get_entry(flow.context["entry_id"])
+    if entry is None:
+        raise AbortFlow("reauth_unsuccessful")
+    return entry
+
+
+def _complete_reauth(flow: ConfigFlow, updates: Mapping[str, Any]) -> FlowResult:
+    """Save reauth data. 2024.2 has no helper; 2024.10 has no data_updates."""
+    entry = _reauth_entry(flow)
+    helper = getattr(flow, "async_update_reload_and_abort", None)
+    if callable(helper) and "data_updates" in inspect.signature(helper).parameters:
+        return helper(entry, data_updates=dict(updates))
+    data = {**entry.data, **updates}
+    if callable(helper):
+        return helper(entry, data=data)
+    flow.hass.config_entries.async_update_entry(entry, data=data)
+    schedule = getattr(flow.hass.config_entries, "async_schedule_reload", None)
+    if callable(schedule):
+        schedule(entry.entry_id)
+    else:
+        flow.hass.async_create_task(flow.hass.config_entries.async_reload(entry.entry_id))
+    return flow.async_abort(reason="reauth_successful")
+
+
 ACCOUNT_TYPE_DREAME = "dreame"
 ACCOUNT_TYPE_MOVA = "mova"
 ACCOUNT_TYPE_MI = "mi"
@@ -76,6 +106,30 @@ ACCOUNT_TYPES = [
     ACCOUNT_TYPE_TROUVER,
     ACCOUNT_TYPE_LOCAL,
 ]
+
+
+def _token_is_hex32(token: object) -> bool:
+    """Return whether this is a 16-byte miIO token written as hex."""
+    if not isinstance(token, str) or len(token) != 32:
+        return False
+    try:
+        bytes.fromhex(token)
+    except ValueError:
+        return False
+    return True
+
+
+def _token_was_rejected(exc: BaseException) -> bool:
+    """Return whether the robot answered and refused the token."""
+    current: BaseException | None = exc
+    for _depth in range(6):
+        if current is None:
+            return False
+        text = str(current).lower()
+        if "invalid token" in text or "checksum error" in text:
+            return True
+        current = current.__cause__
+    return False
 
 
 class DreameVacuumOptionsFlowHandler(OptionsFlow):
@@ -101,7 +155,7 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
             }
             return self.async_create_entry(title="", data={**stored, **user_input})
 
-        notify = self._config_entry.options[CONF_NOTIFY]
+        notify = self._config_entry.options.get(CONF_NOTIFY, [])
         if isinstance(notify, bool):
             if notify is True:
                 notify = NOTIFICATION
@@ -113,12 +167,15 @@ class DreameVacuumOptionsFlowHandler(OptionsFlow):
                 vol.Required(CONF_NOTIFY, default=notify): SelectSelector(SelectSelectorConfig(options=NOTIFICATION, multiple=True, translation_key='notifications')),
             }
         )
-        if self._config_entry.data[CONF_USERNAME]:
+        if self._config_entry.data.get(CONF_USERNAME):
             data_schema = data_schema.extend(
                 {
                     vol.Required(
                         CONF_COLOR_SCHEME,
-                        default=_key_of(COLOR_SCHEME_KEYS, self._config_entry.options[CONF_COLOR_SCHEME]),
+                        default=_key_of(
+                            COLOR_SCHEME_KEYS,
+                            self._config_entry.options.get(CONF_COLOR_SCHEME),
+                        ),
                     ): SelectSelector(
                         SelectSelectorConfig(options=list(COLOR_SCHEME_KEYS), translation_key="color_scheme")
                     ),
@@ -248,6 +305,8 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
     async def async_step_connect(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Connect to a Dreame Vacuum device."""
         error = None
+        if not (self.username and self.password) and not _token_is_hex32(self.token):
+            return await self.async_step_local(error="wrong_token")
         if self.prefer_cloud or (self.token and len(self.token) == 32):
             try:
                 if (
@@ -276,13 +335,13 @@ class DreameVacuumFlowHandler(ConfigFlow, domain=DOMAIN):
                         self.model = info["model"]
 
                     self.protocol.disconnect()
-            except:
-                error = "cannot_connect"
+            except Exception as exc:
+                error = "wrong_token" if _token_was_rejected(exc) else "cannot_connect"
             else:
                 if self.reauth:
-                    return self.async_update_reload_and_abort(
-                        self._get_reauth_entry(),
-                        data_updates={
+                    return _complete_reauth(
+                        self,
+                        {
                             CONF_USERNAME: self.username,
                             CONF_PASSWORD: self.password,
                             CONF_HOST: self.host,

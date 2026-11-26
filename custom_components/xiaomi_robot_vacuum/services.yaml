@@ -59,6 +59,52 @@ xiaomi_add_schedule:
       selector:
         boolean:
 
+xiaomi_set_dnd:
+  target:
+    entity:
+      integration: xiaomi_robot_vacuum
+      domain: vacuum
+  fields:
+    enable:
+      required: true
+      selector:
+        boolean:
+    start_hour:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 23
+          mode: box
+    start_minute:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 59
+          mode: box
+    end_hour:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 23
+          mode: box
+    end_minute:
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 59
+          mode: box
+    timezone:
+      required: false
+      selector:
+        number:
+          min: -99999
+          max: 99999
+          mode: box
+
 vacuum_clean_segment:
   target:
     entity:
@@ -483,7 +529,7 @@ vacuum_reset_consumable:
             - "detergent"
             - "squeegee"
             - "onboard_dirty_water_tank"
-            - "dirty_water_tank"
+            - "dirty_water_channel"
             - "deodorizer"
             - "wheel"
             - "scale_inhibitor"

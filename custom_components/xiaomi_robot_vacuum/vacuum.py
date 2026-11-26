@@ -60,6 +60,7 @@ from .const import (
     CONSUMABLE_ROLLER_MOP_FILTER,
     CONSUMABLE_WATER_OUTLET_FILTER,
 )
+from .xiaomi import clean_rooms, set_dnd, supports_room_clean
 
 try:
     from homeassistant.components.vacuum import Segment
@@ -929,6 +930,19 @@ async def async_setup_entry(
         DreameVacuum.async_xiaomi_add_schedule.__name__,
     )
 
+    platform.async_register_entity_service(
+        "xiaomi_set_dnd",
+        {
+            vol.Required("enable"): cv.boolean,
+            vol.Required("start_hour"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+            vol.Required("start_minute"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+            vol.Required("end_hour"): vol.All(vol.Coerce(int), vol.Range(min=0, max=23)),
+            vol.Required("end_minute"): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+            vol.Optional("timezone"): vol.All(vol.Coerce(int), vol.Range(min=-99999, max=99999)),
+        },
+        DreameVacuum.async_xiaomi_set_dnd.__name__,
+    )
+
     activity_class = None
     ## For backwards compatibility
     try:
@@ -1027,6 +1041,7 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
         else:
             self._attr_icon = "mdi:robot-vacuum"
 
+        suction_level = self.device.status.suction_level
         if (
             not (
                 self.device.status
@@ -1037,15 +1052,19 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
                 )
             )
             and not self.device.status.suction_unavailable
+            and suction_level not in (None, DreameVacuumSuctionLevel.UNKNOWN)
         ):
             self._attr_supported_features = self._attr_supported_features | VacuumEntityFeature.FAN_SPEED
-            self._attr_fan_speed = self.device.status.suction_level.name.lower().replace("quiet", "silent")
+            self._attr_fan_speed = suction_level.name.lower().replace("quiet", "silent")
             self._attr_fan_speed_list = [
                 level.name.lower().replace("quiet", "silent")
                 for level in DreameVacuumSuctionLevel
                 if level != DreameVacuumSuctionLevel.UNKNOWN
             ]
         else:
+            self._attr_supported_features = (
+                self._attr_supported_features & ~VacuumEntityFeature.FAN_SPEED
+            )
             self._attr_fan_speed = None
             self._attr_fan_speed_list = []
 
@@ -1142,6 +1161,15 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
     async def async_clean_segment(self, segments, repeats=1, suction_level="", water_volume="") -> None:
         """Clean selected segments."""
+        if supports_room_clean(self.device):
+            room_ids = segments if isinstance(segments, list) else [segments]
+            await self._try_command(
+                "Unable to call clean_segment: %s",
+                clean_rooms,
+                self.device,
+                room_ids,
+            )
+            return
         self._require_targeted_clean()
         await self._try_command(
             "Unable to call clean_segment: %s",
@@ -1400,6 +1428,21 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
         await self.hass.async_add_executor_job(_call)
 
+    async def async_xiaomi_set_dnd(self, **fields: object) -> None:
+        """Set do-not-disturb through the sweep-family disturb action."""
+
+        def _call() -> None:
+            from homeassistant.exceptions import HomeAssistantError
+
+            from .xiaomi.exceptions import XiaomiControlException
+
+            try:
+                set_dnd(self.device, fields)
+            except XiaomiControlException as error:
+                raise HomeAssistantError(str(error)) from error
+
+        await self.hass.async_add_executor_job(_call)
+
     async def async_rename_map(self, map_id, map_name="") -> None:
         """Rename a map"""
         await self._try_command(
@@ -1618,13 +1661,22 @@ class DreameVacuum(DreameVacuumEntity, StateVacuumEntity):
 
     async def async_reset_consumable(self, consumable: str) -> None:
         """Reset consumable"""
-        action = CONSUMABLE_RESET_ACTION.get(consumable)
-        if action:
-            await self._try_command(
-                "Unable to call reset_consumable: %s",
-                self.device.call_action,
-                action,
-            )
+
+        def _reset() -> None:
+            from .xiaomi.consumable import reset_published_consumable
+            from .xiaomi.exceptions import XiaomiControlException
+
+            try:
+                handled = reset_published_consumable(self.device, consumable)
+            except XiaomiControlException as error:
+                raise InvalidActionException(key="unknown_action") from error
+            if handled:
+                return
+            action = CONSUMABLE_RESET_ACTION.get(consumable)
+            if action:
+                self.device.call_action(action)
+
+        await self._try_command("Unable to call reset_consumable: %s", _reset)
 
     async def async_rename_shortcut(self, shortcut_id, shortcut_name) -> None:
         """Rename a shortcut"""

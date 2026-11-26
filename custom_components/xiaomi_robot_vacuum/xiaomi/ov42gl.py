@@ -38,6 +38,7 @@ H50_PRO: Final = XiaomiModel(
     action_overrides=compose_addresses(STATION_ACTIONS),
     state_by_wire=compose_codes(EXTENDED_STATION_STATES),
     task_by_wire=compose_codes(EXTENDED_STATION_TASKS),
+    room_sweep=(2, 16, 15),
     controls=compose_controls(
         EXTENDED_STATION_CONTROLS,
         S40_CLASS_CONTROLS + _ADDED_CONTROLS,

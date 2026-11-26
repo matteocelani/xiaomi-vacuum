@@ -1524,9 +1524,17 @@ class DreameMapVacuumMapManager:
                             "Need map request: %.2f",
                             time.time() - (self._current_timestamp_ms / 1000.0),
                         )
-                    if self._protocol.cloud.logged_in:
+                    cloud = self._protocol.cloud
+                    if cloud is not None and cloud.logged_in:
                         self._request_current_map()
-                elif not self._request_map_from_cloud() and self._device_running:
+                    elif cloud is None and self._map_data is None:
+                        # REQUEST_MAP is a local action. A token-only device has no cloud client.
+                        self._request_i_map()
+                elif (
+                    self._protocol.cloud is not None
+                    and not self._request_map_from_cloud()
+                    and self._device_running
+                ):
                     _LOGGER.debug("No new map data received, retrying")
                     sleep(1)
                     if not self._request_map_from_cloud():
@@ -4241,7 +4249,19 @@ class DreameVacuumMapDecoder:
         return segments, areas
 
     @staticmethod
+    def _optional_int(value: object) -> int | None:
+        """Return an int, or None when a corrupt map field is not numeric."""
+        if isinstance(value, bool) or not isinstance(value, (int, float, str)):
+            return None
+        try:
+            return int(value)
+        except ValueError:
+            return None
+
+    @staticmethod
     def decode_map_partial(raw_data, version=1, iv=None, key=None) -> MapDataPartial | None:
+        if not isinstance(raw_data, str) or not raw_data:
+            return None
         raw_map = raw_data.replace("_", "/").replace("-", "+")
 
         if len(raw_map) < 3:
@@ -4252,7 +4272,10 @@ class DreameVacuumMapDecoder:
             key = values[1]
             raw_map = values[0]
 
-        raw_map = base64.decodebytes(raw_map.encode("utf8"))
+        try:
+            raw_map = base64.decodebytes(raw_map.encode("utf8"))
+        except ValueError:
+            return None
 
         if key is not None:
             if iv is None:
@@ -4307,6 +4330,7 @@ class DreameVacuumMapDecoder:
                 ):
                     version = 3
 
+                partial_map.version = version
                 partial_map.data_json = data_json
             except Exception as ex:
                 _LOGGER.warning("Failed to parse data: %s", ex)
@@ -4327,7 +4351,10 @@ class DreameVacuumMapDecoder:
 
     @staticmethod
     def decode_saved_map(raw_map: str, map_version: int = 1, rotation: int = 0, iv: str = None) -> MapData | None:
-        return DreameVacuumMapDecoder.decode_map(raw_map, map_version, rotation, iv)[0]
+        decoded = DreameVacuumMapDecoder.decode_map(raw_map, map_version, rotation, iv)
+        if not isinstance(decoded, tuple):
+            return None
+        return decoded[0]
 
     @staticmethod
     def decode_map_data_from_partial(partial_map: MapDataPartial, rotation: int = 0) -> MapData | None:
@@ -4389,24 +4416,34 @@ class DreameVacuumMapDecoder:
 
             if map_data.frame_type != MapFrameType.W.value:
                 if "mra" in data_json:
-                    map_data.rotation = int(data_json["mra"])
+                    rotation_value = DreameVacuumMapDecoder._optional_int(data_json["mra"])
+                    if rotation_value is not None:
+                        map_data.rotation = rotation_value
 
                 if "cs" in data_json:
-                    map_data.cleaned_area = int(data_json["cs"])
+                    cleaned_area = DreameVacuumMapDecoder._optional_int(data_json["cs"])
+                    if cleaned_area is not None:
+                        map_data.cleaned_area = cleaned_area
 
                 if "ct" in data_json:
-                    value = data_json["ct"]
-                    if isinstance(value, int) or isinstance(value, float) or isinstance(value, str):
-                        map_data.cleaning_time = int(value)
+                    cleaning_time = DreameVacuumMapDecoder._optional_int(data_json["ct"])
+                    if cleaning_time is not None:
+                        map_data.cleaning_time = cleaning_time
 
                 if "wm" in data_json:
-                    map_data.work_status = int(data_json["wm"])
+                    work_status = DreameVacuumMapDecoder._optional_int(data_json["wm"])
+                    if work_status is not None:
+                        map_data.work_status = work_status
 
                 if "cf" in data_json:
                     map_data.completed = bool(data_json["cf"] == 1)
 
                 if "clean_finish_remain_electricity" in data_json:
-                    map_data.remaining_battery = int(data_json["clean_finish_remain_electricity"])
+                    remaining_battery = DreameVacuumMapDecoder._optional_int(
+                        data_json["clean_finish_remain_electricity"]
+                    )
+                    if remaining_battery is not None:
+                        map_data.remaining_battery = remaining_battery
 
                 map_data.customized_cleaning = data_json.get("customeClean")
                 map_data.docked = bool("oc" in data_json and data_json["oc"])
@@ -4438,9 +4475,13 @@ class DreameVacuumMapDecoder:
                         else CleanupMethod.OTHER
                     )
                 if "ds" in data_json:
-                    map_data.dust_collection_count = int(data_json.get("ds", 0))
+                    dust_collection_count = DreameVacuumMapDecoder._optional_int(data_json.get("ds", 0))
+                    if dust_collection_count is not None:
+                        map_data.dust_collection_count = dust_collection_count
                 if "wt" in data_json:
-                    map_data.mop_wash_count = int(data_json.get("wt", 0))
+                    mop_wash_count = DreameVacuumMapDecoder._optional_int(data_json.get("wt", 0))
+                    if mop_wash_count is not None:
+                        map_data.mop_wash_count = mop_wash_count
                 map_data.multiple_cleaning_time = data_json.get("multime")
                 map_data.dos = data_json.get("dos")
                 map_data.mopping_mode = data_json.get("mooClean")
@@ -4537,51 +4578,65 @@ class DreameVacuumMapDecoder:
                     data_json.get("combineaddcleanedarea")
                 )[0]
 
-                if data_json.get("da2"):
-                    if data_json["da2"].get("areas"):
-                        map_data.active_areas = []
-                        for area in data_json["da2"]["areas"]:
-                            x_coords = sorted([area[0], area[2]])
-                            y_coords = sorted([area[1], area[3]])
-                            map_data.active_areas.append(
-                                Area(
-                                    x_coords[0],
-                                    y_coords[0],
-                                    x_coords[1],
-                                    y_coords[0],
-                                    x_coords[1],
-                                    y_coords[1],
-                                    x_coords[0],
-                                    y_coords[1],
-                                )
+                if isinstance(data_json.get("da2"), dict) and data_json["da2"].get("areas"):
+                    map_data.active_areas = []
+                    for area in data_json["da2"]["areas"]:
+                        if not isinstance(area, (list, tuple)) or len(area) < 4:
+                            continue
+                        x_coords = sorted([area[0], area[2]])
+                        y_coords = sorted([area[1], area[3]])
+                        map_data.active_areas.append(
+                            Area(
+                                x_coords[0],
+                                y_coords[0],
+                                x_coords[1],
+                                y_coords[0],
+                                x_coords[1],
+                                y_coords[1],
+                                x_coords[0],
+                                y_coords[1],
                             )
+                        )
 
                 if data_json.get("sp"):
                     map_data.active_points = []
                     for point in data_json["sp"]:
+                        if not isinstance(point, (list, tuple)) or len(point) < 2:
+                            continue
                         map_data.active_points.append(Point(point[0], point[1]))
 
                 if "cleanset" in data_json:
                     map_data.cleanset = data_json["cleanset"]
                     if isinstance(map_data.cleanset, str):
-                        map_data.cleanset = json.loads(map_data.cleanset)
-                    map_data.sequence = True
+                        try:
+                            map_data.cleanset = json.loads(map_data.cleanset)
+                        except json.JSONDecodeError:
+                            map_data.cleanset = None
+                    if map_data.cleanset is not None:
+                        map_data.sequence = True
 
                 if "carpetcleanset" in data_json:
                     map_data.carpet_cleanset = data_json["carpetcleanset"]
                     if isinstance(map_data.carpet_cleanset, str):
-                        map_data.carpet_cleanset = json.loads(map_data.carpet_cleanset)
+                        try:
+                            map_data.carpet_cleanset = json.loads(map_data.carpet_cleanset)
+                        except json.JSONDecodeError:
+                            map_data.carpet_cleanset = None
 
                 if "cleanareaorder" in data_json:
-                    map_data.cleaning_sequence = {}
+                    ordered = []
                     for item in data_json["cleanareaorder"]:
-                        for k, v in item.items():
-                            map_data.cleaning_sequence[k] = v
+                        if not isinstance(item, dict):
+                            continue
+                        for key, value in item.items():
+                            index = DreameVacuumMapDecoder._optional_int(key)
+                            if index is None:
+                                break
+                            ordered.append((index, key, value))
                             break
-
-                    map_data.cleaning_sequence = dict(
-                        sorted(map_data.cleaning_sequence.items(), key=lambda item: int(item[0]))
-                    )
+                    map_data.cleaning_sequence = {
+                        key: value for _index, key, value in sorted(ordered)
+                    }
                     if map_data.version == 1:
                         map_data.version = 2
 
@@ -4737,10 +4792,15 @@ class DreameVacuumMapDecoder:
                         segments = DreameVacuumMapDecoder.get_segments(map_data)
                         segment_info = []
 
-                        if segments and "seg_inf" in data_json:
+                        if segments and isinstance(data_json.get("seg_inf"), dict):
                             seg_inf = data_json["seg_inf"]
                             for k, v in seg_inf.items():
-                                seg_id = int(k)
+                                if not isinstance(v, dict):
+                                    continue
+                                try:
+                                    seg_id = int(k)
+                                except (TypeError, ValueError):
+                                    continue
 
                                 segment_info.append(
                                     (seg_id, v.get("nei_id"), segments[seg_id].area if seg_id in segments else 0)
@@ -4760,7 +4820,10 @@ class DreameVacuumMapDecoder:
                                 if v.get("nei_id") is not None:
                                     target_seg.neighbors = v["nei_id"]
                                 if v.get("type") is not None:
-                                    target_seg.type = int(v["type"])
+                                    try:
+                                        target_seg.type = int(v["type"])
+                                    except (TypeError, ValueError):
+                                        pass
                                 if v.get("index") is not None:
                                     target_seg.index = v["index"]
                                 if v.get("roomID") is not None:
@@ -4785,10 +4848,14 @@ class DreameVacuumMapDecoder:
                                     else:
                                         target_seg.floor_material = DreameVacuumFloorMaterial.NONE.value
 
-                                if v.get(MAP_PARAMETER_NAME):
-                                    target_seg.custom_name = base64.b64decode(v.get(MAP_PARAMETER_NAME)).decode(
-                                        "utf-8"
-                                    )
+                                name = v.get(MAP_PARAMETER_NAME)
+                                if isinstance(name, str) and name:
+                                    try:
+                                        target_seg.custom_name = base64.b64decode(name, validate=True).decode("utf-8")
+                                    except (ValueError, UnicodeDecodeError):
+                                        # A literal unicode name is not base64. Keep it.
+                                        if not name.isascii():
+                                            target_seg.custom_name = name
 
                                 target_seg.visibility = (
                                     bool(seg_id not in map_data.hidden_segments)
@@ -5304,12 +5371,29 @@ class DreameVacuumMapDecoder:
 
                 DreameVacuumMapDecoder.set_obstacle_segment(map_data, map_data.laser_obstacles)
 
+            def _coordinate(value: object) -> float | None:
+                if isinstance(value, bool) or value is None:
+                    return None
+                if isinstance(value, (int, float)):
+                    return float(value)
+                if isinstance(value, str) and value.strip():
+                    try:
+                        return float(value)
+                    except ValueError:
+                        return None
+                return None
+
             def parse_areas(areas):
                 if areas is not None:
                     map_areas = []
                     for area in areas:
-                        x_coords = sorted([area[0], area[2]])
-                        y_coords = sorted([area[1], area[3]])
+                        if not isinstance(area, (list, tuple)) or len(area) < 4:
+                            continue
+                        coords = [_coordinate(area[index]) for index in range(4)]
+                        if any(item is None for item in coords):
+                            continue
+                        x_coords = sorted([coords[0], coords[2]])
+                        y_coords = sorted([coords[1], coords[3]])
                         map_areas.append(
                             Area(
                                 x_coords[0],
@@ -5335,15 +5419,22 @@ class DreameVacuumMapDecoder:
                             wall[3],
                         )
                         for wall in lines
+                        if isinstance(wall, (list, tuple)) and len(wall) >= 4
                     ]
 
             def parse_carpets(carpets):
                 if carpets is not None:
                     map_carpets = []
                     for carpet in carpets:
+                        if not isinstance(carpet, (list, tuple)) or len(carpet) < 4:
+                            continue
+                        try:
+                            carpet_id = int(carpet[4]) if len(carpet) > 4 else None
+                        except (TypeError, ValueError):
+                            carpet_id = None
                         map_carpets.append(
                             Carpet(
-                                int(carpet[4]) if len(carpet) > 4 else None,
+                                carpet_id,
                                 carpet[0],
                                 carpet[1],
                                 carpet[2],

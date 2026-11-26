@@ -736,6 +736,7 @@
       "water_volume": {
         "name": "Water Volume",
         "state": {
+          "off": "Off",
           "low": "Low",
           "medium": "Medium",
           "high": "High"
@@ -3665,6 +3666,36 @@
         "twice_clean": {
           "name": "Twice clean",
           "description": "Second cleaning pass. No model's add-ii action accepts this input, so the service rejects it."
+        }
+      }
+    },
+    "xiaomi_set_dnd": {
+      "name": "Set do not disturb",
+      "description": "Set do-not-disturb on a sweep-family robot. The clock properties are read-only. This calls set-notdisturb. A model without that action is rejected and nothing is sent.",
+      "fields": {
+        "enable": {
+          "name": "Enable",
+          "description": "Whether do-not-disturb is on."
+        },
+        "start_hour": {
+          "name": "Start hour",
+          "description": "Start hour from 0 to 23."
+        },
+        "start_minute": {
+          "name": "Start minute",
+          "description": "Start minute from 0 to 59."
+        },
+        "end_hour": {
+          "name": "End hour",
+          "description": "End hour from 0 to 23."
+        },
+        "end_minute": {
+          "name": "End minute",
+          "description": "End minute from 0 to 59."
+        },
+        "timezone": {
+          "name": "Timezone",
+          "description": "Timezone offset from the spec. Omitted values are sent as 0."
         }
       }
     },
