@@ -2741,7 +2741,7 @@ class DreameVacuumMiHomeCloudProtocol:
             return None
         return api_response["result"]
 
-    def request(self, url: str, params: Dict[str, str], retry_count=2, timeout=None) -> Any:
+    def request(self, url: str, params: Dict[str, str], retry_count=2, timeout=None, retried=False) -> Any:
         retries = 0
         if not retry_count or retry_count < 0:
             retry_count = 0
@@ -2789,6 +2789,8 @@ class DreameVacuumMiHomeCloudProtocol:
                 self._connected = True
                 decoded = self.decrypt_rc4(self.signed_nonce(fields["_nonce"]), response.text)
                 return json.loads(decoded) if decoded else None
+            if response.status_code == 401 and not retried and self.login():
+                return self.request(url, params, retry_count, timeout, True)
             _LOGGER.warning("Execute api call failed with HTTP status %s", response.status_code)
 
         if self._fail_count == 5:
